@@ -15,16 +15,30 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	public LoginDataDto userLoginStatus(String requestUri) {
 		CheckLoginStatus command = new CheckLoginStatus(requestUri);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, command.getEmail());
-		CommandInstanceRepository.get().create(commandInstance);
+		saveCommandForNotRegisteredUsers(command);
 		return command.getResult();
+	}
+
+	private void saveCommandForNotRegisteredUsers(CheckLoginStatus command) {
+		if (command.getResult().loginResponse != LoginResult.LOGGED_IN_AND_REGISTERED) {
+			CommandInstance commandInstance = new CommandInstance(command, command.getEmail());
+			CommandInstanceRepository.get().create(commandInstance);
+		}
 	}
 
 	@Override
 	public void registerPlayer(EmailAddressDto email) {
 		RegisterPlayer command = new RegisterPlayer(email);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, command.getEmail());
+		CommandInstance commandInstance = new CommandInstance(command, email);
+		CommandInstanceRepository.get().create(commandInstance);
+	}
+
+	@Override
+	public void sendMessage(EmailAddressDto player, String message) {
+		SendMessage command = new SendMessage(player, message);
+		command.execute();
+		CommandInstance commandInstance = new CommandInstance(command, player);
 		CommandInstanceRepository.get().create(commandInstance);
 	}
 }

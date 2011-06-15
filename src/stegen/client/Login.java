@@ -5,6 +5,7 @@ import stegen.client.messages.*;
 import stegen.client.service.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.*;
 import com.google.gwt.user.client.rpc.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -15,6 +16,7 @@ public class Login implements EntryPoint {
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private LoginDataDto loginData;
 	private MessageCentral messageCentral = new MessageCentral();
+	private Timer timer;
 
 	/** This is the entry point method. */
 	@Override
@@ -78,11 +80,27 @@ public class Login implements EntryPoint {
 	private void showLista() {
 		ScoreCellTable playerTable = new ScoreCellTable(messageCentral, loginData);
 		listPanel().add(playerTable);
-		listPanel().add(new CleanScoresButton(messageCentral, loginData));
+
+		HorizontalPanel buttonPanel = new HorizontalPanel();
+		buttonPanel.add(new CleanScoresButton(messageCentral, loginData));
+		buttonPanel.add(new RopaKnapp(messageCentral, loginData));
+		buttonPanel.add(new RefreshButton(messageCentral));
+
+		listPanel().add(buttonPanel);
 		listPanel().add(new UndoPanel(messageCentral, loginData));
 		messageCentral.updateScores();
 		messageCentral.updateUndoList();
 		messageCentral.updateUndoCommand();
+		timer = new Timer() {
+
+			@Override
+			public void run() {
+				messageCentral.updateScores();
+				messageCentral.updateUndoList();
+				messageCentral.updateUndoCommand();
+			}
+		};
+		timer.scheduleRepeating(1000 * 60);
 	}
 
 	private RootPanel rootPanel() {

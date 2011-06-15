@@ -8,7 +8,6 @@ import stegen.client.dto.*;
 
 public class PlayerRepository {
 	private static PlayerRepository instance = new PlayerRepository();
-	private PersistenceManager pm;
 
 	private PlayerRepository() {}
 
@@ -21,7 +20,7 @@ public class PlayerRepository {
 	}
 
 	public boolean isUserRegistered(Object email) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(Player.class, "select emailString");
 			query.setFilter("emailString == emailParam");
@@ -35,7 +34,7 @@ public class PlayerRepository {
 	}
 
 	public void processAndPersist(Func doForEachPlayer) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(Player.class);
 			query.setOrdering("score desc");
@@ -54,7 +53,7 @@ public class PlayerRepository {
 	}
 
 	public Player getPlayer(EmailAddressDto email) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			return pm.getObjectById(Player.class, email.address);
 		} finally {
@@ -63,7 +62,7 @@ public class PlayerRepository {
 	}
 
 	public void changeScore(EmailAddressDto email, int newScore, EmailAddressDto changedBy) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Player player = pm.getObjectById(Player.class, email.address);
 			player.changeScore(newScore, changedBy);
@@ -73,7 +72,7 @@ public class PlayerRepository {
 	}
 
 	public void create(Player player) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			pm.makePersistent(player);
 		} finally {

@@ -11,4 +11,9 @@ public final class Pmf {
 	public static PersistenceManagerFactory get() {
 		return pmfInstance;
 	}
+
+	public static PersistenceManager getPersistenceManager() {
+		PersistenceManager persistenceManager = get().getPersistenceManager();
+		return persistenceManager;
+	}
 }

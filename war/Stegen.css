@@ -10,6 +10,18 @@ h1 {
   text-align: center;
 }
 
+.players_label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #4B4A4A;
+  text-align: center;
+  text-shadow: #DDF 1px 1px 0px;
+}
+
+.center {
+	text-align: center;
+}
+
 .score_big {
   font-size: 28px;
   font-weight: bold;
@@ -32,6 +44,10 @@ h1 {
 /** Most GWT widgets already have a style name defined */
 .gwt-DialogBox {
   width: 400px;
+}
+
+.gwt-Button {
+  margin-right: 10px !important;
 }
 
 .dialogVPanel {

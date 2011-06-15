@@ -14,8 +14,8 @@ public class GameSetResultTable extends CellTable<SetScoreDto> {
 	private final EmailAddressDto loserEmail;
 	private final GameResultDto gameResult;
 
-	private GameSetResultTable(UpdateScoreCallback scoreCallback, EmailAddressDto winnerEmail, EmailAddressDto loserEmail,
-			GameResultDto gameResult) {
+	public GameSetResultTable(UpdateScoreCallback scoreCallback, EmailAddressDto winnerEmail,
+			EmailAddressDto loserEmail, GameResultDto gameResult) {
 		this.scoreCallback = scoreCallback;
 		this.winnerEmail = winnerEmail;
 		this.loserEmail = loserEmail;
@@ -24,13 +24,9 @@ public class GameSetResultTable extends CellTable<SetScoreDto> {
 		initDataProvider();
 	}
 
-	public static GameSetResultTable createTableWithData(UpdateScoreCallback scoreCallback, EmailAddressDto winnerEmail,
-			EmailAddressDto loserEmail, GameResultDto gameResult) {
-		return new GameSetResultTable(scoreCallback, winnerEmail, loserEmail, gameResult);
-	}
-
 	private void initComponent() {
-		Column<SetScoreDto, String> firstColumn = new Column<SetScoreDto, String>(new SelectionCell(getSetCountValues())) {
+		Column<SetScoreDto, String> firstColumn = new Column<SetScoreDto, String>(
+				new SelectionCell(getSetCountValues())) {
 			@Override
 			public String getValue(SetScoreDto object) {
 				return convertScore(object.gameWinnerScore);
@@ -45,7 +41,8 @@ public class GameSetResultTable extends CellTable<SetScoreDto> {
 		});
 		addColumn(firstColumn, winnerEmail.address);
 
-		Column<SetScoreDto, String> secondColumn = new Column<SetScoreDto, String>(new SelectionCell(getSetCountValues())) {
+		Column<SetScoreDto, String> secondColumn = new Column<SetScoreDto, String>(new SelectionCell(
+				getSetCountValues())) {
 			@Override
 			public String getValue(SetScoreDto object) {
 				return convertScore(object.gameLoserScore);

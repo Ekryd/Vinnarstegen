@@ -3,12 +3,9 @@ package stegen.server.database;
 import java.util.*;
 
 import javax.jdo.*;
-import javax.jdo.Query;
-import javax.jdo.annotations.*;
 
 public class CommandInstanceRepository {
 	private static CommandInstanceRepository instance = new CommandInstanceRepository();
-	private PersistenceManager pm;
 
 	private CommandInstanceRepository() {}
 
@@ -18,7 +15,7 @@ public class CommandInstanceRepository {
 
 	@SuppressWarnings("unchecked")
 	public CommandInstance getLatestUndoable() {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(CommandInstance.class);
 			query.setRange(0, 1);
@@ -32,14 +29,12 @@ public class CommandInstanceRepository {
 				return commands.get(0);
 			}
 		} finally {
-			if (!pm.isClosed()) {
-				pm.close();
-			}
+			pm.close();
 		}
 	}
 
 	public void delete(CommandInstance command) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			CommandInstance commandToDelete = pm.getObjectById(CommandInstance.class, command.getId());
 			pm.deletePersistent(commandToDelete);
@@ -48,9 +43,14 @@ public class CommandInstanceRepository {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void create(CommandInstance commandInstanceToStore) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
+			Query query = pm.newQuery(CommandInstance.class);
+			query.setRange(49, 60);
+			List<CommandInstance> commands = (List<CommandInstance>) query.execute();
+			pm.deletePersistentAll(commands);
 			pm.makePersistent(commandInstanceToStore);
 		} finally {
 			pm.close();
@@ -58,21 +58,18 @@ public class CommandInstanceRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Transactional
 	public List<CommandInstance> getPlayerCommandStack(int maxDepth) {
-		pm = Pmf.get().getPersistenceManager();
+		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(CommandInstance.class);
-			query.setRange(0, maxDepth);
 			query.setOrdering("dateTime desc");
+			query.setRange(0, maxDepth);
 			List<CommandInstance> commands = (List<CommandInstance>) query.execute();
 			// To prevent lazy load exception
 			commands.size();
 			return commands;
 		} finally {
-			if (!pm.isClosed()) {
-				pm.close();
-			}
+			pm.close();
 		}
 	}
 }

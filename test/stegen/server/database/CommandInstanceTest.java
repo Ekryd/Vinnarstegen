@@ -27,8 +27,7 @@ public class CommandInstanceTest {
 		Assert.assertEquals(
 				"{\"result\":"
 						+ "{\"nickname\":\"nick\",\"logoutUrl\":\"logoutUrl\",\"loginResponse\":\"LOGGED_IN_AND_REGISTERED\",\"signInUrl\":\"\",\"emailAddress\":"
-						+ "{\"address\":\"address\"}}," + "\"class\":\"stegen.server.command.CheckLoginStatus\"}",
-				command.getCommandSerialized());
+						+ "{\"address\":\"address\"}}}", command.getCommandSerialized());
 	}
 
 	@Test
@@ -39,8 +38,8 @@ public class CommandInstanceTest {
 		playerRepository.create(player);
 		CommandInstance command = CommandInstanceFactory.clearAllScores(playerEmail);
 		Assert.assertEquals(
-				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":0}],\"changedBy\":{\"address\":\"address\"},"
-						+ "\"class\":\"stegen.server.command.ClearAllScores\"}", command.getCommandSerialized());
+				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":0}],\"changedBy\":{\"address\":\"address\"}}",
+				command.getCommandSerialized());
 	}
 
 	@Test
@@ -52,7 +51,7 @@ public class CommandInstanceTest {
 		CommandInstance command = CommandInstanceFactory.clearAllScores(playerEmail);
 		String ser = command.getCommandSerialized();
 		System.out.println(ser);
-		PlayerCommand deserialize = new Serializer().deserialize(ser);
+		PlayerCommand deserialize = new Serializer().deserialize(ser, ClearAllScores.class);
 		Assert.assertNotNull(deserialize.getDescription());
 	}
 
@@ -66,11 +65,10 @@ public class CommandInstanceTest {
 		CommandInstance command = CommandInstanceFactory.clearAllScores(playerEmail1);
 		String serialized = command.getCommandSerialized();
 		System.out.println(serialized);
-		ClearAllScores deserialize = (ClearAllScores) new Serializer().deserialize(serialized);
+		ClearAllScores deserialize = new Serializer().deserialize(serialized, ClearAllScores.class);
 		serialized = new Serializer().deepSerialize(deserialize);
 		Assert.assertEquals(
 				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"winner\"},\"score\":1},{\"playerEmail\":{\"address\":\"loser\"},\"score\":0}],"
-						+ "\"changedBy\":{\"address\":\"winner\"},"
-						+ "\"class\":\"stegen.server.command.ClearAllScores\"}", serialized);
+						+ "\"changedBy\":{\"address\":\"winner\"}}", serialized);
 	}
 }

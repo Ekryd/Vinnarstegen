@@ -67,4 +67,25 @@ public class CommandInstanceRepositoryTest {
 		}
 	}
 
+	@Test
+	public void testTooManyCommands() {
+		PlayerRepository playerRepository = PlayerRepository.get();
+		EmailAddressDto playerEmail = new EmailAddressDto("address");
+		Player player = Player.createPlayer(playerEmail);
+		playerRepository.create(player);
+		CommandInstanceRepository commandInstanceRepository = CommandInstanceRepository.get();
+
+		for (int i = 0; i < 49; i++) {
+			commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		}
+
+		Assert.assertEquals(49, commandInstanceRepository.getPlayerCommandStack(100).size());
+		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		Assert.assertEquals(50, commandInstanceRepository.getPlayerCommandStack(100).size());
+		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		Assert.assertEquals(50, commandInstanceRepository.getPlayerCommandStack(100).size());
+		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		Assert.assertEquals(50, commandInstanceRepository.getPlayerCommandStack(100).size());
+	}
+
 }

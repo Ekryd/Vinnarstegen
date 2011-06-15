@@ -12,6 +12,7 @@ public class MessageCentral {
 	private final UpdateScoresCallback updateScoresCallback = new UpdateScoresCallback();
 	private final UndoServiceAsync undoService = GWT.create(UndoService.class);
 	private final ScoreServiceAsync scoreService = GWT.create(ScoreService.class);
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private final List<ScoreListener> scoreListeners = new ArrayList<ScoreListener>();
 	private final List<UndoListener> undoListeners = new ArrayList<UndoListener>();
 
@@ -40,11 +41,19 @@ public class MessageCentral {
 				for (UndoListener undoListener : undoListeners) {
 					undoListener.onUndoCommand(result);
 				}
-				if (result == UndoPlayerCommandResult.SUCCESS) {
-					updateUndoList();
-					updateScores();
-					updateUndoCommand();
-				}
+				updateAll();
+			}
+
+		});
+	}
+
+	public void sendMessage(EmailAddressDto player, String message) {
+		loginService.sendMessage(player, message, new DefaultCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				updateUndoList();
+				updateUndoCommand();
 			}
 
 		});
@@ -100,11 +109,14 @@ public class MessageCentral {
 	private class UpdateScoresCallback extends DefaultCallback<Void> {
 		@Override
 		public void onSuccess(Void result) {
-			updateScores();
-			updateUndoList();
-			updateUndoCommand();
+			updateAll();
 		}
 
 	}
 
+	public void updateAll() {
+		updateScores();
+		updateUndoList();
+		updateUndoCommand();
+	}
 }

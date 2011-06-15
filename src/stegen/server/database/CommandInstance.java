@@ -7,6 +7,8 @@ import javax.jdo.annotations.*;
 import stegen.client.dto.*;
 import stegen.server.command.*;
 
+import com.google.appengine.api.datastore.*;
+
 @PersistenceCapable
 public class CommandInstance {
 	public static final CommandInstance NOT_FOUND = getNotFoundInstance();
@@ -26,19 +28,19 @@ public class CommandInstance {
 	private boolean undoable;
 
 	@Persistent
-	private String commandInJsonFormat;
+	private Text commandInJsonFormat;
+
+	@Persistent
+	private String commandClassName;
 
 	private CommandInstance() {}
 
 	public CommandInstance(PlayerCommand command, EmailAddressDto email) {
-		this.commandInJsonFormat = serializer.deepSerialize(command);
+		this.commandInJsonFormat = new Text(serializer.deepSerialize(command));
 		this.emailString = email.address;
 		this.dateTime = new Date();
 		this.undoable = command.isUndoable();
-	}
-
-	PlayerCommand getCommand() {
-		return serializer.deserialize(commandInJsonFormat);
+		this.commandClassName = command.getClass().getName();
 	}
 
 	public void undo() {
@@ -71,7 +73,20 @@ public class CommandInstance {
 	}
 
 	String getCommandSerialized() {
-		return commandInJsonFormat;
+		return commandInJsonFormat.getValue();
+	}
+
+	PlayerCommand getCommand() {
+		return serializer.deserialize(commandInJsonFormat.getValue(), getClassName());
+	}
+
+	@SuppressWarnings("unchecked")
+	private Class<PlayerCommand> getClassName() {
+		try {
+			return (Class<PlayerCommand>) Class.forName(commandClassName);
+		} catch (ClassNotFoundException e) {
+			return PlayerCommand.class;
+		}
 	}
 
 }

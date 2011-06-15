@@ -26,43 +26,24 @@ public abstract class GameResultDialogBox extends DialogBox {
 
 		VerticalPanel verticalPanel = new VerticalPanel();
 		verticalPanel.add(new HTML("<p>Skriv in matchresultatet. Vinnaren står först</p>"));
-		Widget gameSetResultTable = GameSetResultTable.createTableWithData(new UpdateScoreCallback() {
+		// Widget gameSetResultTable = new GameSetResultTable(new
+		// UpdateScoreCallback() {
+		//
+		// @Override
+		// public void onScoreChange() {
+		// updateScoreLabel();
+		// }
+		// }, winnerEmail, loserEmail, gameResult);
+		// verticalPanel.add(gameSetResultTable);
+
+		Widget setScoreDropdown = new SetScoreDropdown(winnerEmail, loserEmail, gameResult, new UpdateScoreCallback() {
 
 			@Override
 			public void onScoreChange() {
 				updateScoreLabel();
 			}
-		}, winnerEmail, loserEmail, gameResult);
-		verticalPanel.add(gameSetResultTable);
-
-		// CellTable<String> rubrikTable = new CellTable<String>();
-		// rubrikTable.addColumn(new TextColumn<String>() {
-		//
-		// @Override
-		// public String getValue(String object) {
-		// return null;
-		// }
-		// }, winnerEmail.address);
-		// rubrikTable.addColumn(new TextColumn<String>() {
-		//
-		// @Override
-		// public String getValue(String object) {
-		// return null;
-		// }
-		// }, loserEmail.address);
-		// new ListDataProvider<String>().addDataDisplay(rubrikTable);
-		// verticalPanel.add(rubrikTable);
-		//
-		// ListBox setList = new SetScoreDropdown(gameResult, new
-		// UpdateScoreCallback() {
-		//
-		// @Override
-		// public void onScoreChange() {
-		// // TODO Auto-generated method stub
-		//
-		// }
-		// });
-		// verticalPanel.add(setList);
+		});
+		verticalPanel.add(setScoreDropdown);
 
 		updateScoreLabel();
 		verticalPanel.add(scoreLabel);

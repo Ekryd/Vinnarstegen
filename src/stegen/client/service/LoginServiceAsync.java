@@ -10,4 +10,6 @@ public interface LoginServiceAsync {
 
 	void registerPlayer(EmailAddressDto email, AsyncCallback<Void> callback);
 
+	void sendMessage(EmailAddressDto player, String message, AsyncCallback<Void> callback);
+
 }

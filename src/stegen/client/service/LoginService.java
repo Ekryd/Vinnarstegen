@@ -11,4 +11,6 @@ public interface LoginService extends RemoteService {
 
 	void registerPlayer(EmailAddressDto email);
 
+	void sendMessage(EmailAddressDto player, String message);
+
 }
