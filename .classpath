@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
+	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="/Network/Download/Download/direct/junit-4.8.1.jar"/>
+	<classpathentry kind="lib" path="/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="lib" path="/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/gson-1.7.1.jar"/>
+	<classpathentry kind="output" path="war/WEB-INF/classes"/>
+</classpath>
