@@ -24,12 +24,14 @@ public class Player {
 	@Persistent(nullValue = NullValue.EXCEPTION)
 	private Date changed;
 
+	private Player(String emailString, Date createdDateTime, int score) {
+		this.emailString = emailString;
+		this.createdDateTime = createdDateTime;
+		this.score = score;
+	}
+
 	public static Player createPlayer(EmailAddressDto email) {
-		Player player = new Player();
-		player.emailString = email.address;
-		player.score = 0;
-		Date now = new Date();
-		player.createdDateTime = now;
+		Player player = new Player(email.address, new Date(), 0);
 		player.setChangedBy(email);
 		return player;
 	}

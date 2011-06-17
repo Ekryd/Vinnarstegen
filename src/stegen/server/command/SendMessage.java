@@ -37,7 +37,7 @@ public class SendMessage implements PlayerCommand {
 		Message msg = new MimeMessage(session);
 		try {
 			msg.setFrom(new InternetAddress(email.address, "Vinnarstegen"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress("admin@vinnarstegen.appspotmail.com"));
+			msg.addRecipient(Message.RecipientType.TO, new InternetAddress("bjorn.ekryd@gmail.com"));
 			msg.setSubject("Vinnarstegen ropar");
 			msg.setText(msgBody);
 			Transport.send(msg);
