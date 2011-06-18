@@ -64,7 +64,7 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 	}
 
 	private void initButtonColumns() {
-		Column<PlayerScoreDto, String> winColumn = new ButtonColumn("Jag vann mot");
+		Column<PlayerScoreDto, String> winColumn = new ButtonColumn(loginData, "Jag vann mot");
 		addColumn(winColumn);
 		winColumn.setFieldUpdater(new FieldUpdater<PlayerScoreDto, String>() {
 
@@ -73,7 +73,7 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 				playerWonOverPlayer(loginData.emailAddress, playerScore.email);
 			}
 		});
-		Column<PlayerScoreDto, String> loseColumn = new ButtonColumn("Jag förlorade mot");
+		Column<PlayerScoreDto, String> loseColumn = new ButtonColumn(loginData, "Jag förlorade mot");
 		addColumn(loseColumn);
 		loseColumn.setFieldUpdater(new FieldUpdater<PlayerScoreDto, String>() {
 
