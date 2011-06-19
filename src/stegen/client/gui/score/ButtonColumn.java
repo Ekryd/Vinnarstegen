@@ -1,4 +1,4 @@
-package stegen.client;
+package stegen.client.gui.score;
 
 import stegen.client.dto.*;
 

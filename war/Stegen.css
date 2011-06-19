@@ -1,13 +1,62 @@
 /** Add css rules here for your application. */
 
 
-/** Example rules used by the template application (remove for your app) */
 h1 {
   font-size: 2em;
   font-weight: bold;
   color: #777777;
   margin: 40px 0px 70px;
   text-align: center;
+}
+
+body {
+  margin: 0px;
+  padding: 0px;
+}
+.headerPanel {
+  width: 100%;
+/*   border: 2px solid gray; */
+}
+.userArea_left {
+  float: left;
+  width: 20%;
+  height: 20px;
+  position: relative;
+  margin-top: -40px;
+  padding: 5px;
+}
+.logoutArea_right {
+  float: right;
+  width: 15%;
+  height: 20px;
+  margin-top: -40px;
+  padding: 5px;
+}
+.leftColumn {
+  float: left;
+  min-width: 100;
+  width:10%;
+  height: 500px;
+/*   border: 2px solid gray; */
+  padding: 5px;
+}
+.rightColumn {
+  float: right;
+  width: 10px;
+  height: 500px;
+  padding: 5px;
+}
+.contentPanel {
+  float: left;
+  width: 85%;
+  height: 500px;
+  padding: 5px;
+}
+.footerPanel {
+  clear: both;
+  width: 100%;
+/*   border: 2px solid gray; */
+  padding: 5px;
 }
 
 .players_label {

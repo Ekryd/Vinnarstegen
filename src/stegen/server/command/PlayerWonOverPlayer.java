@@ -77,8 +77,9 @@ public class PlayerWonOverPlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		return String.format("%s vann, från (%s, %s) till (%s, %s)", winnerEmail.address, scores.oldWinnerScore,
-				scores.oldLoserScore, scores.newWinnerScore, scores.newLoserScore);
+		return String.format("%s vann över %s och ökade sina poäng från %s till %s. Förloraren fick %s poäng",
+				winnerEmail.address, loserEmail.address, scores.oldWinnerScore, scores.newWinnerScore,
+				scores.newLoserScore - scores.oldLoserScore);
 	}
 
 	@Override

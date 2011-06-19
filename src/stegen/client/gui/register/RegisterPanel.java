@@ -1,4 +1,4 @@
-package stegen.client;
+package stegen.client.gui.register;
 
 import stegen.client.dto.*;
 import stegen.client.service.*;
@@ -25,8 +25,7 @@ public abstract class RegisterPanel extends VerticalPanel {
 	}
 
 	private void initComponents() {
-		registerLabel = new Label("Hej " + loginData.nickname
-				+ ". Du måste skriva in den magiska koden för att registrera dig.");
+		registerLabel = new Label("Du måste skriva in den magiska koden för att registrera dig.");
 		registeraButton = new Button("Registrera");
 		kodField = new TextBox();
 		kodField.setText("<kod>");

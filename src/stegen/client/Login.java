@@ -1,6 +1,10 @@
 package stegen.client;
 
 import stegen.client.dto.*;
+import stegen.client.gui.*;
+import stegen.client.gui.login.*;
+import stegen.client.gui.message.*;
+import stegen.client.gui.register.*;
 import stegen.client.messages.*;
 import stegen.client.service.*;
 
@@ -38,56 +42,64 @@ public class Login implements EntryPoint {
 	}
 
 	private void onLoginPageStart() {
-		if (loginData.loginResponse == LoginResult.LOGGED_IN_AND_REGISTERED) {
-			showOkLogin();
+		if (loginData.loginResponse == LoginResult.NOT_LOGGED_IN) {
+			showLoginPanel();
 		}
 		if (loginData.loginResponse == LoginResult.LOGGED_IN_GMAIL) {
 			showRegisterPanel();
 		}
-		if (loginData.loginResponse == LoginResult.NOT_LOGGED_IN) {
-			showLoginPanel();
+		if (loginData.loginResponse == LoginResult.LOGGED_IN_AND_REGISTERED) {
+			showOkLogin();
 		}
 	}
 
-	private void showOkLogin() {
-		rootPanel().add(new Label("Hej " + loginData.nickname));
-		logoutPanel().add(new Anchor("Logga ut", loginData.logoutUrl));
-		showLista();
+	private void showLoginPanel() {
+		showMainArea(new LoginPanel(loginData.signInUrl));
 	}
 
 	private void showRegisterPanel() {
-		logoutPanel().add(new Anchor("Logga ut", loginData.logoutUrl));
-		rootPanel().add(new RegisterPanel("SuckoPust", loginData) {
+		showLogout();
+		showUser();
+		showMainArea(new RegisterPanel("SuckoPust", loginData) {
 
 			@Override
 			public void onRegisterOk(LoginDataDto loginData) {
-				showLista();
+				showOkLogin();
 			}
 		});
 	}
 
-	private void showLoginPanel() {
-		// Assemble login panel.
-		Anchor signInLink = new Anchor("Sign In", loginData.signInUrl);
-		Label loginLabel = new Label("Please sign in to your Google Account to access the Stegen application.");
-		VerticalPanel loginPanel = new VerticalPanel();
-		loginPanel.add(loginLabel);
-		loginPanel.add(signInLink);
-		rootPanel().add(loginPanel);
-		logoutPanel().clear();
+	private void showOkLogin() {
+		showLogout();
+		showUser();
+		showMenu();
+		showMainArea(new MainContentTabs(messageCentral, loginData));
+		addUpdateTimer();
 	}
 
-	private void showLista() {
-		ScoreCellTable playerTable = new ScoreCellTable(messageCentral, loginData);
-		listPanel().add(playerTable);
+	private void showLogout() {
+		logoutArea().clear();
+		logoutArea().add(new Anchor("Logga ut", loginData.logoutUrl));
+	}
 
-		HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.add(new CleanScoresButton(messageCentral, loginData));
-		buttonPanel.add(new RopaKnapp(messageCentral, loginData));
-		buttonPanel.add(new RefreshButton(messageCentral));
+	private void showUser() {
+		userArea().add(new UserPanel(messageCentral, loginData));
+	}
 
-		listPanel().add(buttonPanel);
-		listPanel().add(new UndoPanel(messageCentral, loginData));
+	private void showMenu() {
+		VerticalPanel menuMainPanel = new VerticalPanel();
+		menuArea().add(menuMainPanel);
+
+		menuMainPanel.add(new RefreshButton(messageCentral));
+		menuMainPanel.add(new RopaKnapp(messageCentral, loginData));
+	}
+
+	protected void showMainArea(Widget panel) {
+		mainArea().clear();
+		mainArea().add(panel);
+	}
+
+	private void addUpdateTimer() {
 		messageCentral.updateScores();
 		messageCentral.updateUndoList();
 		messageCentral.updateUndoCommand();
@@ -103,15 +115,24 @@ public class Login implements EntryPoint {
 		timer.scheduleRepeating(1000 * 60);
 	}
 
-	private RootPanel rootPanel() {
-		return RootPanel.get("container");
+	private RootPanel mainArea() {
+		return RootPanel.get("mainArea");
 	}
 
-	private RootPanel logoutPanel() {
-		return RootPanel.get("logout");
+	private RootPanel logoutArea() {
+		return RootPanel.get("logoutArea");
 	}
 
-	private RootPanel listPanel() {
-		return RootPanel.get("list");
+	private RootPanel userArea() {
+		return RootPanel.get("userArea");
 	}
+
+	private RootPanel menuArea() {
+		return RootPanel.get("menuArea");
+	}
+
+	private RootPanel messagesArea() {
+		return RootPanel.get("messagesArea");
+	}
+
 }

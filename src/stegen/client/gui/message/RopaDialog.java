@@ -1,7 +1,7 @@
-package stegen.client;
+package stegen.client.gui.message;
 
-import stegen.client.RopaKnapp.ButtonText;
 import stegen.client.dto.*;
+import stegen.client.gui.message.RopaKnapp.*;
 import stegen.client.messages.*;
 
 import com.google.gwt.event.dom.client.*;

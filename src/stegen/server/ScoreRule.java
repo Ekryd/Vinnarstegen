@@ -1,8 +1,9 @@
 package stegen.server;
 
-import stegen.client.*;
 import stegen.client.dto.*;
+import stegen.client.gui.score.*;
 import stegen.server.database.*;
+import stegen.shared.*;
 
 public class ScoreRule {
 	private final int oldWinnerScore;

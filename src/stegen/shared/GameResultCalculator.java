@@ -1,4 +1,4 @@
-package stegen.client;
+package stegen.shared;
 
 import stegen.client.dto.*;
 
