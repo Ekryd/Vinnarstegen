@@ -1,2 +1,5 @@
 # Module stegen
 # RPC service class, partial path of RPC policy file
+stegen.client.service.UndoService, 3DB6CDE6FC1E529594DAA6277B50C5BE.gwt.rpc
+stegen.client.service.LoginService, 05AFDF63865FAF82D1C9218A5D3B5DAF.gwt.rpc
+stegen.client.service.ScoreService, B381B461DB45C9F352467FE3CC3A2353.gwt.rpc

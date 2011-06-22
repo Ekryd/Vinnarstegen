@@ -1,8 +1,8 @@
-<!-- Indices written at Sun, 19 Jun 2011 17:54:01 UTC -->
+<!-- Indices written at Wed, 22 Jun 2011 22:30:41 UTC -->
 
 <datastore-indexes>
 
-    <!-- Used 1 time in query history -->
+    <!-- Used 81 times in query history -->
     <datastore-index kind="CommandInstance" ancestor="false" source="auto">
         <property name="undoable" direction="asc"/>
         <property name="dateTime" direction="desc"/>

@@ -24,8 +24,7 @@ public class MainContentTabs extends TabLayoutPanel {
 		setAnimationDuration(1000);
 		add(new ListScorePanel(messageCentral, loginData), "Poängställning");
 		add(new UndoPanel(messageCentral, loginData), "Händelser");
-		setWidth("100%");
-		setHeight("100%");
+		setHeight("700px");
 		selectTab(0);
 	}
 

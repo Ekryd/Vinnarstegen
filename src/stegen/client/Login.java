@@ -72,26 +72,21 @@ public class Login implements EntryPoint {
 	private void showOkLogin() {
 		showLogout();
 		showUser();
-		showMenu();
+		messagesArea().add(new RopaKnapp(messageCentral, loginData));
+		refreshArea().add(new RefreshButton(messageCentral));
 		showMainArea(new MainContentTabs(messageCentral, loginData));
 		addUpdateTimer();
 	}
 
 	private void showLogout() {
 		logoutArea().clear();
-		logoutArea().add(new Anchor("Logga ut", loginData.logoutUrl));
+		Anchor link = new Anchor("Logga ut", loginData.logoutUrl);
+		logoutArea().add(link);
 	}
 
 	private void showUser() {
+		userArea().clear();
 		userArea().add(new UserPanel(messageCentral, loginData));
-	}
-
-	private void showMenu() {
-		VerticalPanel menuMainPanel = new VerticalPanel();
-		menuArea().add(menuMainPanel);
-
-		menuMainPanel.add(new RefreshButton(messageCentral));
-		menuMainPanel.add(new RopaKnapp(messageCentral, loginData));
 	}
 
 	protected void showMainArea(Widget panel) {
@@ -127,12 +122,11 @@ public class Login implements EntryPoint {
 		return RootPanel.get("userArea");
 	}
 
-	private RootPanel menuArea() {
-		return RootPanel.get("menuArea");
-	}
-
 	private RootPanel messagesArea() {
 		return RootPanel.get("messagesArea");
 	}
 
+	private RootPanel refreshArea() {
+		return RootPanel.get("refreshArea");
+	}
 }

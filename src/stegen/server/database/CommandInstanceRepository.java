@@ -43,14 +43,14 @@ public class CommandInstanceRepository {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public void create(CommandInstance commandInstanceToStore) {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
-			Query query = pm.newQuery(CommandInstance.class);
-			query.setRange(49, 60);
-			List<CommandInstance> commands = (List<CommandInstance>) query.execute();
-			pm.deletePersistentAll(commands);
+			// Query query = pm.newQuery(CommandInstance.class);
+			// query.setRange(49, 60);
+			// List<CommandInstance> commands = (List<CommandInstance>)
+			// query.execute();
+			// pm.deletePersistentAll(commands);
 			pm.makePersistent(commandInstanceToStore);
 		} finally {
 			pm.close();

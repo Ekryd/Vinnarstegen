@@ -13,43 +13,40 @@ body {
   margin: 0px;
   padding: 0px;
 }
+.container {
+	width: 1200px;
+	margin: 0 auto;
+	/* the auto value on the sides, coupled with the width, centers the layout */
+}
+.refreshPanel {
+	position: relative;
+	float: right;
+	z-index: 999;
+	top: 1px;
+}
 .headerPanel {
   width: 100%;
 /*   border: 2px solid gray; */
+}
+.headerLogo {
+	border: 1px solid #CCC
 }
 .userArea_left {
   float: left;
   width: 20%;
   height: 20px;
   position: relative;
-  margin-top: -40px;
   padding: 5px;
 }
 .logoutArea_right {
   float: right;
-  width: 15%;
+  width: 5%;
   height: 20px;
-  margin-top: -40px;
-  padding: 5px;
-}
-.leftColumn {
-  float: left;
-  min-width: 100;
-  width:10%;
-  height: 500px;
-/*   border: 2px solid gray; */
-  padding: 5px;
-}
-.rightColumn {
-  float: right;
-  width: 10px;
-  height: 500px;
   padding: 5px;
 }
 .contentPanel {
   float: left;
-  width: 85%;
-  height: 500px;
+  width: 100%;
   padding: 5px;
 }
 .footerPanel {
