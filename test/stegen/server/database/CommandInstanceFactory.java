@@ -4,6 +4,9 @@ import stegen.client.dto.*;
 import stegen.server.command.*;
 
 public class CommandInstanceFactory {
+	private static final EmailAddressDto email = new EmailAddressDto("address");
+	private static final PlayerDto player = new PlayerDto(email, "nickname");
+
 	public static CommandInstance getUserIsNotLoggedInCommand() {
 		LoginDataDto result = LoginDataDto.userIsNotLoggedIn("signInUrl");
 		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", result);
@@ -13,16 +16,14 @@ public class CommandInstanceFactory {
 	}
 
 	public static CommandInstance getUserIsNotRegistered() {
-		EmailAddressDto email = new EmailAddressDto("address");
-		LoginDataDto result = LoginDataDto.userIsNotRegistered(email, "nick", "logoutUrl");
+		LoginDataDto result = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
 		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", result);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
 		return commandInstanceToStore;
 	}
 
 	public static CommandInstance getUserIsLoggedInAndRegistered() {
-		EmailAddressDto email = new EmailAddressDto("address");
-		LoginDataDto result = LoginDataDto.userIsLoggedInAndRegistered(email, "nick", "logoutUrl");
+		LoginDataDto result = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
 		CheckLoginStatus command = CheckLoginStatus.createForTest("requestUri", result);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
 		return commandInstanceToStore;
@@ -49,6 +50,12 @@ public class CommandInstanceFactory {
 		result.setScores[1].gameWinnerScore = 5;
 		PlayerCommand command = new PlayerWonOverPlayer(winnerEmail, loserEmail, result, changedBy);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy);
+		return commandInstanceToStore;
+	}
+
+	public static CommandInstance sendMessage(String message) {
+		SendMessage sendMessage = new SendMessage(player.email, message);
+		CommandInstance commandInstanceToStore = new CommandInstance(sendMessage, player.email);
 		return commandInstanceToStore;
 	}
 }

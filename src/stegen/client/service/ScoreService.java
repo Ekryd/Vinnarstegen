@@ -11,9 +11,9 @@ public interface ScoreService extends RemoteService {
 
 	List<PlayerScoreDto> getPlayerList();
 
-	void playerWonOverPlayer(EmailAddressDto winnerEmail, EmailAddressDto loserEmail, GameResultDto result,
-			EmailAddressDto changedBy);
+	void playerWonOverPlayer(PlayerDto winnerEmail, PlayerDto loserEmail, GameResultDto result,
+			PlayerDto changedBy);
 
-	void clearAllScores(EmailAddressDto changedBy);
+	void clearAllScores(PlayerDto changedBy);
 
 }

@@ -25,10 +25,19 @@ public class StegenUserRepository {
 	}
 
 	public String getOrCreateNickname(EmailAddressDto email) {
+		if (email.address.isEmpty()) {
+			return "";
+		}
 		if (!hasNickname(email)) {
 			createDefaultNickname(email);
 		}
 		return getNickname(email);
+	}
+
+	public PlayerDto createPlayerDto(String emailString) {
+		EmailAddressDto email = new EmailAddressDto(emailString);
+		String nickname = getOrCreateNickname(email);
+		return new PlayerDto(email, nickname);
 	}
 
 	boolean hasNickname(EmailAddressDto email) {

@@ -15,22 +15,21 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 	private static final long serialVersionUID = 5777230422402242088L;
 
 	@Override
-	public void playerWonOverPlayer(EmailAddressDto winnerEmail, EmailAddressDto loserEmail, GameResultDto result,
-			EmailAddressDto changedBy) {
-		if (winnerEmail.equals(loserEmail)) {
+	public void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy) {
+		if (winner.equals(loser)) {
 			return;
 		}
-		PlayerCommand command = new PlayerWonOverPlayer(winnerEmail, loserEmail, result, changedBy);
+		PlayerCommand command = new PlayerWonOverPlayer(winner.email, loser.email, result, changedBy.email);
 		command.execute();
-		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy.email);
 		CommandInstanceRepository.get().create(commandInstanceToStore);
 	}
 
 	@Override
-	public void clearAllScores(EmailAddressDto changedBy) {
-		PlayerCommand command = new ClearAllScores(changedBy);
+	public void clearAllScores(PlayerDto changedBy) {
+		PlayerCommand command = new ClearAllScores(changedBy.email);
 		command.execute();
-		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy.email);
 		CommandInstanceRepository.get().create(commandInstanceToStore);
 	}
 

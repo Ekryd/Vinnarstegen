@@ -29,7 +29,8 @@ public class RegisterPlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		return "Registrerade " + email.address;
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		return "Registrerade " + stegenUserRepository.getOrCreateNickname(email);
 	}
 
 	@Override

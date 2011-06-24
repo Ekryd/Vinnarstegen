@@ -4,11 +4,12 @@ import java.util.*;
 
 import stegen.client.dto.*;
 
-public interface UndoListener {
+//TODO
+public interface PlayerCommandListener {
 
 	void onUndoCommand(UndoPlayerCommandResult result);
 
-	void onUndoListUpdate(List<PlayerCommandDto> result);
+	void onPlayerCommandListUpdate(List<PlayerCommandDto> result);
 
 	void onUndoCommandUpdate(PlayerCommandDto result);
 }

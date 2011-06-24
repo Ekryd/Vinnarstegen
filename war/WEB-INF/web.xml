@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>loginService</servlet-name>
-    <servlet-class>stegen.server.service.LoginServiceImpl</servlet-class>
+    <servlet-class>stegen.server.service.PlayerServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>
@@ -28,7 +28,7 @@
  
   <servlet>
     <servlet-name>undoService</servlet-name>
-    <servlet-class>stegen.server.service.UndoServiceImpl</servlet-class>
+    <servlet-class>stegen.server.service.PlayerCommandServiceImpl</servlet-class>
   </servlet>
 
   <servlet-mapping>

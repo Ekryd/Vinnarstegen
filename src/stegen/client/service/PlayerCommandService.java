@@ -7,10 +7,12 @@ import stegen.client.dto.*;
 import com.google.gwt.user.client.rpc.*;
 
 @RemoteServiceRelativePath("undo")
-public interface UndoService extends RemoteService {
+public interface PlayerCommandService extends RemoteService {
 	List<PlayerCommandDto> getPlayerCommandStack(int maxDepth);
 
-	UndoPlayerCommandResult undoPlayerCommand(EmailAddressDto player);
+	UndoPlayerCommandResult undoPlayerCommand(PlayerDto player);
 
 	PlayerCommandDto getUndoCommand();
+
+	List<PlayerCommandDto> getSendMessageCommandStack(int maxDepth);
 }

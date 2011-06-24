@@ -10,9 +10,9 @@ public interface ScoreServiceAsync {
 
 	void getPlayerList(AsyncCallback<List<PlayerScoreDto>> callback);
 
-	void playerWonOverPlayer(EmailAddressDto winnerEmail, EmailAddressDto loserEmail, GameResultDto result,
-			EmailAddressDto changedBy, AsyncCallback<Void> callback);
+	void playerWonOverPlayer(PlayerDto winnerEmail, PlayerDto loserEmail, GameResultDto result, PlayerDto changedBy,
+			AsyncCallback<Void> callback);
 
-	void clearAllScores(EmailAddressDto changedBy, AsyncCallback<Void> callback);
+	void clearAllScores(PlayerDto changedBy, AsyncCallback<Void> callback);
 
 }

@@ -15,9 +15,14 @@ public class CleanScoresButton extends Button {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
 		init();
+		initHandler();
 	}
 
 	private void init() {
+		setStylePrimaryName("button");
+	}
+
+	private void initHandler() {
 		addClickHandler(new ClickHandler() {
 
 			@Override
@@ -34,7 +39,7 @@ public class CleanScoresButton extends Button {
 
 					@Override
 					public void onClick(ClickEvent event) {
-						messageCentral.clearAllScores(loginData.emailAddress);
+						messageCentral.clearAllScores(loginData.player);
 						dialogBox.hide();
 					}
 				});
@@ -47,6 +52,8 @@ public class CleanScoresButton extends Button {
 						dialogBox.hide();
 					}
 				});
+				cancelButton.setStylePrimaryName("button");
+				okButton.setStylePrimaryName("button");
 				dialogBox.center();
 			}
 		});

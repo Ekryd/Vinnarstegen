@@ -2,22 +2,19 @@ package stegen.client;
 
 import stegen.client.dto.*;
 import stegen.client.gui.*;
-import stegen.client.gui.login.*;
 import stegen.client.gui.message.*;
+import stegen.client.gui.player.*;
 import stegen.client.gui.register.*;
 import stegen.client.messages.*;
-import stegen.client.service.*;
 
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.*;
-import com.google.gwt.user.client.rpc.*;
 import com.google.gwt.user.client.ui.*;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class Login implements EntryPoint {
-	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
 	private LoginDataDto loginData;
 	private MessageCentral messageCentral = new MessageCentral();
 	private Timer timer;
@@ -25,19 +22,13 @@ public class Login implements EntryPoint {
 	/** This is the entry point method. */
 	@Override
 	public void onModuleLoad() {
-		loginService.userLoginStatus(GWT.getHostPageBaseURL(), new AsyncCallback<LoginDataDto>() {
-
-			@Override
-			public void onFailure(Throwable caught) {
-				System.out.println("onFailure");
-			}
+		messageCentral.userLoginStatus(new DefaultCallback<LoginDataDto>() {
 
 			@Override
 			public void onSuccess(LoginDataDto result) {
 				loginData = result;
 				onLoginPageStart();
 			}
-
 		});
 	}
 
@@ -72,7 +63,7 @@ public class Login implements EntryPoint {
 	private void showOkLogin() {
 		showLogout();
 		showUser();
-		messagesArea().add(new RopaKnapp(messageCentral, loginData));
+		messagesArea().add(new MessageButton(messageCentral, loginData));
 		refreshArea().add(new RefreshButton(messageCentral));
 		showMainArea(new MainContentTabs(messageCentral, loginData));
 		addUpdateTimer();
@@ -95,16 +86,12 @@ public class Login implements EntryPoint {
 	}
 
 	private void addUpdateTimer() {
-		messageCentral.updateScores();
-		messageCentral.updateUndoList();
-		messageCentral.updateUndoCommand();
+		messageCentral.updateScoreAndCommands();
 		timer = new Timer() {
 
 			@Override
 			public void run() {
-				messageCentral.updateScores();
-				messageCentral.updateUndoList();
-				messageCentral.updateUndoCommand();
+				messageCentral.updateScoreAndCommands();
 			}
 		};
 		timer.scheduleRepeating(1000 * 60);

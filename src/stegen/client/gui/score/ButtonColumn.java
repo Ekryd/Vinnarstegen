@@ -28,7 +28,7 @@ public class ButtonColumn extends Column<PlayerScoreDto, String> {
 	}
 
 	private void dontDisplayButtonsForCurrentUser(Context context, PlayerScoreDto object, SafeHtmlBuilder sb) {
-		if (!loginData.emailAddress.equals(object.email)) {
+		if (!loginData.player.email.equals(object.player.email)) {
 			super.render(context, object, sb);
 		}
 	}

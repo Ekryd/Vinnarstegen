@@ -6,49 +6,47 @@ import stegen.client.dto.*;
 import stegen.client.service.*;
 
 import com.google.gwt.core.client.*;
-import com.google.gwt.user.client.rpc.*;
 
 public class MessageCentral {
-	private final UpdateScoresCallback updateScoresCallback = new UpdateScoresCallback();
-	private final UndoServiceAsync undoService = GWT.create(UndoService.class);
+	private final UpdateAllCallback updateAllCallback = new UpdateAllCallback();
+	private final PlayerCommandServiceAsync playerCommandService = GWT.create(PlayerCommandService.class);
 	private final ScoreServiceAsync scoreService = GWT.create(ScoreService.class);
-	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
-	private final List<ScoreListener> scoreListeners = new ArrayList<ScoreListener>();
-	private final List<UndoListener> undoListeners = new ArrayList<UndoListener>();
+	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
+	public final ListenerLists listeners = new ListenerLists();
 
-	public void addListener(ScoreListener listener) {
-		scoreListeners.add(listener);
+	public void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto gameResult, PlayerDto changedBy) {
+		scoreService.playerWonOverPlayer(winner, loser, gameResult, changedBy, updateAllCallback);
 	}
 
-	public void addListener(UndoListener listener) {
-		undoListeners.add(listener);
+	public void clearAllScores(PlayerDto changedBy) {
+		scoreService.clearAllScores(changedBy, updateAllCallback);
 	}
 
-	public void playerWonOverPlayer(EmailAddressDto winEmail, EmailAddressDto loseEmail, GameResultDto gameResult,
-			EmailAddressDto changedBy) {
-		scoreService.playerWonOverPlayer(winEmail, loseEmail, gameResult, changedBy, updateScoresCallback);
-	}
-
-	public void clearAllScores(EmailAddressDto changedBy) {
-		scoreService.clearAllScores(changedBy, updateScoresCallback);
-	}
-
-	public void undo(EmailAddressDto changedBy) {
-		undoService.undoPlayerCommand(changedBy, new DefaultCallback<UndoPlayerCommandResult>() {
+	public void undo(final PlayerDto player) {
+		playerCommandService.undoPlayerCommand(player, new DefaultCallback<UndoPlayerCommandResult>() {
 
 			@Override
 			public void onSuccess(UndoPlayerCommandResult result) {
-				for (UndoListener undoListener : undoListeners) {
-					undoListener.onUndoCommand(result);
-				}
-				updateAll();
+				listeners.onUndoCommand(result);
+				updateScoreAndCommands();
+				updateNickname(player);
 			}
 
 		});
 	}
 
-	public void sendMessage(EmailAddressDto player, String message) {
-		loginService.sendMessage(player, message, new DefaultCallback<Void>() {
+	private void updateNickname(PlayerDto player) {
+		playerService.getNickname(player.email, new DefaultCallback<String>() {
+
+			@Override
+			public void onSuccess(String result) {
+				listeners.onNicknameUpdate(result);
+			}
+		});
+	}
+
+	public void sendMessage(PlayerDto player, String message) {
+		playerService.sendMessage(player, message, new DefaultCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
@@ -59,64 +57,66 @@ public class MessageCentral {
 		});
 	}
 
-	public void updateUndoList() {
-		undoService.getPlayerCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
-
-			@Override
-			public void onSuccess(List<PlayerCommandDto> result) {
-				for (UndoListener undoListener : undoListeners) {
-					undoListener.onUndoListUpdate(result);
-				}
-			}
-		});
-
+	public void userLoginStatus(DefaultCallback<LoginDataDto> defaultCallback) {
+		playerService.userLoginStatus(GWT.getHostPageBaseURL(), defaultCallback);
 	}
 
-	public void updateScores() {
-		scoreService.getPlayerList(new DefaultCallback<List<PlayerScoreDto>>() {
+	public void changeNickname(EmailAddressDto player, final String nickname) {
+		playerService.changeNickname(player, nickname, new DefaultCallback<Void>() {
 
 			@Override
-			public void onSuccess(List<PlayerScoreDto> result) {
-				for (ScoreListener scoreListener : scoreListeners) {
-					scoreListener.onScoreChange(result);
-				}
-			}
-
-		});
-
-	}
-
-	public void updateUndoCommand() {
-		undoService.getUndoCommand(new DefaultCallback<PlayerCommandDto>() {
-
-			@Override
-			public void onSuccess(PlayerCommandDto result) {
-				for (UndoListener undoListener : undoListeners) {
-					undoListener.onUndoCommandUpdate(result);
-				}
+			public void onSuccess(Void result) {
+				updateScoreAndCommands();
+				listeners.onNicknameUpdate(nickname);
 			}
 		});
 	}
 
-	private static abstract class DefaultCallback<T> implements AsyncCallback<T> {
-
-		@Override
-		public final void onFailure(Throwable caught) {
-			caught.printStackTrace();
-		}
-	}
-
-	private class UpdateScoresCallback extends DefaultCallback<Void> {
-		@Override
-		public void onSuccess(Void result) {
-			updateAll();
-		}
-
-	}
-
-	public void updateAll() {
+	public void updateScoreAndCommands() {
 		updateScores();
 		updateUndoList();
 		updateUndoCommand();
 	}
+
+	private void updateUndoList() {
+		playerCommandService.getPlayerCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+
+			@Override
+			public void onSuccess(List<PlayerCommandDto> result) {
+				listeners.onPlayerCommandListUpdate(result);
+			}
+		});
+
+	}
+
+	private void updateScores() {
+		scoreService.getPlayerList(new DefaultCallback<List<PlayerScoreDto>>() {
+
+			@Override
+			public void onSuccess(List<PlayerScoreDto> result) {
+				listeners.onScoreChange(result);
+			}
+
+		});
+
+	}
+
+	private void updateUndoCommand() {
+		playerCommandService.getUndoCommand(new DefaultCallback<PlayerCommandDto>() {
+
+			@Override
+			public void onSuccess(PlayerCommandDto result) {
+				listeners.onUndoCommandUpdate(result);
+			}
+		});
+	}
+
+	private class UpdateAllCallback extends DefaultCallback<Void> {
+		@Override
+		public void onSuccess(Void result) {
+			updateScoreAndCommands();
+		}
+
+	}
+
 }

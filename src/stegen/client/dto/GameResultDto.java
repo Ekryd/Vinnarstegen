@@ -8,6 +8,7 @@ public class GameResultDto implements Serializable {
 
 	public SetScoreDto[] setScores;
 
+	/** For Serialization */
 	protected GameResultDto() {}
 
 	public static GameResultDto createEmptyGameResult() {

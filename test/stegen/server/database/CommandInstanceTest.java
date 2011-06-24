@@ -24,10 +24,10 @@ public class CommandInstanceTest {
 	@Test
 	public void serializeUserLoggedIn() {
 		CommandInstance command = CommandInstanceFactory.getUserIsLoggedInAndRegistered();
-		Assert.assertEquals(
-				"{\"result\":"
-						+ "{\"nickname\":\"nick\",\"logoutUrl\":\"logoutUrl\",\"loginResponse\":\"LOGGED_IN_AND_REGISTERED\",\"signInUrl\":\"\",\"emailAddress\":"
-						+ "{\"address\":\"address\"}}}", command.getCommandSerialized());
+		Assert.assertEquals("{\"result\":"
+				+ "{\"logoutUrl\":\"logoutUrl\",\"loginResponse\":\"LOGGED_IN_AND_REGISTERED\",\"signInUrl\":\"\","
+				+ "\"player\":{\"email\":{\"address\":\"address\"},\"nickname\":\"nickname\"}}}",
+				command.getCommandSerialized());
 	}
 
 	@Test

@@ -1,34 +1,35 @@
-package stegen.client.gui.message;
+package stegen.client.gui.dialog;
 
 import stegen.client.dto.*;
-import stegen.client.gui.message.RopaKnapp.*;
 import stegen.client.messages.*;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class RopaDialog extends DialogBox {
+public abstract class InputDialogBox extends DialogBox {
+
 	private final MessageCentral messageCentral;
 	private final LoginDataDto loginData;
-	private final ButtonText buttonText;
 	private final Button closeButton = new Button("Avbryt");
 	private final Button okButton = new Button("Ok");
 	private final TextBox messageBox = new TextBox();
+	private Label messageLabel;
 
-	public RopaDialog(MessageCentral messageCentral, LoginDataDto loginData, ButtonText buttonText) {
+	public InputDialogBox(MessageCentral messageCentral, LoginDataDto loginData) {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
-		this.buttonText = buttonText;
 		init();
 		setupButtonHandler();
 	}
 
 	private void init() {
+		closeButton.setStylePrimaryName("button");
+		okButton.setStylePrimaryName("button");
 		VerticalPanel verticalPanel = new VerticalPanel();
 		add(verticalPanel);
 
 		HorizontalPanel inputPanel = new HorizontalPanel();
-		Label messageLabel = new Label(loginData.nickname + " " + buttonText.actionText);
+		messageLabel = new Label("");
 		inputPanel.add(messageLabel);
 
 		inputPanel.add(messageBox);
@@ -60,10 +61,20 @@ public class RopaDialog extends DialogBox {
 			@Override
 			public void onClick(ClickEvent event) {
 				hide();
-				messageCentral.sendMessage(loginData.emailAddress, loginData.nickname + " " + buttonText.actionText
-						+ " " + messageBox.getText());
+				onOkButtonClick(messageCentral, loginData, messageBox.getText());
 			}
 
 		});
 	}
+
+	@Override
+	public void show() {
+		messageLabel.setText(getMessageLabelText());
+		super.show();
+	}
+
+	protected abstract String getMessageLabelText();
+
+	protected abstract void onOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText);
+
 }

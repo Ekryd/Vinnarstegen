@@ -9,19 +9,21 @@ import com.google.gwt.user.client.ui.*;
 public abstract class GameResultDialogBox extends DialogBox {
 	private final Button closeButton = new Button("Avbryt");
 	private final Button okButton = new Button("Ok");
-	private final EmailAddressDto winnerEmail;
-	private final EmailAddressDto loserEmail;
+	private final PlayerDto winner;
+	private final PlayerDto loser;
 	private final GameResultDto gameResult = GameResultDto.createEmptyGameResult();
 	private final Label scoreLabel = new Label();
 
-	public GameResultDialogBox(EmailAddressDto winnerEmail, EmailAddressDto loserEmail) {
-		this.winnerEmail = winnerEmail;
-		this.loserEmail = loserEmail;
-		setupComponents();
+	public GameResultDialogBox(PlayerDto winner, PlayerDto loser) {
+		this.winner = winner;
+		this.loser = loser;
+		init();
 		setupButtonHandler();
 	}
 
-	private void setupComponents() {
+	private void init() {
+		closeButton.setStylePrimaryName("button");
+		okButton.setStylePrimaryName("button");
 		setText("Matchresultat");
 		setAnimationEnabled(true);
 
@@ -37,7 +39,7 @@ public abstract class GameResultDialogBox extends DialogBox {
 		// }, winnerEmail, loserEmail, gameResult);
 		// verticalPanel.add(gameSetResultTable);
 
-		Widget setScoreDropdown = new SetScoreDropdown(winnerEmail, loserEmail, gameResult, new UpdateScoreCallback() {
+		Widget setScoreDropdown = new SetScoreDropdown(winner, loser, gameResult, new UpdateScoreCallback() {
 
 			@Override
 			public void onScoreChange() {

@@ -8,7 +8,7 @@ import stegen.client.messages.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class RopaKnapp extends Button implements UndoListener {
+public class MessageButton extends Button implements PlayerCommandListener {
 	private final Random random = new Random();
 	private final static ButtonText[] buttonTexts = new ButtonText[] { new ButtonText("Ropa", "ropar att"),
 			new ButtonText("Viska", "viskar att"), new ButtonText("Väsa", "väser att"),
@@ -28,12 +28,17 @@ public class RopaKnapp extends Button implements UndoListener {
 	private ButtonText buttonText;
 	private final LoginDataDto loginData;
 
-	public RopaKnapp(MessageCentral messageCentral, final LoginDataDto loginData) {
+	public MessageButton(MessageCentral messageCentral, final LoginDataDto loginData) {
 		super("");
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
+		init();
 		addHandler();
-		messageCentral.addListener(this);
+		messageCentral.listeners.addListener(this);
+	}
+
+	private void init() {
+		setStylePrimaryName("button");
 	}
 
 	private void addHandler() {
@@ -41,7 +46,7 @@ public class RopaKnapp extends Button implements UndoListener {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				RopaDialog ropaDialog = new RopaDialog(messageCentral, loginData, buttonText);
+				MessageDialog ropaDialog = new MessageDialog(messageCentral, loginData, buttonText);
 				int left = getAbsoluteLeft() + 10;
 				int top = getAbsoluteTop() + 10;
 				ropaDialog.setPopupPosition(left, top);
@@ -56,18 +61,8 @@ public class RopaKnapp extends Button implements UndoListener {
 		setText(buttonText.buttonText);
 	}
 
-	static class ButtonText {
-		public String buttonText;
-		public String actionText;
-
-		public ButtonText(String buttonText, String actionText) {
-			this.buttonText = buttonText;
-			this.actionText = actionText;
-		}
-	}
-
 	@Override
-	public void onUndoListUpdate(List<PlayerCommandDto> result) {
+	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
 		changeButtonText();
 	}
 

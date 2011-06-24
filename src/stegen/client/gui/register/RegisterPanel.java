@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.*;
 import com.google.gwt.user.client.ui.*;
 
 public abstract class RegisterPanel extends VerticalPanel {
-	private final LoginServiceAsync loginService = GWT.create(LoginService.class);
+	private final PlayerServiceAsync loginService = GWT.create(PlayerService.class);
 	private final String password;
 	private final LoginDataDto loginData;
 
@@ -27,6 +27,8 @@ public abstract class RegisterPanel extends VerticalPanel {
 	private void initComponents() {
 		registerLabel = new Label("Du måste skriva in den magiska koden för att registrera dig.");
 		registeraButton = new Button("Registrera");
+		registeraButton.setStylePrimaryName("button");
+
 		kodField = new TextBox();
 		kodField.setText("<kod>");
 
@@ -44,11 +46,11 @@ public abstract class RegisterPanel extends VerticalPanel {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (kodField.getText().equals(password)) {
-					loginService.registerPlayer(loginData.emailAddress, new AsyncCallback<Void>() {
+					loginService.registerPlayer(loginData.player.email, new AsyncCallback<Void>() {
 
 						@Override
 						public void onSuccess(Void result) {
-							registerLabel.setText("Ja, " + loginData.nickname + ". Du är nu registrerad.");
+							registerLabel.setText("Ja, " + loginData.player.nickname + ". Du är nu registrerad.");
 							registeraButton.setVisible(false);
 							kodField.setVisible(false);
 							onRegisterOk(loginData);
@@ -60,7 +62,8 @@ public abstract class RegisterPanel extends VerticalPanel {
 						}
 					});
 				} else {
-					registerLabel.setText("Nej, " + loginData.nickname + ". Det där gick inte bra. Skriv in koden.");
+					registerLabel.setText("Nej, " + loginData.player.nickname
+							+ ". Det där gick inte bra. Skriv in koden.");
 				}
 
 			}

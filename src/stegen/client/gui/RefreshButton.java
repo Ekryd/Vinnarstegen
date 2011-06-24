@@ -11,7 +11,12 @@ public class RefreshButton extends Button {
 	public RefreshButton(MessageCentral messageCentral) {
 		super("Refresh!");
 		this.messageCentral = messageCentral;
+		inti();
 		initHandler();
+	}
+
+	private void inti() {
+		setStylePrimaryName("thinButton");
 	}
 
 	private void initHandler() {
@@ -19,7 +24,7 @@ public class RefreshButton extends Button {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				messageCentral.updateAll();
+				messageCentral.updateScoreAndCommands();
 			}
 		});
 	}

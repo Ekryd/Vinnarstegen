@@ -7,7 +7,7 @@ import stegen.server.database.*;
 
 import com.google.gwt.user.server.rpc.*;
 
-public class LoginServiceImpl extends RemoteServiceServlet implements LoginService {
+public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
 	private static final long serialVersionUID = 1134570288972922306L;
 
@@ -35,10 +35,23 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	}
 
 	@Override
-	public void sendMessage(EmailAddressDto player, String message) {
-		SendMessage command = new SendMessage(player, message);
+	public void sendMessage(PlayerDto player, String message) {
+		SendMessage command = new SendMessage(player.email, message);
+		command.execute();
+		CommandInstance commandInstance = new CommandInstance(command, player.email);
+		CommandInstanceRepository.get().create(commandInstance);
+	}
+
+	@Override
+	public void changeNickname(EmailAddressDto player, String nickname) {
+		PlayerCommand command = new ChangeNickname(player, nickname);
 		command.execute();
 		CommandInstance commandInstance = new CommandInstance(command, player);
 		CommandInstanceRepository.get().create(commandInstance);
+	}
+
+	@Override
+	public String getNickname(EmailAddressDto player) {
+		return StegenUserRepository.get().getOrCreateNickname(player);
 	}
 }

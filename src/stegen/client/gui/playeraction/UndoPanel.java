@@ -10,7 +10,7 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class UndoPanel extends VerticalPanel implements UndoListener {
+public class UndoPanel extends VerticalPanel implements PlayerCommandListener {
 	private final LoginDataDto loginData;
 	private final Button undoButton = new Button();
 	private final CellTable<PlayerCommandDto> undoList = new CellTable<PlayerCommandDto>();
@@ -21,15 +21,17 @@ public class UndoPanel extends VerticalPanel implements UndoListener {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
 		init();
-		messageCentral.addListener(this);
+		messageCentral.listeners.addListener(this);
 	}
 
 	private void init() {
+		undoButton.setStylePrimaryName("button");
+
 		undoList.addColumn(new TextColumn<PlayerCommandDto>() {
 
 			@Override
 			public String getValue(PlayerCommandDto object) {
-				return object.player.address;
+				return object.player.nickname;
 			}
 		}, "Utfört av");
 		undoList.addColumn(new TextColumn<PlayerCommandDto>() {
@@ -80,18 +82,18 @@ public class UndoPanel extends VerticalPanel implements UndoListener {
 	}
 
 	private boolean ownsLastUndoCommand(PlayerCommandDto result) {
-		return result != null && result.player.address.equals(loginData.emailAddress.address);
+		return result != null && result.player.email.equals(loginData.player.email);
 	}
 
 	private final class UndoButtonClickHandler implements ClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
-			messageCentral.undo(loginData.emailAddress);
+			messageCentral.undo(loginData.player);
 		}
 	}
 
 	@Override
-	public void onUndoListUpdate(List<PlayerCommandDto> result) {
+	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
 		changeList(result);
 	}
 

@@ -6,16 +6,16 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class SetScoreDropdown extends VerticalPanel {
-	private final EmailAddressDto winnerEmail;
-	private final EmailAddressDto loserEmail;
+	private final PlayerDto winner;
+	private final PlayerDto loser;
 	private final GameResultDto gameResult;
 	private final UpdateScoreCallback scoreCallback;
 	private final ListBox listBox = new ListBox(false);
 
-	public SetScoreDropdown(EmailAddressDto winnerEmail, EmailAddressDto loserEmail, GameResultDto gameResult,
+	public SetScoreDropdown(PlayerDto winner, PlayerDto loser, GameResultDto gameResult,
 			UpdateScoreCallback scoreCallback) {
-		this.winnerEmail = winnerEmail;
-		this.loserEmail = loserEmail;
+		this.winner = winner;
+		this.loser = loser;
 		this.gameResult = gameResult;
 		this.scoreCallback = scoreCallback;
 		addItems();
@@ -44,7 +44,7 @@ public class SetScoreDropdown extends VerticalPanel {
 	}
 
 	private void addItems() {
-		Label playersLabel = new Label(winnerEmail.address + " - " + loserEmail.address);
+		Label playersLabel = new Label(winner.nickname + " - " + loser.nickname);
 		playersLabel.setStylePrimaryName("players_label");
 		add(playersLabel);
 

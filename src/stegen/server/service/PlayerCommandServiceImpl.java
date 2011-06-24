@@ -9,7 +9,7 @@ import stegen.server.database.*;
 
 import com.google.gwt.user.server.rpc.*;
 
-public class UndoServiceImpl extends RemoteServiceServlet implements UndoService {
+public class PlayerCommandServiceImpl extends RemoteServiceServlet implements PlayerCommandService {
 	private static final long serialVersionUID = 5777230422402242088L;
 
 	@Override
@@ -19,9 +19,17 @@ public class UndoServiceImpl extends RemoteServiceServlet implements UndoService
 	}
 
 	@Override
+	public List<PlayerCommandDto> getSendMessageCommandStack(int maxDepth) {
+		@SuppressWarnings("unchecked")
+		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
+				SendMessage.class);
+		return convertList(commands, maxDepth);
+	}
+
+	@Override
 	public PlayerCommandDto getUndoCommand() {
 		CommandInstance latestUndoable = CommandInstanceRepository.get().getLatestUndoable();
-		return latestUndoable.getPlayerUndoCommand();
+		return latestUndoable.createPlayerCommandDto();
 	}
 
 	private List<PlayerCommandDto> convertList(List<CommandInstance> commands, int maxDepth) {
@@ -32,16 +40,16 @@ public class UndoServiceImpl extends RemoteServiceServlet implements UndoService
 			if (index > maxDepth) {
 				return returnValue;
 			}
-			returnValue.add(commandInstance.getPlayerUndoCommand());
+			returnValue.add(commandInstance.createPlayerCommandDto());
 		}
 		return returnValue;
 	}
 
 	@Override
-	public UndoPlayerCommandResult undoPlayerCommand(EmailAddressDto player) {
-		UndoPlayerCommand command = new UndoPlayerCommand(player);
+	public UndoPlayerCommandResult undoPlayerCommand(PlayerDto player) {
+		UndoPlayerCommand command = new UndoPlayerCommand(player.email);
 		command.execute();
-		CommandInstance commandInstanceToStore = new CommandInstance(command, player);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, player.email);
 		CommandInstanceRepository.get().create(commandInstanceToStore);
 		return command.getResult();
 	}

@@ -47,8 +47,10 @@ public class CommandInstance {
 		getCommand().undo();
 	}
 
-	public PlayerCommandDto getPlayerUndoCommand() {
-		return new PlayerCommandDto(new EmailAddressDto(emailString), dateTime, getCommand().getDescription());
+	public PlayerCommandDto createPlayerCommandDto() {
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		return new PlayerCommandDto(stegenUserRepository.createPlayerDto(emailString), dateTime, getCommand()
+				.getDescription());
 	}
 
 	public boolean belongsTo(EmailAddressDto player) {
@@ -66,7 +68,7 @@ public class CommandInstance {
 	private static CommandInstance getNotFoundInstance() {
 		return new CommandInstance() {
 			@Override
-			public PlayerCommandDto getPlayerUndoCommand() {
+			public PlayerCommandDto createPlayerCommandDto() {
 				return null;
 			}
 		};

@@ -48,13 +48,15 @@ public class CheckLoginStatus implements PlayerCommand {
 
 	private LoginDataDto userIsLoggedInAndRegistered(UserService userService) {
 		User currentUser = userService.getCurrentUser();
-		return LoginDataDto.userIsLoggedInAndRegistered(new EmailAddressDto(currentUser.getEmail()),
-				currentUser.getNickname(), userService.createLogoutURL(requestUri));
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		return LoginDataDto.userIsLoggedInAndRegistered(stegenUserRepository.createPlayerDto(currentUser.getEmail()),
+				userService.createLogoutURL(requestUri));
 	}
 
 	private LoginDataDto userIsNotRegistered(UserService userService) {
 		User currentUser = userService.getCurrentUser();
-		return LoginDataDto.userIsNotRegistered(new EmailAddressDto(currentUser.getEmail()), currentUser.getNickname(),
+		return LoginDataDto.userIsNotRegistered(
+				new PlayerDto(new EmailAddressDto(currentUser.getEmail()), currentUser.getEmail()),
 				userService.createLogoutURL(requestUri));
 	}
 
@@ -67,12 +69,20 @@ public class CheckLoginStatus implements PlayerCommand {
 	public String getDescription() {
 		switch (result.loginResponse) {
 		case LOGGED_IN_GMAIL:
-			return result.emailAddress.address + " tittade till applikationen, men var inte registrerad";
+			String nickname = getBackwardCompabilityNickname(result.player);
+			return nickname + " tittade till applikationen, men var inte registrerad";
 		case LOGGED_IN_AND_REGISTERED:
 			return "Loggade just in i applikationen";
 		default:
 			return "Någon tittade till applikationen, men var inte inloggad";
 		}
+	}
+
+	private String getBackwardCompabilityNickname(PlayerDto player) {
+		if (player == null) {
+			return "Någon";
+		}
+		return player.nickname;
 	}
 
 	@Override
@@ -85,6 +95,6 @@ public class CheckLoginStatus implements PlayerCommand {
 	}
 
 	public EmailAddressDto getEmail() {
-		return result.emailAddress;
+		return result.player.email;
 	}
 }

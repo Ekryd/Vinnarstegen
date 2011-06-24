@@ -77,8 +77,10 @@ public class PlayerWonOverPlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
 		return String.format("%s vann över %s och ökade sina poäng från %s till %s. Förloraren fick %s poäng",
-				winnerEmail.address, loserEmail.address, scores.oldWinnerScore, scores.newWinnerScore,
+				stegenUserRepository.getOrCreateNickname(winnerEmail),
+				stegenUserRepository.getOrCreateNickname(loserEmail), scores.oldWinnerScore, scores.newWinnerScore,
 				scores.newLoserScore - scores.oldLoserScore);
 	}
 

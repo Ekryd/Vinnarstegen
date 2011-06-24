@@ -7,7 +7,8 @@ public class SetScoreDto implements Serializable {
 	public Integer gameWinnerScore;
 	public Integer gameLoserScore;
 
-	public SetScoreDto() {}
+	/** For Serialization */
+	protected SetScoreDto() {}
 
 	public SetScoreDto(Integer gameWinnerScore, Integer gameLoserScore) {
 		this.gameWinnerScore = gameWinnerScore;

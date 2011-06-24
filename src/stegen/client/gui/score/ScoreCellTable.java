@@ -21,7 +21,7 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 		initTextColumns();
 		initButtonColumns();
 		addDataProvider();
-		messageCentral.addListener(this);
+		messageCentral.listeners.addListener(this);
 	}
 
 	private void initTextColumns() {
@@ -29,9 +29,9 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 
 			@Override
 			public String getValue(PlayerScoreDto player) {
-				return player.email.address;
+				return player.player.nickname;
 			}
-		}, "Email");
+		}, "Namn");
 		addColumn(new TextColumn<PlayerScoreDto>() {
 
 			@Override
@@ -57,7 +57,7 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 
 			@Override
 			public String getValue(PlayerScoreDto player) {
-				return player.changedBy.address;
+				return player.player.nickname;
 			}
 		}, "Ändrad av");
 
@@ -65,12 +65,13 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 
 	private void initButtonColumns() {
 		Column<PlayerScoreDto, String> winColumn = new ButtonColumn(loginData, "Jag vann mot");
+
 		addColumn(winColumn);
 		winColumn.setFieldUpdater(new FieldUpdater<PlayerScoreDto, String>() {
 
 			@Override
 			public void update(int index, PlayerScoreDto playerScore, String value) {
-				playerWonOverPlayer(loginData.emailAddress, playerScore.email);
+				playerWonOverPlayer(loginData.player, playerScore.player);
 			}
 		});
 		Column<PlayerScoreDto, String> loseColumn = new ButtonColumn(loginData, "Jag förlorade mot");
@@ -79,7 +80,7 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 
 			@Override
 			public void update(int index, PlayerScoreDto playerScore, String value) {
-				playerWonOverPlayer(playerScore.email, loginData.emailAddress);
+				playerWonOverPlayer(playerScore.player, loginData.player);
 			}
 		});
 	}
@@ -92,15 +93,15 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 
 	}
 
-	private void playerWonOverPlayer(final EmailAddressDto winEmail, final EmailAddressDto loseEmail) {
-		if (winEmail.equals(loseEmail)) {
+	private void playerWonOverPlayer(final PlayerDto winner, final PlayerDto loser) {
+		if (winner.equals(loser)) {
 			return;
 		}
-		new GameResultDialogBox(winEmail, loseEmail) {
+		new GameResultDialogBox(winner, loser) {
 
 			@Override
 			protected void sendGameResult(GameResultDto gameResult) {
-				messageCentral.playerWonOverPlayer(winEmail, loseEmail, gameResult, loginData.emailAddress);
+				messageCentral.playerWonOverPlayer(winner, loser, gameResult, loginData.player);
 			}
 		}.center();
 	}

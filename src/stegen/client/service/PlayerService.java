@@ -5,12 +5,16 @@ import stegen.client.dto.*;
 import com.google.gwt.user.client.rpc.*;
 
 @RemoteServiceRelativePath("login")
-public interface LoginService extends RemoteService {
+public interface PlayerService extends RemoteService {
 
 	LoginDataDto userLoginStatus(String requestUri);
 
 	void registerPlayer(EmailAddressDto email);
 
-	void sendMessage(EmailAddressDto player, String message);
+	void sendMessage(PlayerDto player, String message);
+
+	void changeNickname(EmailAddressDto player, String nickname);
+
+	String getNickname(EmailAddressDto player);
 
 }

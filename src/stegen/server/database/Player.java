@@ -47,8 +47,9 @@ public class Player {
 	}
 
 	public PlayerScoreDto createDto(SimpleDateFormat dateFormat) {
-		return new PlayerScoreDto(new EmailAddressDto(emailString), score, new EmailAddressDto(changedByEmailString),
-				dateFormat.format(changed));
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		return new PlayerScoreDto(stegenUserRepository.createPlayerDto(emailString), score,
+				stegenUserRepository.createPlayerDto(changedByEmailString), dateFormat.format(changed));
 	}
 
 	public void clearScore(EmailAddressDto changedBy) {

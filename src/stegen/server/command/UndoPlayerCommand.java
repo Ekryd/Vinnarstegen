@@ -24,10 +24,10 @@ public class UndoPlayerCommand implements PlayerCommand {
 		if (commandToUndo == null) {
 			result = UndoPlayerCommandResult.FAILURE;
 		} else if (!commandToUndo.belongsTo(player)) {
-			commandUndoDescription = " för " + commandToUndo.getPlayerUndoCommand().description;
+			commandUndoDescription = " för " + commandToUndo.createPlayerCommandDto().description;
 			result = UndoPlayerCommandResult.FAILURE;
 		} else {
-			commandUndoDescription = commandToUndo.getPlayerUndoCommand().description;
+			commandUndoDescription = commandToUndo.createPlayerCommandDto().description;
 			commandToUndo.undo();
 			CommandInstanceRepository.get().delete(commandToUndo);
 			result = UndoPlayerCommandResult.SUCCESS;

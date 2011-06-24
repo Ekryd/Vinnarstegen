@@ -7,17 +7,14 @@ public class EmailAddressDto implements Serializable {
 
 	public String address;
 
-	public EmailAddressDto() {}
+	/** For Serialization */
+	protected EmailAddressDto() {}
 
 	public EmailAddressDto(String address) {
 		this.address = address;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
+	/** @see java.lang.Object#hashCode() */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -26,11 +23,7 @@ public class EmailAddressDto implements Serializable {
 		return result;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
+	/** @see java.lang.Object#equals(java.lang.Object) */
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
