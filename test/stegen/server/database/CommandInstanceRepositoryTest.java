@@ -82,6 +82,7 @@ public class CommandInstanceRepositoryTest {
 		commandInstanceRepository.create(CommandInstanceFactory.sendMessage("hopp"));
 
 		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		@SuppressWarnings("unchecked")
 		List<CommandInstance> stack = commandInstanceRepository.getPlayerCommandStack(10, SendMessage.class);
 		Assert.assertNotNull(stack);
 		Assert.assertEquals(2, stack.size());
@@ -105,6 +106,7 @@ public class CommandInstanceRepositoryTest {
 		commandInstanceRepository.create(CommandInstanceFactory.sendMessage("hopp"));
 
 		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
+		@SuppressWarnings("unchecked")
 		List<CommandInstance> stack = commandInstanceRepository.getPlayerCommandStack(10, SendMessage.class,
 				ClearAllScores.class);
 		Assert.assertNotNull(stack);
