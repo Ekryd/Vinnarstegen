@@ -43,10 +43,10 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	}
 
 	@Override
-	public void changeNickname(EmailAddressDto player, String nickname) {
+	public void changeNickname(PlayerDto player, String nickname) {
 		PlayerCommand command = new ChangeNickname(player, nickname);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, player);
+		CommandInstance commandInstance = new CommandInstance(command, player.email);
 		CommandInstanceRepository.get().create(commandInstance);
 	}
 

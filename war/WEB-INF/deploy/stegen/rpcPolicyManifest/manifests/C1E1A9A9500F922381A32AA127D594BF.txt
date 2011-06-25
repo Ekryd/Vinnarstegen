@@ -1,2 +1,0 @@
-serviceClass: stegen.client.service.LoginService
-path: 05AFDF63865FAF82D1C9218A5D3B5DAF.gwt.rpc

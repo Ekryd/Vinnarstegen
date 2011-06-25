@@ -24,7 +24,7 @@ public class RefreshButton extends Button {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				messageCentral.updateScoreAndCommands();
+				messageCentral.updateAll();
 			}
 		});
 	}

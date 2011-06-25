@@ -8,18 +8,33 @@ import stegen.client.service.*;
 import com.google.gwt.core.client.*;
 
 public class MessageCentral {
-	private final UpdateAllCallback updateAllCallback = new UpdateAllCallback();
 	private final PlayerCommandServiceAsync playerCommandService = GWT.create(PlayerCommandService.class);
 	private final ScoreServiceAsync scoreService = GWT.create(ScoreService.class);
 	private final PlayerServiceAsync playerService = GWT.create(PlayerService.class);
 	public final ListenerLists listeners = new ListenerLists();
 
 	public void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto gameResult, PlayerDto changedBy) {
-		scoreService.playerWonOverPlayer(winner, loser, gameResult, changedBy, updateAllCallback);
+		scoreService.playerWonOverPlayer(winner, loser, gameResult, changedBy, new DefaultCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				updatePlayerCommandList();
+				updateScores();
+				updateUndoCommand();
+			}
+		});
 	}
 
 	public void clearAllScores(PlayerDto changedBy) {
-		scoreService.clearAllScores(changedBy, updateAllCallback);
+		scoreService.clearAllScores(changedBy, new DefaultCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				updatePlayerCommandList();
+				updateScores();
+				updateUndoCommand();
+			}
+		});
 	}
 
 	public void undo(final PlayerDto player) {
@@ -28,20 +43,11 @@ public class MessageCentral {
 			@Override
 			public void onSuccess(UndoPlayerCommandResult result) {
 				listeners.onUndoCommand(result);
-				updateScoreAndCommands();
-				updateNickname(player);
+				updatePlayerCommandList();
+				updateScores();
+				updateUndoCommand();
 			}
 
-		});
-	}
-
-	private void updateNickname(PlayerDto player) {
-		playerService.getNickname(player.email, new DefaultCallback<String>() {
-
-			@Override
-			public void onSuccess(String result) {
-				listeners.onNicknameUpdate(result);
-			}
 		});
 	}
 
@@ -50,8 +56,8 @@ public class MessageCentral {
 
 			@Override
 			public void onSuccess(Void result) {
-				updateUndoList();
-				updateUndoCommand();
+				updateMessageList();
+				updatePlayerCommandList();
 			}
 
 		});
@@ -61,29 +67,41 @@ public class MessageCentral {
 		playerService.userLoginStatus(GWT.getHostPageBaseURL(), defaultCallback);
 	}
 
-	public void changeNickname(EmailAddressDto player, final String nickname) {
+	public void changeNickname(final PlayerDto player, final String nickname) {
 		playerService.changeNickname(player, nickname, new DefaultCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
-				updateScoreAndCommands();
 				listeners.onNicknameUpdate(nickname);
+				updatePlayerCommandList();
 			}
 		});
 	}
 
-	public void updateScoreAndCommands() {
+	public void updateAll() {
 		updateScores();
-		updateUndoList();
+		updatePlayerCommandList();
 		updateUndoCommand();
+		updateMessageList();
 	}
 
-	private void updateUndoList() {
+	private void updatePlayerCommandList() {
 		playerCommandService.getPlayerCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
 
 			@Override
 			public void onSuccess(List<PlayerCommandDto> result) {
 				listeners.onPlayerCommandListUpdate(result);
+			}
+		});
+
+	}
+
+	private void updateMessageList() {
+		playerCommandService.getSendMessageCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+
+			@Override
+			public void onSuccess(List<PlayerCommandDto> result) {
+				listeners.onMessageListUpdate(result);
 			}
 		});
 
@@ -109,14 +127,6 @@ public class MessageCentral {
 				listeners.onUndoCommandUpdate(result);
 			}
 		});
-	}
-
-	private class UpdateAllCallback extends DefaultCallback<Void> {
-		@Override
-		public void onSuccess(Void result) {
-			updateScoreAndCommands();
-		}
-
 	}
 
 }

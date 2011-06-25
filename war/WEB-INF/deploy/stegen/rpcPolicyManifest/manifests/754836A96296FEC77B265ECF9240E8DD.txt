@@ -1,2 +1,0 @@
-serviceClass: stegen.client.service.UndoService
-path: 3DB6CDE6FC1E529594DAA6277B50C5BE.gwt.rpc

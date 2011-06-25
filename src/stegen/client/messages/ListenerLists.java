@@ -8,6 +8,7 @@ public class ListenerLists {
 	private final List<ScoreListener> scoreListenerList = new ArrayList<ScoreListener>();
 	private final List<PlayerCommandListener> undoListeners = new ArrayList<PlayerCommandListener>();
 	private final List<NicknameListener> nicknameListeners = new ArrayList<NicknameListener>();
+	private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
 	public void addListener(ScoreListener listener) {
 		scoreListenerList.add(listener);
@@ -19,6 +20,10 @@ public class ListenerLists {
 
 	public void addListener(NicknameListener listener) {
 		nicknameListeners.add(listener);
+	}
+
+	public void addListener(MessageListener listener) {
+		messageListeners.add(listener);
 	}
 
 	void onUndoCommand(UndoPlayerCommandResult result) {
@@ -45,9 +50,15 @@ public class ListenerLists {
 		}
 	}
 
-	public void onNicknameUpdate(String nickname) {
+	void onNicknameUpdate(String nickname) {
 		for (NicknameListener listener : nicknameListeners) {
 			listener.onNicknameChange(nickname);
+		}
+	}
+
+	void onMessageListUpdate(List<PlayerCommandDto> result) {
+		for (MessageListener listener : messageListeners) {
+			listener.onMessageListUpdate(result);
 		}
 	}
 

@@ -16,12 +16,12 @@ public class ChangeNicknameDialog extends InputDialogBox implements NicknameList
 
 	@Override
 	protected void onOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText) {
-		messageCentral.changeNickname(loginData.player.email, messageBoxText);
+		messageCentral.changeNickname(loginData.player, messageBoxText);
 	}
 
 	@Override
 	protected String getMessageLabelText() {
-		return "Du vill ändra ditt alias från " + oldNickname + " till";
+		return "Ändra från " + oldNickname + " till";
 	}
 
 	@Override

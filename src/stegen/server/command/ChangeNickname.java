@@ -16,11 +16,10 @@ public class ChangeNickname implements PlayerCommand {
 		this.oldNickname = null;
 	}
 
-	public ChangeNickname(EmailAddressDto player, String nickname) {
-		this.email = player;
+	public ChangeNickname(PlayerDto player, String nickname) {
+		this.email = player.email;
 		this.newNickname = nickname;
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		this.oldNickname = stegenUserRepository.getOrCreateNickname(player);
+		this.oldNickname = player.nickname;
 	}
 
 	@Override
@@ -31,8 +30,7 @@ public class ChangeNickname implements PlayerCommand {
 
 	@Override
 	public void undo() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		stegenUserRepository.updateNickname(email, oldNickname);
+		// Nope
 	}
 
 	@Override
@@ -42,7 +40,7 @@ public class ChangeNickname implements PlayerCommand {
 
 	@Override
 	public boolean isUndoable() {
-		return true;
+		return false;
 	}
 
 }

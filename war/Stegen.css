@@ -1,14 +1,6 @@
 /** Add css rules here for your application. */
 
 
-h1 {
-  font-size: 2em;
-  font-weight: bold;
-  color: #777777;
-  margin: 40px 0px 70px;
-  text-align: center;
-}
-
 body {
   margin: 0px;
   padding: 0px;
@@ -18,19 +10,31 @@ body {
 	margin: 0 auto;
 	/* the auto value on the sides, coupled with the width, centers the layout */
 }
+
+.headerPanel {
+  width: 100%;
+}
+
+.contentPanel {
+  float: left;
+  width: 100%;
+  padding: 5px;
+}
+
+.footerPanel {
+  clear: both;
+  width: 100%;
+  height: 100px;
+  padding: 5px;
+}
+
 .refreshPanel {
 	position: relative;
 	float: right;
 	z-index: 999;
 	top: 5px;
 }
-.headerPanel {
-  width: 100%;
-/*   border: 2px solid gray; */
-}
-.headerLogo {
-	border: 1px solid #CCC
-}
+
 .userArea_left {
   float: left;
   width: 50%;
@@ -38,25 +42,17 @@ body {
   position: relative;
   padding: 5px;
 }
+
 .logoutArea_right {
   float: right;
   width: 5%;
   height: 30px;
   padding: 5px;
 }
-.contentPanel {
-  float: left;
-  width: 100%;
-  padding: 5px;
-}
-.footerPanel {
-  clear: both;
-  width: 100%;
-  height: 100px;
-/*   border: 2px solid gray; */
-  padding: 5px;
-}
 
+.headerLogo {
+	border: 1px solid #CCC
+}
 .players_label {
   font-size: 13px;
   font-weight: bold;
@@ -90,6 +86,7 @@ body {
 
 .thinButton {
 	height: 24px;
+	margin-left: 10px;
 }
 
 button {

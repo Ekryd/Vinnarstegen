@@ -45,13 +45,13 @@ public class Login implements EntryPoint {
 	}
 
 	private void showLoginPanel() {
-		showMainArea(new LoginPanel(loginData.signInUrl));
+		showInMainArea(new LoginPanel(loginData.signInUrl));
 	}
 
 	private void showRegisterPanel() {
 		showLogout();
 		showUser();
-		showMainArea(new RegisterPanel("SuckoPust", loginData) {
+		showInMainArea(new RegisterPanel("SuckoPust", loginData) {
 
 			@Override
 			public void onRegisterOk(LoginDataDto loginData) {
@@ -63,9 +63,9 @@ public class Login implements EntryPoint {
 	private void showOkLogin() {
 		showLogout();
 		showUser();
-		messagesArea().add(new MessageButton(messageCentral, loginData));
+		messagesArea().add(new MessageArea(messageCentral, loginData));
 		refreshArea().add(new RefreshButton(messageCentral));
-		showMainArea(new MainContentTabs(messageCentral, loginData));
+		showInMainArea(new MainContentTabs(messageCentral, loginData));
 		addUpdateTimer();
 	}
 
@@ -80,18 +80,18 @@ public class Login implements EntryPoint {
 		userArea().add(new UserPanel(messageCentral, loginData));
 	}
 
-	protected void showMainArea(Widget panel) {
+	protected void showInMainArea(Widget panel) {
 		mainArea().clear();
 		mainArea().add(panel);
 	}
 
 	private void addUpdateTimer() {
-		messageCentral.updateScoreAndCommands();
+		messageCentral.updateAll();
 		timer = new Timer() {
 
 			@Override
 			public void run() {
-				messageCentral.updateScoreAndCommands();
+				messageCentral.updateAll();
 			}
 		};
 		timer.scheduleRepeating(1000 * 60);

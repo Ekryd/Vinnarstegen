@@ -8,18 +8,17 @@ import stegen.client.messages.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
-import com.google.gwt.view.client.*;
 
-public class UndoPanel extends VerticalPanel implements PlayerCommandListener {
+public class PlayerCommandPanel extends VerticalPanel implements PlayerCommandListener {
 	private final LoginDataDto loginData;
 	private final Button undoButton = new Button();
-	private final CellTable<PlayerCommandDto> undoList = new CellTable<PlayerCommandDto>();
-	private final ListDataProvider<PlayerCommandDto> undoListDataProvider = new ListDataProvider<PlayerCommandDto>();
+	private final CellTable<PlayerCommandDto> playerCommandTable;
 	private final MessageCentral messageCentral;
 
-	public UndoPanel(MessageCentral messageCentral, LoginDataDto loginData) {
+	public PlayerCommandPanel(MessageCentral messageCentral, LoginDataDto loginData) {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
+		playerCommandTable = new PlayerCommandTable(messageCentral);
 		init();
 		messageCentral.listeners.addListener(this);
 	}
@@ -27,23 +26,7 @@ public class UndoPanel extends VerticalPanel implements PlayerCommandListener {
 	private void init() {
 		undoButton.setStylePrimaryName("button");
 
-		undoList.addColumn(new TextColumn<PlayerCommandDto>() {
-
-			@Override
-			public String getValue(PlayerCommandDto object) {
-				return object.player.nickname;
-			}
-		}, "Utfört av");
-		undoList.addColumn(new TextColumn<PlayerCommandDto>() {
-
-			@Override
-			public String getValue(PlayerCommandDto object) {
-				return object.description;
-			}
-		}, "Senaste händelse");
-		add(undoList);
-
-		undoListDataProvider.addDataDisplay(undoList);
+		add(playerCommandTable);
 
 		undoButton.setVisible(false);
 		undoButton.addClickHandler(new UndoButtonClickHandler());
@@ -77,10 +60,6 @@ public class UndoPanel extends VerticalPanel implements PlayerCommandListener {
 		undoButton.setVisible(ownsLastUndoCommand);
 	}
 
-	private void changeList(List<PlayerCommandDto> result) {
-		undoListDataProvider.setList(result);
-	}
-
 	private boolean ownsLastUndoCommand(PlayerCommandDto result) {
 		return result != null && result.player.email.equals(loginData.player.email);
 	}
@@ -93,13 +72,11 @@ public class UndoPanel extends VerticalPanel implements PlayerCommandListener {
 	}
 
 	@Override
-	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
-		changeList(result);
-	}
-
-	@Override
 	public void onUndoCommandUpdate(PlayerCommandDto result) {
 		changeButton(result);
 	}
+
+	@Override
+	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {}
 
 }
