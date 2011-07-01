@@ -5,12 +5,14 @@ import java.util.*;
 import stegen.client.dto.*;
 import stegen.client.messages.*;
 
+import com.google.gwt.i18n.client.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.view.client.*;
 
 public class GameResultTable extends CellTable<PlayerCommandDto> implements PlayerCommandListener {
 
 	private final ListDataProvider<PlayerCommandDto> undoListDataProvider = new ListDataProvider<PlayerCommandDto>();
+	private DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
 
 	public GameResultTable(MessageCentral messageCentral) {
 		init();
@@ -26,6 +28,13 @@ public class GameResultTable extends CellTable<PlayerCommandDto> implements Play
 				return object.player.nickname;
 			}
 		}, "Utfört av");
+		addColumn(new TextColumn<PlayerCommandDto>() {
+
+			@Override
+			public String getValue(PlayerCommandDto object) {
+				return dateTimeFormat.format(object.performedDateTime);
+			}
+		}, "Datum");
 		addColumn(new TextColumn<PlayerCommandDto>() {
 
 			@Override

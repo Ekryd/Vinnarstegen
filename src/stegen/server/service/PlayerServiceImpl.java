@@ -15,8 +15,14 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	public LoginDataDto userLoginStatus(String requestUri) {
 		CheckLoginStatus command = new CheckLoginStatus(requestUri);
 		command.execute();
-		saveCommandForNotRegisteredUsers(command);
+		saveCommand(command);
+		// saveCommandForNotRegisteredUsers(command);
 		return command.getResult();
+	}
+
+	private void saveCommand(CheckLoginStatus command) {
+		CommandInstance commandInstance = new CommandInstance(command, command.getEmail());
+		CommandInstanceRepository.get().create(commandInstance);
 	}
 
 	private void saveCommandForNotRegisteredUsers(CheckLoginStatus command) {
