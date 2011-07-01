@@ -6,31 +6,24 @@ import stegen.client.dto.*;
 import stegen.client.messages.*;
 
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class PlayerCommandPanel extends VerticalPanel implements PlayerCommandListener {
-	private final LoginDataDto loginData;
-	private final Button undoButton = new Button();
-	private final CellTable<PlayerCommandDto> playerCommandTable;
-	private final MessageCentral messageCentral;
+public class UndoButton extends Button implements PlayerCommandListener {
 
-	public PlayerCommandPanel(MessageCentral messageCentral, LoginDataDto loginData) {
+	private final MessageCentral messageCentral;
+	private final LoginDataDto loginData;
+
+	public UndoButton(MessageCentral messageCentral, LoginDataDto loginData) {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
-		playerCommandTable = new PlayerCommandTable(messageCentral);
 		init();
 		messageCentral.listeners.addListener(this);
 	}
 
 	private void init() {
-		undoButton.setStylePrimaryName("button");
-
-		add(playerCommandTable);
-
-		undoButton.setVisible(false);
-		undoButton.addClickHandler(new UndoButtonClickHandler());
-		add(undoButton);
+		setStylePrimaryName("button");
+		setVisible(false);
+		addClickHandler(new UndoButtonClickHandler());
 	}
 
 	@Override
@@ -42,8 +35,8 @@ public class PlayerCommandPanel extends VerticalPanel implements PlayerCommandLi
 			simplePopup.setWidget(new HTML(
 					"Tyvärr gick det inte att göra undo. <br/>Någon annan har redan ändrat poäng."));
 
-			int left = undoButton.getAbsoluteLeft() + 10;
-			int top = undoButton.getAbsoluteTop() + 10;
+			int left = getAbsoluteLeft() + 10;
+			int top = getAbsoluteTop() + 10;
 			simplePopup.setPopupPosition(left, top);
 
 			// Show the popup
@@ -55,14 +48,22 @@ public class PlayerCommandPanel extends VerticalPanel implements PlayerCommandLi
 	private void changeButton(PlayerCommandDto result) {
 		boolean ownsLastUndoCommand = ownsLastUndoCommand(result);
 		if (ownsLastUndoCommand) {
-			undoButton.setText("Ångra " + result.description);
+			setText("Ångra " + result.description);
 		}
-		undoButton.setVisible(ownsLastUndoCommand);
+		setVisible(ownsLastUndoCommand);
 	}
 
 	private boolean ownsLastUndoCommand(PlayerCommandDto result) {
 		return result != null && result.player.email.equals(loginData.player.email);
 	}
+
+	@Override
+	public void onUndoCommandUpdate(PlayerCommandDto result) {
+		changeButton(result);
+	}
+
+	@Override
+	public void onPlayerMiscCommandListUpdate(List<PlayerCommandDto> result) {}
 
 	private final class UndoButtonClickHandler implements ClickHandler {
 		@Override
@@ -72,11 +73,15 @@ public class PlayerCommandPanel extends VerticalPanel implements PlayerCommandLi
 	}
 
 	@Override
-	public void onUndoCommandUpdate(PlayerCommandDto result) {
-		changeButton(result);
+	public void onGameResultListUpdate(List<PlayerCommandDto> result) {
+		// TODO Auto-generated method stub
+
 	}
 
 	@Override
-	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {}
+	public void onLoginStatusListUpdate(List<PlayerCommandDto> result) {
+		// TODO Auto-generated method stub
+
+	}
 
 }

@@ -12,8 +12,12 @@ public interface PlayerCommandServiceAsync {
 
 	void getUndoCommand(AsyncCallback<PlayerCommandDto> callback);
 
-	void getPlayerCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
-
 	void getSendMessageCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
+
+	void getGameResultCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
+
+	void getLoginStatusCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
+
+	void getPlayerMiscCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
 
 }

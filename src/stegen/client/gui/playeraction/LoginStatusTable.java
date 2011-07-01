@@ -8,11 +8,11 @@ import stegen.client.messages.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.view.client.*;
 
-public class PlayerCommandTable extends CellTable<PlayerCommandDto> implements PlayerCommandListener {
+public class LoginStatusTable extends CellTable<PlayerCommandDto> implements PlayerCommandListener {
 
 	private final ListDataProvider<PlayerCommandDto> undoListDataProvider = new ListDataProvider<PlayerCommandDto>();
 
-	public PlayerCommandTable(MessageCentral messageCentral) {
+	public LoginStatusTable(MessageCentral messageCentral) {
 		init();
 		initProvider();
 		messageCentral.listeners.addListener(this);
@@ -32,7 +32,7 @@ public class PlayerCommandTable extends CellTable<PlayerCommandDto> implements P
 			public String getValue(PlayerCommandDto object) {
 				return object.description;
 			}
-		}, "Senaste händelse");
+		}, "Händelse");
 
 	}
 
@@ -41,18 +41,24 @@ public class PlayerCommandTable extends CellTable<PlayerCommandDto> implements P
 	}
 
 	@Override
-	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
-		changeList(result);
-	}
-
-	private void changeList(List<PlayerCommandDto> result) {
-		undoListDataProvider.setList(result);
-	}
+	public void onPlayerMiscCommandListUpdate(List<PlayerCommandDto> result) {}
 
 	@Override
 	public void onUndoCommand(UndoPlayerCommandResult result) {}
 
 	@Override
 	public void onUndoCommandUpdate(PlayerCommandDto result) {}
+
+	@Override
+	public void onGameResultListUpdate(List<PlayerCommandDto> result) {}
+
+	@Override
+	public void onLoginStatusListUpdate(List<PlayerCommandDto> result) {
+		changeList(result);
+	}
+
+	private void changeList(List<PlayerCommandDto> result) {
+		undoListDataProvider.setList(result);
+	}
 
 }

@@ -9,7 +9,11 @@ public interface PlayerCommandListener {
 
 	void onUndoCommand(UndoPlayerCommandResult result);
 
-	void onPlayerCommandListUpdate(List<PlayerCommandDto> result);
+	void onPlayerMiscCommandListUpdate(List<PlayerCommandDto> result);
 
 	void onUndoCommandUpdate(PlayerCommandDto result);
+
+	void onGameResultListUpdate(List<PlayerCommandDto> result);
+
+	void onLoginStatusListUpdate(List<PlayerCommandDto> result);
 }

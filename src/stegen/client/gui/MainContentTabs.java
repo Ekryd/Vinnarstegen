@@ -23,7 +23,9 @@ public class MainContentTabs extends TabLayoutPanel {
 	private void init() {
 		setAnimationDuration(1000);
 		add(new ScrollPanel(new ListScorePanel(messageCentral, loginData)), "Poängställning");
-		add(new PlayerCommandPanel(messageCentral, loginData), "Händelser");
+		add(new GameResultPanel(messageCentral, loginData), "Matcher");
+		add(new LoginStatusTable(messageCentral), "Inloggning");
+		add(new PlayerMiscCommandTable(messageCentral), "Övrigt");
 		setHeight("400px");
 		selectTab(0);
 	}

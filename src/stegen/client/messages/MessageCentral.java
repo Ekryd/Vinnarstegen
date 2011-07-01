@@ -18,7 +18,7 @@ public class MessageCentral {
 
 			@Override
 			public void onSuccess(Void result) {
-				updatePlayerCommandList();
+				updateGameResultList();
 				updateScores();
 				updateUndoCommand();
 			}
@@ -30,7 +30,7 @@ public class MessageCentral {
 
 			@Override
 			public void onSuccess(Void result) {
-				updatePlayerCommandList();
+				updateGameResultList();
 				updateScores();
 				updateUndoCommand();
 			}
@@ -43,7 +43,8 @@ public class MessageCentral {
 			@Override
 			public void onSuccess(UndoPlayerCommandResult result) {
 				listeners.onUndoCommand(result);
-				updatePlayerCommandList();
+				updatePlayerMiscCommandList();
+				updateGameResultList();
 				updateScores();
 				updateUndoCommand();
 			}
@@ -57,7 +58,6 @@ public class MessageCentral {
 			@Override
 			public void onSuccess(Void result) {
 				updateMessageList();
-				updatePlayerCommandList();
 			}
 
 		});
@@ -73,24 +73,48 @@ public class MessageCentral {
 			@Override
 			public void onSuccess(Void result) {
 				listeners.onNicknameUpdate(nickname);
-				updatePlayerCommandList();
+				updatePlayerMiscCommandList();
 			}
 		});
 	}
 
 	public void updateAll() {
 		updateScores();
-		updatePlayerCommandList();
+		updateGameResultList();
+		updatePlayerMiscCommandList();
+		updateLoginStatusList();
 		updateUndoCommand();
 		updateMessageList();
 	}
 
-	private void updatePlayerCommandList() {
-		playerCommandService.getPlayerCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+	private void updateGameResultList() {
+		playerCommandService.getGameResultCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
 
 			@Override
 			public void onSuccess(List<PlayerCommandDto> result) {
-				listeners.onPlayerCommandListUpdate(result);
+				listeners.onGameResultListUpdate(result);
+			}
+		});
+
+	}
+
+	private void updatePlayerMiscCommandList() {
+		playerCommandService.getPlayerMiscCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+
+			@Override
+			public void onSuccess(List<PlayerCommandDto> result) {
+				listeners.onPlayerMiscCommandListUpdate(result);
+			}
+		});
+
+	}
+
+	private void updateLoginStatusList() {
+		playerCommandService.getLoginStatusCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+
+			@Override
+			public void onSuccess(List<PlayerCommandDto> result) {
+				listeners.onLoginStatusListUpdate(result);
 			}
 		});
 

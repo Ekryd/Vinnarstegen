@@ -13,8 +13,10 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 	private static final long serialVersionUID = 5777230422402242088L;
 
 	@Override
-	public List<PlayerCommandDto> getPlayerCommandStack(int maxDepth) {
-		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth);
+	public List<PlayerCommandDto> getPlayerMiscCommandStack(int maxDepth) {
+		@SuppressWarnings("unchecked")
+		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
+				ChangeNickname.class, RegisterPlayer.class, UndoPlayerCommand.class);
 		return convertList(commands, maxDepth);
 	}
 
@@ -23,6 +25,22 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				SendMessage.class);
+		return convertList(commands, maxDepth);
+	}
+
+	@Override
+	public List<PlayerCommandDto> getGameResultCommandStack(int maxDepth) {
+		@SuppressWarnings("unchecked")
+		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
+				ClearAllScores.class, PlayerWonOverPlayer.class);
+		return convertList(commands, maxDepth);
+	}
+
+	@Override
+	public List<PlayerCommandDto> getLoginStatusCommandStack(int maxDepth) {
+		@SuppressWarnings("unchecked")
+		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
+				CheckLoginStatus.class);
 		return convertList(commands, maxDepth);
 	}
 

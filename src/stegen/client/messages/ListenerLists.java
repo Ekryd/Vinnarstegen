@@ -32,9 +32,9 @@ public class ListenerLists {
 		}
 	}
 
-	void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
-		for (PlayerCommandListener undoListener : undoListeners) {
-			undoListener.onPlayerCommandListUpdate(result);
+	void onPlayerMiscCommandListUpdate(List<PlayerCommandDto> result) {
+		for (PlayerCommandListener listener : undoListeners) {
+			listener.onPlayerMiscCommandListUpdate(result);
 		}
 	}
 
@@ -59,6 +59,18 @@ public class ListenerLists {
 	void onMessageListUpdate(List<PlayerCommandDto> result) {
 		for (MessageListener listener : messageListeners) {
 			listener.onMessageListUpdate(result);
+		}
+	}
+
+	public void onGameResultListUpdate(List<PlayerCommandDto> result) {
+		for (PlayerCommandListener listener : undoListeners) {
+			listener.onGameResultListUpdate(result);
+		}
+	}
+
+	public void onLoginStatusListUpdate(List<PlayerCommandDto> result) {
+		for (PlayerCommandListener listener : undoListeners) {
+			listener.onLoginStatusListUpdate(result);
 		}
 	}
 

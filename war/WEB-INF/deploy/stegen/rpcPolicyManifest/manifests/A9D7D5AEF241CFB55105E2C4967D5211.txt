@@ -1,0 +1,2 @@
+serviceClass: stegen.client.service.PlayerCommandService
+path: 753A906FFAC5D7AF78DA790EAA10CAEA.gwt.rpc

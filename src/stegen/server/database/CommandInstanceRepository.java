@@ -59,39 +59,42 @@ public class CommandInstanceRepository {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
-	public List<CommandInstance> getPlayerCommandStack(int maxDepth) {
+	public List<CommandInstance> getPlayerCommandStack(int maxDepth,
+			Class<? extends PlayerCommand>... filterByCommandType) {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
-			Query query = pm.newQuery(CommandInstance.class);
-			query.setOrdering("dateTime desc");
-			query.setRange(0, maxDepth);
-			List<CommandInstance> commands = (List<CommandInstance>) query.execute();
-			// To prevent lazy load exception
-			commands.size();
-			return commands;
+			return tryGetPlayerCommandStack(maxDepth, pm, filterByCommandType);
 		} finally {
 			pm.close();
 		}
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<CommandInstance> getPlayerCommandStack(int maxDepth,
+	private List<CommandInstance> tryGetPlayerCommandStack(int maxDepth, PersistenceManager pm,
 			Class<? extends PlayerCommand>... filterByCommandType) {
-		PersistenceManager pm = Pmf.getPersistenceManager();
-		try {
-			Query query = pm.newQuery(CommandInstance.class);
-			query.setOrdering("dateTime desc");
-			query.setFilter("commandTypes.contains(this.commandClassName)");
-			query.declareParameters("java.util.List commandTypes");
-			query.setRange(0, maxDepth);
-			List<CommandInstance> commands = (List<CommandInstance>) query.execute(convertTypes(filterByCommandType));
-			// To prevent lazy load exception
-			commands.size();
-			return commands;
-		} finally {
-			pm.close();
+		Query query = pm.newQuery(CommandInstance.class);
+		query.setOrdering("dateTime desc");
+		query.setRange(0, maxDepth);
+		List<CommandInstance> commands;
+		if (filterByCommandType.length != 0) {
+			commands = executeQueryWithPlayerCommandFilter(query, filterByCommandType);
+		} else {
+			commands = (List<CommandInstance>) query.execute();
 		}
+		preventLazyLoadException(commands);
+		return commands;
+	}
+
+	@SuppressWarnings("unchecked")
+	private List<CommandInstance> executeQueryWithPlayerCommandFilter(Query query,
+			Class<? extends PlayerCommand>... filterByCommandType) {
+		query.setFilter("commandTypes.contains(this.commandClassName)");
+		query.declareParameters("java.util.List commandTypes");
+		return (List<CommandInstance>) query.execute(convertTypes(filterByCommandType));
+	}
+
+	private void preventLazyLoadException(List<CommandInstance> commands) {
+		commands.size();
 	}
 
 	private List<String> convertTypes(Class<? extends PlayerCommand>[] filterByCommandType) {

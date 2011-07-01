@@ -62,7 +62,7 @@ public class MessageButton extends Button implements PlayerCommandListener {
 	}
 
 	@Override
-	public void onPlayerCommandListUpdate(List<PlayerCommandDto> result) {
+	public void onPlayerMiscCommandListUpdate(List<PlayerCommandDto> result) {
 		changeButtonText();
 	}
 
@@ -71,5 +71,11 @@ public class MessageButton extends Button implements PlayerCommandListener {
 
 	@Override
 	public void onUndoCommandUpdate(PlayerCommandDto result) {}
+
+	@Override
+	public void onGameResultListUpdate(List<PlayerCommandDto> result) {}
+
+	@Override
+	public void onLoginStatusListUpdate(List<PlayerCommandDto> result) {}
 
 }
