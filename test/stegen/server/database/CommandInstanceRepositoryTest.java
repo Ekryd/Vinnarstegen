@@ -9,6 +9,7 @@ import stegen.server.command.*;
 
 import com.google.appengine.tools.development.testing.*;
 
+@SuppressWarnings("unchecked")
 public class CommandInstanceRepositoryTest {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalTaskQueueTestConfig(),
 			new LocalDatastoreServiceTestConfig());
@@ -82,7 +83,6 @@ public class CommandInstanceRepositoryTest {
 		commandInstanceRepository.create(CommandInstanceFactory.sendMessage("hopp"));
 
 		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
-		@SuppressWarnings("unchecked")
 		List<CommandInstance> stack = commandInstanceRepository.getPlayerCommandStack(10, SendMessage.class);
 		Assert.assertNotNull(stack);
 		Assert.assertEquals(2, stack.size());
@@ -106,7 +106,6 @@ public class CommandInstanceRepositoryTest {
 		commandInstanceRepository.create(CommandInstanceFactory.sendMessage("hopp"));
 
 		commandInstanceRepository.create(CommandInstanceFactory.clearAllScores(playerEmail));
-		@SuppressWarnings("unchecked")
 		List<CommandInstance> stack = commandInstanceRepository.getPlayerCommandStack(10, SendMessage.class,
 				ClearAllScores.class);
 		Assert.assertNotNull(stack);

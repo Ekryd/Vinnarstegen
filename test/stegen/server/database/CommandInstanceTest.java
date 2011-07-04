@@ -31,31 +31,6 @@ public class CommandInstanceTest {
 	}
 
 	@Test
-	public void serializeCleanAllScores() {
-		PlayerRepository playerRepository = PlayerRepository.get();
-		EmailAddressDto playerEmail = new EmailAddressDto("address");
-		Player player = Player.createPlayer(playerEmail);
-		playerRepository.create(player);
-		CommandInstance command = CommandInstanceFactory.clearAllScores(playerEmail);
-		Assert.assertEquals(
-				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":0}],\"changedBy\":{\"address\":\"address\"}}",
-				command.getCommandSerialized());
-	}
-
-	@Test
-	public void deserializeCleanAllScores() {
-		PlayerRepository playerRepository = PlayerRepository.get();
-		EmailAddressDto playerEmail = new EmailAddressDto("address");
-		Player player = Player.createPlayer(playerEmail);
-		playerRepository.create(player);
-		CommandInstance command = CommandInstanceFactory.clearAllScores(playerEmail);
-		String ser = command.getCommandSerialized();
-		System.out.println(ser);
-		PlayerCommand deserialize = new Serializer().deserialize(ser, ClearAllScores.class);
-		Assert.assertNotNull(deserialize.getDescription());
-	}
-
-	@Test
 	public void deserializeUserLoggedIn() {
 		EmailAddressDto playerEmail1 = new EmailAddressDto("winner");
 		EmailAddressDto playerEmail2 = new EmailAddressDto("loser");
