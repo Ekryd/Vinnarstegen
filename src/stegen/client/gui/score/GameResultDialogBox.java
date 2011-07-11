@@ -1,29 +1,57 @@
 package stegen.client.gui.score;
 
 import stegen.client.dto.*;
+import stegen.client.gui.common.*;
+import stegen.client.messages.*;
 import stegen.shared.*;
 
-import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public abstract class GameResultDialogBox extends DialogBox {
-	private final Button closeButton = new Button("Avbryt");
-	private final Button okButton = new Button("Ok");
-	private final PlayerDto winner;
-	private final PlayerDto loser;
+public class GameResultDialogBox extends DialogBox {
+	private PlayerDto winner;
+	private PlayerDto loser;
 	private final GameResultDto gameResult = GameResultDto.createEmptyGameResult();
 	private final Label scoreLabel = new Label();
+	private final MessageCentral messageCentral;
+	private final LoginDataDto loginData;
+	private final CancelOrOkButtonPanel buttonPanel;
+	private final SetScoreDropdown setScoreDropdown;
 
-	public GameResultDialogBox(PlayerDto winner, PlayerDto loser) {
-		this.winner = winner;
-		this.loser = loser;
+	public GameResultDialogBox(MessageCentral messageCentral, LoginDataDto loginData) {
+		this.messageCentral = messageCentral;
+		this.loginData = loginData;
+		this.buttonPanel = createButtonPanel();
+		this.setScoreDropdown = createDropDown();
 		init();
-		setupButtonHandler();
+	}
+
+	private CancelOrOkButtonPanel createButtonPanel() {
+		return new CancelOrOkButtonPanel() {
+
+			@Override
+			protected void onOkButtonClick() {
+				hide();
+				messageCentral.playerWonOverPlayer(winner, loser, gameResult, loginData.player);
+			}
+
+			@Override
+			protected void onCloseButtonClick() {
+				hide();
+			}
+		};
+	}
+
+	private SetScoreDropdown createDropDown() {
+		return new SetScoreDropdown(gameResult, new UpdateScoreCallback() {
+
+			@Override
+			public void onScoreChange() {
+				updateScoreLabel();
+			}
+		});
 	}
 
 	private void init() {
-		closeButton.setStylePrimaryName("button");
-		okButton.setStylePrimaryName("button");
 		setText("Matchresultat");
 		setAnimationEnabled(true);
 
@@ -39,24 +67,11 @@ public abstract class GameResultDialogBox extends DialogBox {
 		// }, winnerEmail, loserEmail, gameResult);
 		// verticalPanel.add(gameSetResultTable);
 
-		Widget setScoreDropdown = new SetScoreDropdown(winner, loser, gameResult, new UpdateScoreCallback() {
-
-			@Override
-			public void onScoreChange() {
-				updateScoreLabel();
-			}
-		});
 		verticalPanel.add(setScoreDropdown);
 
 		updateScoreLabel();
 		verticalPanel.add(scoreLabel);
 
-		HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.setWidth("100%");
-		buttonPanel.add(okButton);
-		buttonPanel.add(closeButton);
-		buttonPanel.setCellHorizontalAlignment(okButton, HasHorizontalAlignment.ALIGN_LEFT);
-		buttonPanel.setCellHorizontalAlignment(closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
 		verticalPanel.add(buttonPanel);
 		setWidget(verticalPanel);
 	}
@@ -67,32 +82,18 @@ public abstract class GameResultDialogBox extends DialogBox {
 		int lose = calculator.getLostSets();
 		scoreLabel.setText(win + " - " + lose);
 		if (lose >= win) {
-			okButton.setEnabled(false);
+			buttonPanel.setOkButtonEnabled(false);
 			scoreLabel.setStylePrimaryName("score_big_error");
 		} else {
-			okButton.setEnabled(true);
+			buttonPanel.setOkButtonEnabled(true);
 			scoreLabel.setStylePrimaryName("score_big");
 		}
 	}
 
-	private void setupButtonHandler() {
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				hide();
-			}
-		});
-		okButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				hide();
-				sendGameResult(gameResult);
-			}
-
-		});
+	public void setPlayers(PlayerDto winner, PlayerDto loser) {
+		this.winner = winner;
+		this.loser = loser;
+		setScoreDropdown.setPlayers(winner, loser);
 	}
 
-	protected abstract void sendGameResult(GameResultDto gameResult);
 }

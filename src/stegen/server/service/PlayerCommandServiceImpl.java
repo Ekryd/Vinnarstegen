@@ -16,7 +16,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 	public List<PlayerCommandDto> getPlayerMiscCommandStack(int maxDepth) {
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
-				ChangeNickname.class, RegisterPlayer.class, UndoPlayerCommand.class);
+				ChangeNickname.class, RegisterPlayer.class, UndoPlayerCommand.class, Challenge.class);
 		return convertList(commands, maxDepth);
 	}
 

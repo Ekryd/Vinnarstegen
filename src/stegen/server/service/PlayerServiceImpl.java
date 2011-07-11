@@ -25,6 +25,7 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 		CommandInstanceRepository.get().create(commandInstance);
 	}
 
+	@SuppressWarnings("unused")
 	private void saveCommandForNotRegisteredUsers(CheckLoginStatus command) {
 		if (command.getResult().loginResponse != LoginResult.LOGGED_IN_AND_REGISTERED) {
 			CommandInstance commandInstance = new CommandInstance(command, command.getEmail());

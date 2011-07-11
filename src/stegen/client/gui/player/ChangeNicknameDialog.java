@@ -15,7 +15,7 @@ public class ChangeNicknameDialog extends InputDialogBox implements NicknameList
 	}
 
 	@Override
-	protected void onOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText) {
+	protected void onDialogOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText) {
 		messageCentral.changeNickname(loginData.player, messageBoxText);
 	}
 

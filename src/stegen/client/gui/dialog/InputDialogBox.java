@@ -1,30 +1,44 @@
 package stegen.client.gui.dialog;
 
 import stegen.client.dto.*;
+import stegen.client.gui.common.*;
 import stegen.client.messages.*;
 
-import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public abstract class InputDialogBox extends DialogBox {
 
 	private final MessageCentral messageCentral;
 	private final LoginDataDto loginData;
-	private final Button closeButton = new Button("Avbryt");
-	private final Button okButton = new Button("Ok");
 	private final TextBox messageBox = new TextBox();
 	private Label messageLabel;
+	private final CancelOrOkButtonPanel buttonPanel;
 
 	public InputDialogBox(MessageCentral messageCentral, LoginDataDto loginData) {
 		this.messageCentral = messageCentral;
 		this.loginData = loginData;
+		this.buttonPanel = createButtonPanel();
 		init();
-		setupButtonHandler();
+	}
+
+	private CancelOrOkButtonPanel createButtonPanel() {
+		return new CancelOrOkButtonPanel() {
+
+			@Override
+			protected void onOkButtonClick() {
+				hide();
+				onDialogOkButtonClick(messageCentral, loginData, messageBox.getText());
+			}
+
+			@Override
+			protected void onCloseButtonClick() {
+				hide();
+			}
+		};
 	}
 
 	private void init() {
-		closeButton.setStylePrimaryName("button");
-		okButton.setStylePrimaryName("button");
+		setAnimationEnabled(true);
 		VerticalPanel verticalPanel = new VerticalPanel();
 		add(verticalPanel);
 
@@ -36,35 +50,10 @@ public abstract class InputDialogBox extends DialogBox {
 		inputPanel.setCellVerticalAlignment(messageLabel, HasVerticalAlignment.ALIGN_MIDDLE);
 		verticalPanel.add(inputPanel);
 
-		HorizontalPanel buttonPanel = new HorizontalPanel();
-		buttonPanel.setWidth("100%");
-		buttonPanel.add(okButton);
-		buttonPanel.add(closeButton);
-		buttonPanel.setCellHorizontalAlignment(okButton, HasHorizontalAlignment.ALIGN_LEFT);
-		buttonPanel.setCellHorizontalAlignment(closeButton, HasHorizontalAlignment.ALIGN_RIGHT);
 		verticalPanel.add(buttonPanel);
 
 		setWidget(verticalPanel);
 
-	}
-
-	private void setupButtonHandler() {
-		// Add a handler to close the DialogBox
-		closeButton.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				hide();
-			}
-		});
-		okButton.addClickHandler(new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				hide();
-				onOkButtonClick(messageCentral, loginData, messageBox.getText());
-			}
-
-		});
 	}
 
 	@Override
@@ -75,6 +64,7 @@ public abstract class InputDialogBox extends DialogBox {
 
 	protected abstract String getMessageLabelText();
 
-	protected abstract void onOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText);
+	protected abstract void onDialogOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData,
+			String messageBoxText);
 
 }

@@ -18,7 +18,7 @@ public class MessageDialog extends InputDialogBox {
 	}
 
 	@Override
-	protected void onOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText) {
+	protected void onDialogOkButtonClick(MessageCentral messageCentral, LoginDataDto loginData, String messageBoxText) {
 		messageCentral.sendMessage(loginData.player, messageLabelText + " " + messageBoxText);
 	}
 }

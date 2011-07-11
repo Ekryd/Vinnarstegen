@@ -61,4 +61,12 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 		return sortedPlayerScores;
 	}
 
+	@Override
+	public void challenge(ChallengeMessageDto message) {
+		PlayerCommand command = new Challenge(message);
+		command.execute();
+		CommandInstance commandInstanceToStore = new CommandInstance(command, message.challenger.email);
+		CommandInstanceRepository.get().create(commandInstanceToStore);
+	}
+
 }

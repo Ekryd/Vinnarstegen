@@ -15,4 +15,6 @@ public interface ScoreServiceAsync {
 
 	void clearAllScores(PlayerDto changedBy, AsyncCallback<Void> callback);
 
+	void challenge(ChallengeMessageDto message, AsyncCallback<Void> callback);
+
 }

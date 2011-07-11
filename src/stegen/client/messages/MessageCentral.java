@@ -52,6 +52,17 @@ public class MessageCentral {
 		});
 	}
 
+	public void challenge(ChallengeMessageDto challengeMessage) {
+		scoreService.challenge(challengeMessage, new DefaultCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				updatePlayerMiscCommandList();
+			}
+		});
+
+	}
+
 	public void sendMessage(PlayerDto player, String message) {
 		playerService.sendMessage(player, message, new DefaultCallback<Void>() {
 
@@ -73,7 +84,7 @@ public class MessageCentral {
 			@Override
 			public void onSuccess(Void result) {
 				listeners.onNicknameUpdate(nickname);
-				updatePlayerMiscCommandList();
+				updateAll();
 			}
 		});
 	}

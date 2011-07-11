@@ -3,6 +3,7 @@ package stegen.client.gui.score;
 import java.util.*;
 
 import stegen.client.dto.*;
+import stegen.client.gui.challenge.*;
 import stegen.client.messages.*;
 
 import com.google.gwt.cell.client.*;
@@ -12,12 +13,14 @@ import com.google.gwt.view.client.*;
 public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreListener {
 
 	private final LoginDataDto loginData;
-	private final MessageCentral messageCentral;
 	private ListDataProvider<PlayerScoreDto> dataProvider;
+	private final GameResultDialogBox gameResultDialogBox;
+	private final ChallengeDialog challengeDialog;
 
 	public ScoreCellTable(MessageCentral messageCentral, final LoginDataDto loginData) {
-		this.messageCentral = messageCentral;
 		this.loginData = loginData;
+		this.gameResultDialogBox = new GameResultDialogBox(messageCentral, loginData);
+		this.challengeDialog = new ChallengeDialog(messageCentral, loginData);
 		initTextColumns();
 		initButtonColumns();
 		addDataProvider();
@@ -83,6 +86,20 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 				playerWonOverPlayer(playerScore.player, loginData.player);
 			}
 		});
+		Column<PlayerScoreDto, String> challengeColumn = new ButtonColumn(loginData, "Utmana!");
+		addColumn(challengeColumn);
+		challengeColumn.setFieldUpdater(new FieldUpdater<PlayerScoreDto, String>() {
+
+			@Override
+			public void update(int index, PlayerScoreDto playerScore, String value) {
+				challenge(playerScore.player);
+			}
+		});
+	}
+
+	private void challenge(PlayerDto challengee) {
+		challengeDialog.setChallengeeAndInitDialog(challengee);
+		challengeDialog.center();
 	}
 
 	public void addDataProvider() {
@@ -94,16 +111,8 @@ public class ScoreCellTable extends CellTable<PlayerScoreDto> implements ScoreLi
 	}
 
 	private void playerWonOverPlayer(final PlayerDto winner, final PlayerDto loser) {
-		if (winner.equals(loser)) {
-			return;
-		}
-		new GameResultDialogBox(winner, loser) {
-
-			@Override
-			protected void sendGameResult(GameResultDto gameResult) {
-				messageCentral.playerWonOverPlayer(winner, loser, gameResult, loginData.player);
-			}
-		}.center();
+		gameResultDialogBox.setPlayers(winner, loser);
+		gameResultDialogBox.center();
 	}
 
 	@Override
