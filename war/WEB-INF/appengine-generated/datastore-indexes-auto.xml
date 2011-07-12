@@ -1,16 +1,16 @@
-<!-- Indices written at Mon, 11 Jul 2011 19:51:09 UTC -->
+<!-- Indices written at Tue, 12 Jul 2011 07:37:43 UTC -->
 
 <datastore-indexes>
-
-    <!-- Used 1 time in query history -->
-    <datastore-index kind="CommandInstance" ancestor="false" source="auto">
-        <property name="undoable" direction="asc"/>
-        <property name="dateTime" direction="desc"/>
-    </datastore-index>
 
     <!-- Used 8 times in query history -->
     <datastore-index kind="CommandInstance" ancestor="false" source="auto">
         <property name="commandClassName" direction="asc"/>
+        <property name="dateTime" direction="desc"/>
+    </datastore-index>
+
+    <!-- Used 1 time in query history -->
+    <datastore-index kind="CommandInstance" ancestor="false" source="auto">
+        <property name="undoable" direction="asc"/>
         <property name="dateTime" direction="desc"/>
     </datastore-index>
 
