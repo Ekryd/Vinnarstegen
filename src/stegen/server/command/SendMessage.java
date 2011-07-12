@@ -1,12 +1,7 @@
 package stegen.server.command;
 
-import java.io.*;
-import java.util.*;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-
 import stegen.client.dto.*;
+import stegen.server.mail.*;
 
 public class SendMessage implements PlayerCommand {
 	private static final long serialVersionUID = -3955114274841770714L;
@@ -30,22 +25,11 @@ public class SendMessage implements PlayerCommand {
 	}
 
 	private void sendMailToAdmin() {
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
-
 		String msgBody = email.address + " " + message;
-		Message msg = new MimeMessage(session);
-		try {
-			msg.setFrom(new InternetAddress(email.address, "Vinnarstegen"));
-			msg.addRecipient(Message.RecipientType.TO, new InternetAddress("bjorn.ekryd@gmail.com"));
-			msg.setSubject("Vinnarstegen ropar");
-			msg.setText(msgBody);
-			Transport.send(msg);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
+		EmailAddressDto admin = new EmailAddressDto("bjorn.ekryd@gmail.com");
+
+		MailBuilder mailBuilder = new MailBuilder();
+		mailBuilder.from(email, "Vinnarstegen").to(admin).subject("Vinnarstegen ropar").messageBody(msgBody).send();
 	}
 
 	@Override

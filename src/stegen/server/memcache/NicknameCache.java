@@ -1,4 +1,6 @@
-package stegen.server.database;
+package stegen.server.memcache;
+
+import java.util.*;
 
 import net.sf.jsr107cache.*;
 
@@ -6,8 +8,13 @@ public class NicknameCache {
 
 	private final Cache cache;
 
-	public NicknameCache(Cache cache) {
-		this.cache = cache;
+	public NicknameCache() throws CacheException {
+		this.cache = createCache();
+	}
+
+	private Cache createCache() throws CacheException {
+		CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+		return cacheFactory.createCache(Collections.emptyMap());
 	}
 
 	public void clear() {

@@ -1,13 +1,8 @@
 package stegen.server.command;
 
-import java.io.*;
-import java.util.*;
-
-import javax.mail.*;
-import javax.mail.internet.*;
-
 import stegen.client.dto.*;
 import stegen.server.database.*;
+import stegen.server.mail.*;
 
 public class Challenge implements PlayerCommand {
 	private static final long serialVersionUID = 1381534401064229916L;
@@ -39,25 +34,9 @@ public class Challenge implements PlayerCommand {
 		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
 		String challengerNickname = stegenUserRepository.getOrCreateNickname(challenger);
 		String challengeeNickname = stegenUserRepository.getOrCreateNickname(challengee);
-		try {
-			tryToCreateAndSendEmail(challengerNickname, challengeeNickname);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		} catch (MessagingException e) {
-			e.printStackTrace();
-		}
-	}
-
-	private void tryToCreateAndSendEmail(String challengerNickname, String challengeeNickname)
-			throws MessagingException, UnsupportedEncodingException {
-		Properties props = new Properties();
-		Session session = Session.getDefaultInstance(props, null);
-		Message msg = new MimeMessage(session);
-		msg.setFrom(new InternetAddress(challenger.address, challengerNickname));
-		msg.addRecipient(Message.RecipientType.TO, new InternetAddress(challengee.address, challengeeNickname));
-		msg.setSubject(subject);
-		msg.setText(messageBody);
-		Transport.send(msg);
+		MailBuilder mailBuilder = new MailBuilder();
+		mailBuilder.from(challenger, challengerNickname).to(challengee, challengeeNickname).subject(subject)
+				.messageBody(messageBody).send();
 	}
 
 	@Override

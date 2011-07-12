@@ -1,11 +1,10 @@
 package stegen.server.database;
 
-import java.util.*;
-
 import javax.jdo.*;
 
 import net.sf.jsr107cache.*;
 import stegen.client.dto.*;
+import stegen.server.memcache.*;
 
 public class StegenUserRepository {
 	private static StegenUserRepository instance = new StegenUserRepository();
@@ -13,8 +12,7 @@ public class StegenUserRepository {
 
 	private StegenUserRepository() {
 		try {
-			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-			cache = new NicknameCache(cacheFactory.createCache(Collections.emptyMap()));
+			cache = new NicknameCache();
 		} catch (CacheException e) {
 			e.printStackTrace();
 		}
