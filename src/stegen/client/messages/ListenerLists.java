@@ -3,6 +3,7 @@ package stegen.client.messages;
 import java.util.*;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 public class ListenerLists {
 	private final List<ScoreListener> scoreListenerList = new ArrayList<ScoreListener>();

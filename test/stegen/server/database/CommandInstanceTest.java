@@ -4,6 +4,7 @@ import org.junit.*;
 
 import stegen.client.dto.*;
 import stegen.server.command.*;
+import stegen.shared.*;
 
 import com.google.appengine.tools.development.testing.*;
 

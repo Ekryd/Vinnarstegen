@@ -3,6 +3,7 @@ package stegen.client.service;
 import java.util.*;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
 

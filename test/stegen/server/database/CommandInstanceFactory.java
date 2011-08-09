@@ -2,6 +2,7 @@ package stegen.server.database;
 
 import stegen.client.dto.*;
 import stegen.server.command.*;
+import stegen.shared.*;
 
 public class CommandInstanceFactory {
 	private static final EmailAddressDto email = new EmailAddressDto("address");

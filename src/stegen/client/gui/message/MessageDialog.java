@@ -3,6 +3,7 @@ package stegen.client.gui.message;
 import stegen.client.dto.*;
 import stegen.client.gui.dialog.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 public class MessageDialog extends InputDialogBox {
 	private final String messageLabelText;

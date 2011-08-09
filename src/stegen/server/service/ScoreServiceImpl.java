@@ -8,6 +8,7 @@ import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;
 import stegen.server.database.PlayerRepository.Func;
+import stegen.shared.*;
 
 import com.google.gwt.user.server.rpc.*;
 

@@ -6,6 +6,7 @@ import stegen.client.dto.*;
 import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;
+import stegen.shared.*;
 
 import com.google.gwt.user.server.rpc.*;
 

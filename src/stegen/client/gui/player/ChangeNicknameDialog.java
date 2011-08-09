@@ -3,6 +3,7 @@ package stegen.client.gui.player;
 import stegen.client.dto.*;
 import stegen.client.gui.dialog.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 public class ChangeNicknameDialog extends InputDialogBox implements NicknameListener {
 

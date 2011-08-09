@@ -5,6 +5,7 @@ import java.util.*;
 import stegen.client.dto.*;
 import stegen.server.database.*;
 import stegen.server.database.PlayerRepository.Func;
+import stegen.shared.*;
 
 public class ClearAllScores implements PlayerCommand {
 	private static final long serialVersionUID = 2188373900934655611L;

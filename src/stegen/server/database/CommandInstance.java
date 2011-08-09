@@ -6,6 +6,7 @@ import javax.jdo.annotations.*;
 
 import stegen.client.dto.*;
 import stegen.server.command.*;
+import stegen.shared.*;
 
 import com.google.appengine.api.datastore.*;
 

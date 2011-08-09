@@ -7,6 +7,7 @@ import javax.mail.*;
 import javax.mail.internet.*;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 public class MailBuilder {
 

@@ -2,6 +2,7 @@ package stegen.client.gui.playeraction;
 
 import stegen.client.dto.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;

@@ -14,7 +14,7 @@
   <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
-  <entry-point class='stegen.client.Login'/>
+  <entry-point class='stegen.client.Stegen'/>
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>

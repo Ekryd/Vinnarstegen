@@ -1,4 +1,4 @@
-package stegen.client.dto;
+package stegen.shared;
 
 import java.io.*;
 import java.util.*;

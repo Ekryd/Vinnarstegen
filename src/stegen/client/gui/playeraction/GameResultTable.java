@@ -4,6 +4,7 @@ import java.util.*;
 
 import stegen.client.dto.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 import com.google.gwt.i18n.client.*;
 import com.google.gwt.user.cellview.client.*;

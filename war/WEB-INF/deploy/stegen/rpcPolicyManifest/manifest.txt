@@ -1,5 +1,2 @@
 # Module stegen
 # RPC service class, partial path of RPC policy file
-stegen.client.service.ScoreService, D43510FB55AF05E60457D442DDCCA8BE.gwt.rpc
-stegen.client.service.PlayerCommandService, 753A906FFAC5D7AF78DA790EAA10CAEA.gwt.rpc
-stegen.client.service.PlayerService, F11F3CEF5D0105069F58C5BBBAA9581B.gwt.rpc

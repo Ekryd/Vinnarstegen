@@ -1,6 +1,7 @@
 package stegen.client.gui.score;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;

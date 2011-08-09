@@ -2,6 +2,7 @@ package stegen.client.gui.register;
 
 import stegen.client.dto.*;
 import stegen.client.service.*;
+import stegen.shared.*;
 
 import com.google.gwt.core.client.*;
 import com.google.gwt.event.dom.client.*;

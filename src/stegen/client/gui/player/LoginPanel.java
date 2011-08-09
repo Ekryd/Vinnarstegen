@@ -2,20 +2,28 @@ package stegen.client.gui.player;
 
 import com.google.gwt.user.client.ui.*;
 
-public class LoginPanel extends VerticalPanel {
+public class LoginPanel implements IsWidget {
 
-	private final String signInUrl;
+	private final VerticalPanel baseWidget = new VerticalPanel();
+	private Anchor signInLink = new Anchor("Sign In");
 
-	public LoginPanel(String signInUrl) {
-		this.signInUrl = signInUrl;
-		init();
+	public LoginPanel() {
+		initLayout();
 	}
 
-	private void init() {
-		Anchor signInLink = new Anchor("Sign In", signInUrl);
-		Label loginLabel = new Label("Please sign in to your Google Account to access the Stegen application.");
-		add(loginLabel);
-		add(signInLink);
+	private void initLayout() {
+		Label loginLabel = new Label("Logga in med ditt google-konto för att komma in.");
+		baseWidget.add(loginLabel);
+		baseWidget.add(signInLink = new Anchor("Logga in"));
+	}
+
+	@Override
+	public Widget asWidget() {
+		return baseWidget;
+	}
+
+	public void setSignInUrl(String signInUrl) {
+		signInLink.setHref(signInUrl);
 	}
 
 }

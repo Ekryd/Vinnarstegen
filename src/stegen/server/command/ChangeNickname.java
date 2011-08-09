@@ -2,6 +2,7 @@ package stegen.server.command;
 
 import stegen.client.dto.*;
 import stegen.server.database.*;
+import stegen.shared.*;
 
 public class ChangeNickname implements PlayerCommand {
 	private static final long serialVersionUID = 4813202485158945857L;

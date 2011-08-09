@@ -2,6 +2,7 @@ package stegen.server.command;
 
 import stegen.client.dto.*;
 import stegen.server.mail.*;
+import stegen.shared.*;
 
 public class SendMessage implements PlayerCommand {
 	private static final long serialVersionUID = -3955114274841770714L;

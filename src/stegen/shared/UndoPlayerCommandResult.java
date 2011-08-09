@@ -1,4 +1,4 @@
-package stegen.client.dto;
+package stegen.shared;
 
 public enum UndoPlayerCommandResult {
 	SUCCESS,

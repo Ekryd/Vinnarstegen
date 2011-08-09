@@ -3,6 +3,7 @@ package stegen.server.command;
 import stegen.client.dto.*;
 import stegen.server.database.*;
 import stegen.server.mail.*;
+import stegen.shared.*;
 
 public class Challenge implements PlayerCommand {
 	private static final long serialVersionUID = 1381534401064229916L;

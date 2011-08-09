@@ -2,6 +2,7 @@ package stegen.server.command;
 
 import stegen.client.dto.*;
 import stegen.server.database.*;
+import stegen.shared.*;
 
 import com.google.appengine.api.users.*;
 

@@ -5,6 +5,7 @@ import javax.jdo.*;
 import net.sf.jsr107cache.*;
 import stegen.client.dto.*;
 import stegen.server.memcache.*;
+import stegen.shared.*;
 
 public class StegenUserRepository {
 	private static StegenUserRepository instance = new StegenUserRepository();

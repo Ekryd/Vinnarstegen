@@ -38,7 +38,7 @@
 
   <!-- Default page to serve -->
   <welcome-file-list>
-    <welcome-file>Login.html</welcome-file>
+    <welcome-file>Stegen.html</welcome-file>
   </welcome-file-list>
 
 </web-app>

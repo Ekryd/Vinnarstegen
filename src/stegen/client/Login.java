@@ -1,11 +1,11 @@
 package stegen.client;
 
-import stegen.client.dto.*;
 import stegen.client.gui.*;
 import stegen.client.gui.message.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.register.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 import com.google.gwt.core.client.*;
 import com.google.gwt.user.client.*;
@@ -45,7 +45,9 @@ public class Login implements EntryPoint {
 	}
 
 	private void showLoginPanel() {
-		showInMainArea(new LoginPanel(loginData.signInUrl));
+		LoginPanel panel = new LoginPanel();
+		panel.setSignInUrl(loginData.signInUrl);
+		showInMainArea(panel);
 	}
 
 	private void showRegisterPanel() {
@@ -80,7 +82,7 @@ public class Login implements EntryPoint {
 		userArea().add(new UserPanel(messageCentral, loginData));
 	}
 
-	protected void showInMainArea(Widget panel) {
+	protected void showInMainArea(IsWidget panel) {
 		mainArea().clear();
 		mainArea().add(panel);
 	}

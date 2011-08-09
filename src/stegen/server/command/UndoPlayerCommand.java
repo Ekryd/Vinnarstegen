@@ -2,6 +2,7 @@ package stegen.server.command;
 
 import stegen.client.dto.*;
 import stegen.server.database.*;
+import stegen.shared.*;
 
 public class UndoPlayerCommand implements PlayerCommand {
 	private static final long serialVersionUID = -2335595487010073352L;

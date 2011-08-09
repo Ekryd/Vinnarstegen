@@ -1,4 +1,4 @@
-package stegen.client.dto;
+package stegen.shared;
 
 public enum LoginResult {
 	LOGGED_IN_AND_REGISTERED,

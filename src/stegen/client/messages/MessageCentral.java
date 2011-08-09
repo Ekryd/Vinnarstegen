@@ -4,6 +4,7 @@ import java.util.*;
 
 import stegen.client.dto.*;
 import stegen.client.service.*;
+import stegen.shared.*;
 
 import com.google.gwt.core.client.*;
 

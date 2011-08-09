@@ -1,6 +1,7 @@
-package stegen.shared;
+package stegen.client.dto;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 public class GameResultCalculator {
 	private final GameResultDto gameResult;

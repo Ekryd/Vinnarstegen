@@ -1,6 +1,7 @@
 package stegen.client.service;
 
 import stegen.client.dto.*;
+import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
 

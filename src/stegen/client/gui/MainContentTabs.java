@@ -4,6 +4,7 @@ import stegen.client.dto.*;
 import stegen.client.gui.playeraction.*;
 import stegen.client.gui.score.*;
 import stegen.client.messages.*;
+import stegen.shared.*;
 
 import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.user.client.ui.*;
