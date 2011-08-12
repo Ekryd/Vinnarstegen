@@ -1,6 +1,7 @@
 package stegen.client;
 
 import stegen.client.gui.*;
+import stegen.client.gui.login.*;
 import stegen.client.gui.message.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.register.*;

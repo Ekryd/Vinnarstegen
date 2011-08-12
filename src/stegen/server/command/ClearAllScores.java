@@ -2,7 +2,6 @@ package stegen.server.command;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.server.database.*;
 import stegen.server.database.PlayerRepository.Func;
 import stegen.shared.*;

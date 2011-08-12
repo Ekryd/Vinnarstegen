@@ -5,7 +5,6 @@ import java.util.*;
 
 import javax.jdo.annotations.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 @PersistenceCapable

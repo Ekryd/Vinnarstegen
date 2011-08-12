@@ -1,6 +1,6 @@
-#Sun Jun 26 23:39:00 CEST 2011
+#Thu Aug 11 23:58:24 CEST 2011
 eclipse.preferences.version=1
-jarsExcludedFromWebInfLib=/Network/Download/Download/direct/junit-4.8.1.jar|/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/impl/appengine-api-stubs.jar|/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/testing/appengine-testing.jar
+jarsExcludedFromWebInfLib=/Network/Download/Download/direct/junit-4.8.1.jar|/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/impl/appengine-api-stubs.jar|/Users/bjorn/Library/appengine-java-sdk-1.5.0.1/lib/testing/appengine-testing.jar|/Users/bjorn/Documents/workspace/Stegen/lib/easymock-2.5.2.jar|/Users/bjorn/Documents/workspace/Stegen/lib/junit-4.8.1.jar
 launchConfigExternalUrlPrefix=
 warSrcDir=war
 warSrcDirIsOutput=true

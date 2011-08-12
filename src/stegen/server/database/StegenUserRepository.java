@@ -3,7 +3,6 @@ package stegen.server.database;
 import javax.jdo.*;
 
 import net.sf.jsr107cache.*;
-import stegen.client.dto.*;
 import stegen.server.memcache.*;
 import stegen.shared.*;
 

@@ -1,10 +1,13 @@
 package stegen.client;
 
 import stegen.client.event.*;
-import stegen.client.messages.*;
+import stegen.client.event.callback.*;
+import stegen.client.gui.login.*;
+import stegen.client.gui.message.*;
+import stegen.client.gui.player.*;
+import stegen.client.gui.register.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
-import stegen.client.view.*;
 import stegen.shared.*;
 
 public class AppController {
@@ -13,31 +16,36 @@ public class AppController {
 
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
 			PlayerServiceAsync playerService) {
-		eventBus = new EventBusImpl(playerCommandService, scoreService, playerService);
+		eventBus = EventBusImpl.create(playerCommandService, scoreService, playerService);
 		bindEvents();
 	}
 
 	private void bindEvents() {
-		eventBus.addHandler(Event.CHECK_USER_LOGIN_STATUS, new DefaultCallback<LoginDataDto>() {
+		eventBus.addHandler(new CheckUserLoginStatusCallback() {
 
 			@Override
 			public void onSuccess(LoginDataDto result) {
-				Presenter presenter = getLoginResponsePresenter(result);
-				presenter.go();
-			}
-
-			private Presenter getLoginResponsePresenter(LoginDataDto result) {
 				switch (result.loginResponse) {
 				case NOT_LOGGED_IN:
-					return new NotLoggedInPresenter(new NotLoggedInView(), result);
+					new LoginPresenter(new LoginView(), result).go();
+					break;
 				case LOGGED_IN_GMAIL:
-					return new LoginButNotRegisteredPresenter(new LoginButNotRegisteredView(), result, eventBus);
+					new LogoutPresenter(new LogoutView(), result).go();
+					new RegistrationPresenter(new RegistrationView(), result, eventBus).go();
+					new NonregisteredUserPresenter(new NonregisteredUserView(), result).go();
+					break;
 				case LOGGED_IN_AND_REGISTERED:
-					return new LoggedInPresenter(new LoggedInView(), result, eventBus);
+					new LogoutPresenter(new LogoutView(), result).go();
+					new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
+					new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
+					// new LoggedInPresenter(new LoggedInView(), result,
+					// eventBus).go();
+					break;
 				default:
-					return new NotLoggedInPresenter(new NotLoggedInView(), result);
+					new LoginPresenter(new LoginView(), result).go();
 				}
 			}
+
 		});
 	}
 

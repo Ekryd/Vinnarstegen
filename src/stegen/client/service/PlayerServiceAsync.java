@@ -1,6 +1,5 @@
 package stegen.client.service;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
@@ -13,7 +12,7 @@ public interface PlayerServiceAsync {
 
 	void sendMessage(PlayerDto player, String message, AsyncCallback<Void> callback);
 
-	void changeNickname(PlayerDto player, String nickname, AsyncCallback<Void> callback);
+	void changeNickname(PlayerDto player, String nickname, AsyncCallback<PlayerDto> callback);
 
 	void getNickname(EmailAddressDto player, AsyncCallback<String> callback);
 

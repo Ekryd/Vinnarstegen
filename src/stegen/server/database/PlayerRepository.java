@@ -4,7 +4,6 @@ import java.util.*;
 
 import javax.jdo.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 public class PlayerRepository {

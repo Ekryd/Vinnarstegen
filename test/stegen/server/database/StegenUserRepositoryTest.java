@@ -2,7 +2,6 @@ package stegen.server.database;
 
 import org.junit.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 import com.google.appengine.tools.development.testing.*;

@@ -1,6 +1,5 @@
 package stegen.client.gui;
 
-import stegen.client.dto.*;
 import stegen.client.gui.playeraction.*;
 import stegen.client.gui.score.*;
 import stegen.client.messages.*;

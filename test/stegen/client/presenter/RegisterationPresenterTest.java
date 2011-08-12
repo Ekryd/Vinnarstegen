@@ -1,19 +1,31 @@
 package stegen.client.presenter;
 
-import org.easymock.*;
+import static org.easymock.EasyMock.*;
+
 import org.junit.*;
 
 import stegen.client.event.*;
-import stegen.client.presenter.LoginButNotRegisteredPresenter.Display;
+import stegen.client.presenter.RegistrationPresenter.Display;
 import stegen.shared.*;
 
-public class LoginButNotRegisteredPresenterTest {
+public class RegisterationPresenterTest {
 
-	private LoginButNotRegisteredPresenter presenter;
+	private RegistrationPresenter presenter;
 	private EventBus eventBus;
-	private Display loginButNotRegisteredView;
+	private Display view;
 	private String passcode;
 	private LoginDataDto result;
+
+	@Before
+	public void before() {
+		view = createStrictMock(Display.class);
+		eventBus = createStrictMock(EventBus.class);
+	}
+
+	@After
+	public void after() {
+		verify(view, eventBus);
+	}
 
 	@Test
 	public void testShowView() {
@@ -47,10 +59,8 @@ public class LoginButNotRegisteredPresenterTest {
 	}
 
 	private void setupPresenter() {
-		loginButNotRegisteredView = EasyMock.createStrictMock(Display.class);
 		result = createLoginData();
-		eventBus = EasyMock.createStrictMock(EventBus.class);
-		presenter = new LoginButNotRegisteredPresenter(loginButNotRegisteredView, result, eventBus);
+		presenter = new RegistrationPresenter(view, result, eventBus);
 	}
 
 	private LoginDataDto createLoginData() {
@@ -61,24 +71,22 @@ public class LoginButNotRegisteredPresenterTest {
 	}
 
 	private void setupInitializationExpects() {
-		loginButNotRegisteredView.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
-		loginButNotRegisteredView.setLogoutUrl("logoutUrl");
-		loginButNotRegisteredView.setUserName("nickname");
-		EasyMock.replay(loginButNotRegisteredView, eventBus);
+		view.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
+		replay(view, eventBus);
 	}
 
 	private void setupRegistrationFailExpectations() {
-		EasyMock.reset(loginButNotRegisteredView, eventBus);
-		EasyMock.expect(loginButNotRegisteredView.getRegistrationCode()).andReturn(passcode);
-		loginButNotRegisteredView.showRegistrationFail();
-		EasyMock.replay(loginButNotRegisteredView, eventBus);
+		reset(view, eventBus);
+		expect(view.getRegistrationCode()).andReturn(passcode);
+		view.showRegistrationFail();
+		replay(view, eventBus);
 	}
 
 	private void setupRegistrationSucceedExpectations() {
-		EasyMock.reset(loginButNotRegisteredView, eventBus);
-		EasyMock.expect(loginButNotRegisteredView.getRegistrationCode()).andReturn(passcode);
+		reset(view, eventBus);
+		expect(view.getRegistrationCode()).andReturn(passcode);
 		eventBus.registerPlayer(result.player.email);
-		EasyMock.replay(loginButNotRegisteredView, eventBus);
+		replay(view, eventBus);
 	}
 
 	private void simulateRegistrationClick() {

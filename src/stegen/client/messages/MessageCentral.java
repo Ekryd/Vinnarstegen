@@ -2,7 +2,6 @@ package stegen.client.messages;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.client.service.*;
 import stegen.shared.*;
 
@@ -80,10 +79,10 @@ public class MessageCentral {
 	}
 
 	public void changeNickname(final PlayerDto player, final String nickname) {
-		playerService.changeNickname(player, nickname, new DefaultCallback<Void>() {
+		playerService.changeNickname(player, nickname, new DefaultCallback<PlayerDto>() {
 
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccess(PlayerDto result) {
 				listeners.onNicknameUpdate(nickname);
 				updateAll();
 			}

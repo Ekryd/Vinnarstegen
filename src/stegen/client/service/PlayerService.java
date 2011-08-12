@@ -1,6 +1,5 @@
 package stegen.client.service;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
@@ -14,7 +13,7 @@ public interface PlayerService extends RemoteService {
 
 	void sendMessage(PlayerDto player, String message);
 
-	void changeNickname(PlayerDto player, String nickname);
+	PlayerDto changeNickname(PlayerDto player, String nickname);
 
 	String getNickname(EmailAddressDto player);
 

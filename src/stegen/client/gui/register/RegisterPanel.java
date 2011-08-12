@@ -1,6 +1,5 @@
 package stegen.client.gui.register;
 
-import stegen.client.dto.*;
 import stegen.client.service.*;
 import stegen.shared.*;
 

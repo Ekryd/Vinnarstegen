@@ -1,6 +1,6 @@
-package stegen.client.view;
+package stegen.client.gui.login;
 
-import static stegen.client.view.BaseHtmlPage.*;
+import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.presenter.LogoutPresenter.Display;
 
 import com.google.gwt.user.client.ui.*;

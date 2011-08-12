@@ -1,6 +1,5 @@
 package stegen.client.gui.dialog;
 
-import stegen.client.dto.*;
 import stegen.client.gui.common.*;
 import stegen.client.messages.*;
 import stegen.shared.*;

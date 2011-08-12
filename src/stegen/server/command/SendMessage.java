@@ -1,6 +1,5 @@
 package stegen.server.command;
 
-import stegen.client.dto.*;
 import stegen.server.mail.*;
 import stegen.shared.*;
 

@@ -4,7 +4,6 @@ import java.util.*;
 
 import org.junit.*;
 
-import stegen.client.dto.*;
 import stegen.server.command.*;
 import stegen.shared.*;
 

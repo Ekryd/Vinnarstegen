@@ -1,6 +1,5 @@
 package stegen.client.dto;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 public class GameResultCalculator {

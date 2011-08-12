@@ -1,6 +1,5 @@
 package stegen.server.service;
 
-import stegen.client.dto.*;
 import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;
@@ -16,14 +15,9 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	public LoginDataDto userLoginStatus(String requestUri) {
 		CheckLoginStatus command = new CheckLoginStatus(requestUri);
 		command.execute();
-		saveCommand(command);
+		saveCommand(command, command.getEmail());
 		// saveCommandForNotRegisteredUsers(command);
 		return command.getResult();
-	}
-
-	private void saveCommand(CheckLoginStatus command) {
-		CommandInstance commandInstance = new CommandInstance(command, command.getEmail());
-		CommandInstanceRepository.get().create(commandInstance);
 	}
 
 	@SuppressWarnings("unused")
@@ -36,25 +30,33 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 
 	@Override
 	public void registerPlayer(EmailAddressDto email) {
-		RegisterPlayer command = new RegisterPlayer(email);
+		PlayerCommand command = new RegisterPlayer(email);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, email);
-		CommandInstanceRepository.get().create(commandInstance);
+		saveCommand(command, email);
 	}
 
 	@Override
 	public void sendMessage(PlayerDto player, String message) {
-		SendMessage command = new SendMessage(player.email, message);
+		PlayerCommand command = new SendMessage(player.email, message);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, player.email);
-		CommandInstanceRepository.get().create(commandInstance);
+		saveCommand(command, player.email);
 	}
 
 	@Override
-	public void changeNickname(PlayerDto player, String nickname) {
+	public PlayerDto changeNickname(PlayerDto player, String nickname) {
 		PlayerCommand command = new ChangeNickname(player, nickname);
 		command.execute();
-		CommandInstance commandInstance = new CommandInstance(command, player.email);
+		saveCommand(command, player.email);
+		return updatePlayerNickname(player, nickname);
+	}
+
+	private PlayerDto updatePlayerNickname(PlayerDto player, String nickname) {
+		player.nickname = nickname;
+		return player;
+	}
+
+	private void saveCommand(PlayerCommand command, EmailAddressDto email) {
+		CommandInstance commandInstance = new CommandInstance(command, email);
 		CommandInstanceRepository.get().create(commandInstance);
 	}
 

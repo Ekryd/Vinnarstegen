@@ -2,7 +2,6 @@ package stegen.client.gui.score;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 import com.google.gwt.cell.client.*;

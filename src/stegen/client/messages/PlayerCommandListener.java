@@ -2,7 +2,6 @@ package stegen.client.messages;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 //TODO

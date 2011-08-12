@@ -3,7 +3,6 @@ package stegen.server.service;
 import java.text.*;
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;

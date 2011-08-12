@@ -1,4 +1,4 @@
-package stegen.client.gui.player;
+package stegen.client.gui.login;
 
 import com.google.gwt.user.client.ui.*;
 

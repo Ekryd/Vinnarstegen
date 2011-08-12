@@ -26,7 +26,6 @@ public class UserPanelWithChangeNicknameButton extends UserPanel2 {
 
 	public void addClickChangeUserNameHandler(ClickHandler clickHandler) {
 		changeNicknameButton.addClickChangeUserNicknameHandler(clickHandler);
-
 	}
 
 }

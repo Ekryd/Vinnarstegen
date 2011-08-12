@@ -2,7 +2,6 @@ package stegen.client.gui.message;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.client.messages.*;
 import stegen.shared.*;
 

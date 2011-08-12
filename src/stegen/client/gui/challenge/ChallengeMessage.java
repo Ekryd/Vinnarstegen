@@ -2,7 +2,6 @@ package stegen.client.gui.challenge;
 
 import java.util.*;
 
-import stegen.client.dto.*;
 import stegen.shared.*;
 
 import com.google.gwt.i18n.client.*;

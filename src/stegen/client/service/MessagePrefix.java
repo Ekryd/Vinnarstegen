@@ -1,10 +1,10 @@
-package stegen.client.gui.message;
+package stegen.client.service;
 
-public class ButtonText {
+public class MessagePrefix {
 	public String buttonText;
 	public String actionText;
 
-	public ButtonText(String buttonText, String actionText) {
+	public MessagePrefix(String buttonText, String actionText) {
 		this.buttonText = buttonText;
 		this.actionText = actionText;
 	}
