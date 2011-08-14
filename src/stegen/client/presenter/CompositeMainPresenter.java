@@ -27,7 +27,7 @@ public class CompositeMainPresenter implements Presenter {
 	}
 
 	private void initPresenterParts() {
-		new ScorePresenter(view.getScoreView(), result, eventBus);
+		new ScorePresenter(view.getScoreView(), result, eventBus).go();
 		// new GameResultPresenter(view.getGameResultView(), result, eventBus);
 		// new LoginStatusesPresenter(view.getLoginStatusesView(), result,
 		// eventBus);

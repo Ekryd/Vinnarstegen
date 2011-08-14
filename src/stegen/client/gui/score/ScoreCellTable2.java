@@ -119,7 +119,11 @@ public class ScoreCellTable2 implements IsWidget {
 	}
 
 	public void changeContent(List<ScoreCell> scores) {
-		dataProvider.setList(scores);
+		List<ScoreCell> tableList = dataProvider.getList();
+		tableList.clear();
+		for (ScoreCell playerScore : scores) {
+			tableList.add(playerScore);
+		}
 	}
 
 	@Override
