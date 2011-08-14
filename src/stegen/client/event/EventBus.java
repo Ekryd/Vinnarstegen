@@ -1,6 +1,5 @@
 package stegen.client.event;
 
-import stegen.client.event.callback.*;
 import stegen.shared.*;
 
 public interface EventBus {

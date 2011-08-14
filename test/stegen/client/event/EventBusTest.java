@@ -13,7 +13,7 @@ import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
 
-@SuppressWarnings({ "rawtypes", "unchecked" })
+@SuppressWarnings({ "unchecked" })
 public class EventBusTest {
 
 	private PlayerServiceAsync playerService;
@@ -50,7 +50,8 @@ public class EventBusTest {
 	public void testUpdateMessages() {
 		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
-		ChangedMessagesCallback callback = createMockBuilder(ChangedMessagesCallback.class).createStrictMock();
+		ChangedMessagesCallback callback = createMockBuilder(ChangedMessagesCallback.class).withConstructor()
+				.createStrictMock();
 		callback.onSuccess(anyObject(List.class));
 		replay(callback);
 

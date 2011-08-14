@@ -1,12 +1,8 @@
 package stegen.client.event;
 
-import java.util.*;
-
 import stegen.client.event.callback.*;
 import stegen.client.service.*;
 import stegen.shared.*;
-
-import com.google.gwt.user.client.rpc.*;
 
 public class EventBusImpl implements EventBus {
 
@@ -40,43 +36,37 @@ public class EventBusImpl implements EventBus {
 
 	@Override
 	public void checkUserLoginStatus(String hostPageBaseURL) {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<LoginDataDto> callback = callbacks.get(CheckUserLoginStatusCallback.class);
+		CheckUserLoginStatusCallback callback = callbacks.get(CheckUserLoginStatusCallback.class);
 		playerService.userLoginStatus(hostPageBaseURL, callback);
 	}
 
 	@Override
 	public void changeNickname(final PlayerDto player, final String nickname) {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<PlayerDto> callback = callbacks.get(ChangeNicknameCallback.class);
+		ChangeNicknameCallback callback = callbacks.get(ChangeNicknameCallback.class);
 		playerService.changeNickname(player, nickname, callback);
 	}
 
 	@Override
 	public void registerPlayer(EmailAddressDto email) {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<Void> callback = callbacks.get(RegisterPlayerCallback.class);
+		RegisterPlayerCallback callback = callbacks.get(RegisterPlayerCallback.class);
 		playerService.registerPlayer(email, callback);
 	}
 
 	@Override
 	public void sendMessage(PlayerDto player, String message) {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<Void> callback = callbacks.get(SendMessageCallback.class);
+		SendMessageCallback callback = callbacks.get(SendMessageCallback.class);
 		playerService.sendMessage(player, message, callback);
 	}
 
 	@Override
 	public void updateMessageList() {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<List<PlayerCommandDto>> callback = callbacks.get(ChangedMessagesCallback.class);
+		ChangedMessagesCallback callback = callbacks.get(ChangedMessagesCallback.class);
 		playerCommandService.getSendMessageCommandStack(10, callback);
 	}
 
 	@Override
 	public void updateScoreList() {
-		@SuppressWarnings("unchecked")
-		AsyncCallback<List<PlayerScoreDto>> callback = callbacks.get(ChangedScoresCallback.class);
+		ChangedScoresCallback callback = callbacks.get(ChangedScoresCallback.class);
 		scoreService.getPlayerList(callback);
 	}
 
