@@ -53,7 +53,7 @@ public class MessageCentral {
 	}
 
 	public void challenge(ChallengeMessageDto challengeMessage) {
-		scoreService.challenge(challengeMessage, new DefaultCallback<Void>() {
+		scoreService.challengePlayer(challengeMessage, new DefaultCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
@@ -75,7 +75,7 @@ public class MessageCentral {
 	}
 
 	public void userLoginStatus(DefaultCallback<LoginDataDto> defaultCallback) {
-		playerService.userLoginStatus(GWT.getHostPageBaseURL(), defaultCallback);
+		playerService.getUserLoginStatus(GWT.getHostPageBaseURL(), defaultCallback);
 	}
 
 	public void changeNickname(final PlayerDto player, final String nickname) {
@@ -110,7 +110,7 @@ public class MessageCentral {
 	}
 
 	private void updatePlayerMiscCommandList() {
-		playerCommandService.getPlayerMiscCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
+		playerCommandService.getMiscPlayerCommandStack(10, new DefaultCallback<List<PlayerCommandDto>>() {
 
 			@Override
 			public void onSuccess(List<PlayerCommandDto> result) {
@@ -143,7 +143,7 @@ public class MessageCentral {
 	}
 
 	private void updateScores() {
-		scoreService.getPlayerList(new DefaultCallback<List<PlayerScoreDto>>() {
+		scoreService.getPlayerScoreList(new DefaultCallback<List<PlayerScoreDto>>() {
 
 			@Override
 			public void onSuccess(List<PlayerScoreDto> result) {

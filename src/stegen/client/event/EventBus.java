@@ -6,7 +6,7 @@ public interface EventBus {
 
 	void addHandler(EventCallback<?> callback);
 
-	void checkUserLoginStatus(String hostPageBaseURL);
+	void getUserLoginStatus(String hostPageBaseURL);
 
 	void changeNickname(final PlayerDto player, final String nickname);
 
@@ -14,8 +14,10 @@ public interface EventBus {
 
 	void sendMessage(PlayerDto player, String message);
 
-	void updateMessageList();
+	void updateSendMessageList();
 
-	void updateScoreList();
+	void updatePlayerScoreList();
+
+	void clearAllScores(PlayerDto changedBy);
 
 }

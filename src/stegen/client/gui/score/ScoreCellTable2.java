@@ -4,7 +4,6 @@ import java.util.*;
 
 import stegen.client.gui.challenge.*;
 
-import com.google.gwt.cell.client.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
@@ -102,16 +101,23 @@ public class ScoreCellTable2 implements IsWidget {
 		dataProvider.addDataDisplay(baseWidget);
 	}
 
-	public void setUpdaterWonGameHandler(FieldUpdater<ScoreCell, String> fieldUpdater) {
-		winColumn.setFieldUpdater(fieldUpdater);
-	}
+	// public void setUpdaterWonGameHandler(FieldUpdater<ScoreCell, String>
+	// fieldUpdater) {
+	// winColumn.setFieldUpdater(fieldUpdater);
+	// }
+	//
+	// public void setUpdaterLostGameHandler(FieldUpdater<ScoreCell, String>
+	// fieldUpdater) {
+	// loseColumn.setFieldUpdater(fieldUpdater);
+	// }
+	//
+	// public void setUpdaterChallengeHandler(FieldUpdater<ScoreCell, String>
+	// fieldUpdater) {
+	// challengeColumn.setFieldUpdater(fieldUpdater);
+	// }
 
-	public void setUpdaterLostGameHandler(FieldUpdater<ScoreCell, String> fieldUpdater) {
-		loseColumn.setFieldUpdater(fieldUpdater);
-	}
-
-	public void setUpdaterChallengeHandler(FieldUpdater<ScoreCell, String> fieldUpdater) {
-		challengeColumn.setFieldUpdater(fieldUpdater);
+	public Column<ScoreCell, String> getChallengeColumn() {
+		return challengeColumn;
 	}
 
 	public ChallengeDialog2 getChallengeDialog() {

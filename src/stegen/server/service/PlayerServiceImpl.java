@@ -12,7 +12,7 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	private static final long serialVersionUID = 1134570288972922306L;
 
 	@Override
-	public LoginDataDto userLoginStatus(String requestUri) {
+	public LoginDataDto getUserLoginStatus(String requestUri) {
 		CheckLoginStatus command = new CheckLoginStatus(requestUri);
 		command.execute();
 		saveCommand(command, command.getEmail());

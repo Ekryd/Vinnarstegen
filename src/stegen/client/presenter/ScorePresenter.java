@@ -13,8 +13,9 @@ public class ScorePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
-	private EventCallback<?> eventPlayerWonCallback = createPlayerWonCallback();
-	private EventCallback<?> eventChangedScoresCallback = creatEventChangedScoresCallback();
+	final EventCallback<?> eventPlayerWonCallback = createPlayerWonCallback();
+	final EventCallback<?> eventChangedScoresCallback = creatEventChangedScoresCallback();
+	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
@@ -30,9 +31,14 @@ public class ScorePresenter implements Presenter {
 
 	@Override
 	public void go() {
-		// initView();
+		initView();
 		initEvents();
 		loadScores();
+	}
+
+	private void initView() {
+		view.addCleanScoresHandler(clickCleanScoresHandler);
+
 	}
 
 	private void initEvents() {
@@ -41,7 +47,17 @@ public class ScorePresenter implements Presenter {
 	}
 
 	private void loadScores() {
-		eventBus.updateScoreList();
+		eventBus.updatePlayerScoreList();
+	}
+
+	private ClickHandler createClickCleanScoresHandler() {
+		return new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+
+			}
+		};
 	}
 
 	private PlayerWonCallback createPlayerWonCallback() {
@@ -49,13 +65,13 @@ public class ScorePresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				eventBus.updateScoreList();
+				eventBus.updatePlayerScoreList();
 			}
 		};
 	}
 
-	private ChangedScoresCallback creatEventChangedScoresCallback() {
-		return new ChangedScoresCallback() {
+	private UpdatePlayerScoreListCallback creatEventChangedScoresCallback() {
+		return new UpdatePlayerScoreListCallback() {
 
 			@Override
 			public void onSuccessImpl(List<PlayerScoreDto> scores) {

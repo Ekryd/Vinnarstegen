@@ -19,7 +19,7 @@ public class MessagesPresenter implements Presenter {
 	private final MessagePrefixGenerator messagePrefixGenerator;
 	final ClickHandler clickOpenMessageInputHandler = createClickOpenMessageInputHandler();
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
-	final ChangedMessagesCallback eventChangedMessagesCallback = creatEventChangedMessagesCallback();
+	final UpdateSendMessageListCallback eventChangedMessagesCallback = creatEventChangedMessagesCallback();
 	final SendMessageCallback eventSendMessageCallback = createEventSendMessageCallback();
 	private MessagePrefix currentMessagePrefix;
 
@@ -71,7 +71,7 @@ public class MessagesPresenter implements Presenter {
 	}
 
 	private void loadMessages() {
-		eventBus.updateMessageList();
+		eventBus.updateSendMessageList();
 	}
 
 	private ClickHandler createClickOpenMessageInputHandler() {
@@ -106,13 +106,13 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				eventBus.updateMessageList();
+				eventBus.updateSendMessageList();
 			}
 		};
 	}
 
-	private ChangedMessagesCallback creatEventChangedMessagesCallback() {
-		return new ChangedMessagesCallback() {
+	private UpdateSendMessageListCallback creatEventChangedMessagesCallback() {
+		return new UpdateSendMessageListCallback() {
 
 			@Override
 			public void onSuccessImpl(List<PlayerCommandDto> result) {

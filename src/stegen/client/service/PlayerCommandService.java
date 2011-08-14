@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.*;
 
 @RemoteServiceRelativePath("undo")
 public interface PlayerCommandService extends RemoteService {
-	List<PlayerCommandDto> getPlayerMiscCommandStack(int maxDepth);
+	List<PlayerCommandDto> getMiscPlayerCommandStack(int maxDepth);
 
 	UndoPlayerCommandResult undoPlayerCommand(PlayerDto player);
 

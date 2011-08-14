@@ -23,7 +23,7 @@ public class AppController {
 	}
 
 	private void bindEvents() {
-		eventBus.addHandler(new CheckUserLoginStatusCallback() {
+		eventBus.addHandler(new UserLoginStatusCallback() {
 
 			@Override
 			public void onSuccessImpl(LoginDataDto result) {
@@ -53,6 +53,6 @@ public class AppController {
 	}
 
 	public void start(String hostPageBaseURL) {
-		eventBus.checkUserLoginStatus(hostPageBaseURL);
+		eventBus.getUserLoginStatus(hostPageBaseURL);
 	}
 }

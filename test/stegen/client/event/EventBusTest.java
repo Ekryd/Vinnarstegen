@@ -34,23 +34,23 @@ public class EventBusTest {
 	public void testUserLoginStatus() {
 		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
-		CheckUserLoginStatusCallback callback = createMockBuilder(CheckUserLoginStatusCallback.class)
+		UserLoginStatusCallback callback = createMockBuilder(UserLoginStatusCallback.class)
 				.createStrictMock();
 		replay(callback);
 
 		eventBus.addHandler(callback);
 
-		playerService.userLoginStatus(eq("url"), isA(AsyncCallback.class));
+		playerService.getUserLoginStatus(eq("url"), isA(AsyncCallback.class));
 		replay(playerCommandService, playerService);
 
-		eventBus.checkUserLoginStatus("url");
+		eventBus.getUserLoginStatus("url");
 	}
 
 	@Test
 	public void testUpdateMessages() {
 		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
-		ChangedMessagesCallback callback = createMockBuilder(ChangedMessagesCallback.class).withConstructor()
+		UpdateSendMessageListCallback callback = createMockBuilder(UpdateSendMessageListCallback.class).withConstructor()
 				.createStrictMock();
 		callback.onSuccess(anyObject(List.class));
 		replay(callback);
@@ -61,7 +61,7 @@ public class EventBusTest {
 		simulateCallToMethodOnSuccessByService();
 		replay(playerCommandService, playerService);
 
-		eventBus.updateMessageList();
+		eventBus.updateSendMessageList();
 	}
 
 	private void simulateCallToMethodOnSuccessByService() {

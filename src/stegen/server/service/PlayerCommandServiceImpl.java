@@ -13,7 +13,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 	private static final long serialVersionUID = 5777230422402242088L;
 
 	@Override
-	public List<PlayerCommandDto> getPlayerMiscCommandStack(int maxDepth) {
+	public List<PlayerCommandDto> getMiscPlayerCommandStack(int maxDepth) {
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				ChangeNickname.class, RegisterPlayer.class, UndoPlayerCommand.class, Challenge.class);

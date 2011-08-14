@@ -34,7 +34,7 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 	}
 
 	@Override
-	public List<PlayerScoreDto> getPlayerList() {
+	public List<PlayerScoreDto> getPlayerScoreList() {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		final List<PlayerScoreDto> playerScoreList = new ArrayList<PlayerScoreDto>();
 		PlayerRepository.get().processAndPersist(new Func() {
@@ -62,7 +62,7 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 	}
 
 	@Override
-	public void challenge(ChallengeMessageDto message) {
+	public void challengePlayer(ChallengeMessageDto message) {
 		PlayerCommand command = new Challenge(message);
 		command.execute();
 		CommandInstance commandInstanceToStore = new CommandInstance(command, message.challenger.email);

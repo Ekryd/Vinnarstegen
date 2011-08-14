@@ -35,9 +35,9 @@ public class EventBusImpl implements EventBus {
 	}
 
 	@Override
-	public void checkUserLoginStatus(String hostPageBaseURL) {
-		CheckUserLoginStatusCallback callback = callbacks.get(CheckUserLoginStatusCallback.class);
-		playerService.userLoginStatus(hostPageBaseURL, callback);
+	public void getUserLoginStatus(String hostPageBaseURL) {
+		UserLoginStatusCallback callback = callbacks.get(UserLoginStatusCallback.class);
+		playerService.getUserLoginStatus(hostPageBaseURL, callback);
 	}
 
 	@Override
@@ -59,15 +59,21 @@ public class EventBusImpl implements EventBus {
 	}
 
 	@Override
-	public void updateMessageList() {
-		ChangedMessagesCallback callback = callbacks.get(ChangedMessagesCallback.class);
+	public void updateSendMessageList() {
+		UpdateSendMessageListCallback callback = callbacks.get(UpdateSendMessageListCallback.class);
 		playerCommandService.getSendMessageCommandStack(10, callback);
 	}
 
 	@Override
-	public void updateScoreList() {
-		ChangedScoresCallback callback = callbacks.get(ChangedScoresCallback.class);
-		scoreService.getPlayerList(callback);
+	public void updatePlayerScoreList() {
+		UpdatePlayerScoreListCallback callback = callbacks.get(UpdatePlayerScoreListCallback.class);
+		scoreService.getPlayerScoreList(callback);
+	}
+
+	@Override
+	public void clearAllScores(PlayerDto changedBy) {
+		ClearScoresCallback callback = callbacks.get(ClearScoresCallback.class);
+		scoreService.clearAllScores(changedBy, callback);
 	}
 
 }

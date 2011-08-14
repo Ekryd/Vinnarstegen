@@ -18,6 +18,6 @@ public interface PlayerCommandServiceAsync {
 
 	void getLoginStatusCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
 
-	void getPlayerMiscCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
+	void getMiscPlayerCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
 
 }

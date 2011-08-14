@@ -52,7 +52,7 @@ public class MessagesPresenterTest {
 		view.addClickSendMessageHandler(presenter.clickSendMessageHandler);
 		eventBus.addHandler(presenter.eventSendMessageCallback);
 		eventBus.addHandler(presenter.eventChangedMessagesCallback);
-		eventBus.updateMessageList();
+		eventBus.updateSendMessageList();
 		replay(view, eventBus);
 	}
 
