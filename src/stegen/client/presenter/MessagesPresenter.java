@@ -6,6 +6,7 @@ import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.message.MessageTable2.MessageTableContent;
 import stegen.client.service.*;
+import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -50,7 +51,7 @@ public class MessagesPresenter implements Presenter {
 	public void go() {
 		nextMessagePrefix();
 		initView();
-		initMessageEvent();
+		initEvents();
 		loadMessages();
 	}
 
@@ -62,6 +63,15 @@ public class MessagesPresenter implements Presenter {
 		view.setMessageButtonTitle(currentMessagePrefix.buttonText);
 		view.addClickOpenMessageInputHandler(clickOpenMessageInputHandler);
 		view.addClickSendMessageHandler(clickSendMessageHandler);
+	}
+
+	private void initEvents() {
+		eventBus.addHandler(eventSendMessageCallback);
+		eventBus.addHandler(eventChangedMessagesCallback);
+	}
+
+	private void loadMessages() {
+		eventBus.updateMessageList();
 	}
 
 	private ClickHandler createClickOpenMessageInputHandler() {
@@ -91,17 +101,11 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private void initMessageEvent() {
-		eventBus.addHandler(eventSendMessageCallback);
-		eventBus.addHandler(eventChangedMessagesCallback);
-
-	}
-
 	private SendMessageCallback createEventSendMessageCallback() {
 		return new SendMessageCallback() {
 
 			@Override
-			public void onSuccess(Void result) {
+			public void onSuccessImpl(Void result) {
 				eventBus.updateMessageList();
 			}
 		};
@@ -111,7 +115,7 @@ public class MessagesPresenter implements Presenter {
 		return new ChangedMessagesCallback() {
 
 			@Override
-			public void onSuccess(List<PlayerCommandDto> result) {
+			public void onSuccessImpl(List<PlayerCommandDto> result) {
 				List<MessageTableContent> content = new ArrayList<MessageTableContent>();
 				for (PlayerCommandDto playerCommandDto : result) {
 					content.add(new MessageTableContentImpl(playerCommandDto.player.nickname,
@@ -151,7 +155,4 @@ public class MessagesPresenter implements Presenter {
 
 	}
 
-	private void loadMessages() {
-		eventBus.updateMessageList();
-	}
 }

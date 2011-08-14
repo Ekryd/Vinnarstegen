@@ -3,6 +3,7 @@ package stegen.client.gui.score;
 import java.util.*;
 
 import stegen.client.gui.challenge.*;
+import stegen.client.gui.gameresult.*;
 import stegen.client.messages.*;
 import stegen.shared.*;
 

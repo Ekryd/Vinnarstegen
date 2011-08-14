@@ -1,10 +1,12 @@
 package stegen.client.event;
 
-public enum EventType {
+public enum CallbackType {
 	CHECK_USER_LOGIN_STATUS,
 	CHANGE_NICKNAME,
 	REGISTER_PLAYER,
 	SEND_MESSAGE,
-	CHANGED_MESSAGES;
+	CHANGED_MESSAGES,
+	CHANGED_SCORES,
+	PLAYER_WON;
 
 }

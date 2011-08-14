@@ -7,6 +7,7 @@ import org.junit.*;
 import stegen.client.event.*;
 import stegen.client.presenter.MessagesPresenter.Display;
 import stegen.client.service.*;
+import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class MessagesPresenterTest {

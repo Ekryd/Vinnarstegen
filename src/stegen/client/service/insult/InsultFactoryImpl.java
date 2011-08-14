@@ -1,8 +1,10 @@
-package stegen.client.gui.challenge;
+package stegen.client.service.insult;
 
 import java.util.*;
 
-public class InsultFactory {
+import stegen.client.service.*;
+
+public class InsultFactoryImpl implements InsultFactory {
 	private final Random random = new Random();
 	private final InsultAdjective[] adjectives = new InsultAdjective[] { new InsultAdjective("gammal", "gammlat"),
 			new InsultAdjective("ynkling", "ynkligt"), new InsultAdjective("gammalmodig", "gammalmodigt"),
@@ -31,6 +33,7 @@ public class InsultFactory {
 			new InsultNoun(EnOrEtt.EN, "blomkruka"), new InsultNoun(EnOrEtt.ETT, "dammkorn"),
 			new InsultNoun(EnOrEtt.ETT, "lingon"), new InsultNoun(EnOrEtt.ETT, "blåbär"), };
 
+	@Override
 	public String createCompleteInsult() {
 		StringBuilder returnValue = new StringBuilder();
 		InsultNoun noun = nouns[random.nextInt(nouns.length)];

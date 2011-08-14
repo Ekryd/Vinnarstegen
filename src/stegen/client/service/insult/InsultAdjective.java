@@ -1,4 +1,4 @@
-package stegen.client.gui.challenge;
+package stegen.client.service.insult;
 
 import java.util.*;
 

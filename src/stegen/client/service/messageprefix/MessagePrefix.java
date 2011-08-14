@@ -1,4 +1,4 @@
-package stegen.client.service;
+package stegen.client.service.messageprefix;
 
 public class MessagePrefix {
 	public String buttonText;

@@ -6,8 +6,8 @@ import stegen.shared.*;
 public abstract class CheckUserLoginStatusCallback extends EventCallback<LoginDataDto> {
 
 	@Override
-	public EventType getEventType() {
-		return EventType.CHECK_USER_LOGIN_STATUS;
+	public final Class<CheckUserLoginStatusCallback> getCallbackClass() {
+		return CheckUserLoginStatusCallback.class;
 	}
 
 }

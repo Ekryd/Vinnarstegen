@@ -2,12 +2,14 @@ package stegen.client;
 
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
+import stegen.client.gui.*;
 import stegen.client.gui.login.*;
 import stegen.client.gui.message.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.register.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
+import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class AppController {
@@ -24,7 +26,7 @@ public class AppController {
 		eventBus.addHandler(new CheckUserLoginStatusCallback() {
 
 			@Override
-			public void onSuccess(LoginDataDto result) {
+			public void onSuccessImpl(LoginDataDto result) {
 				switch (result.loginResponse) {
 				case NOT_LOGGED_IN:
 					new LoginPresenter(new LoginView(), result).go();
@@ -38,6 +40,7 @@ public class AppController {
 					new LogoutPresenter(new LogoutView(), result).go();
 					new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
 					new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
+					new CompositeMainPresenter(new CompositeMainView(), result, eventBus).go();
 					// new LoggedInPresenter(new LoggedInView(), result,
 					// eventBus).go();
 					break;

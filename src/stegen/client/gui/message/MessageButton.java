@@ -4,6 +4,7 @@ import java.util.*;
 
 import stegen.client.messages.*;
 import stegen.client.service.*;
+import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;

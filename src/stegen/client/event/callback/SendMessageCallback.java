@@ -5,8 +5,8 @@ import stegen.client.event.*;
 public abstract class SendMessageCallback extends EventCallback<Void> {
 
 	@Override
-	public EventType getEventType() {
-		return EventType.SEND_MESSAGE;
+	public final Class<SendMessageCallback> getCallbackClass() {
+		return SendMessageCallback.class;
 	}
 
 }

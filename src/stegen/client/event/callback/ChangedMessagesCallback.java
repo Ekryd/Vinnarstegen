@@ -8,8 +8,7 @@ import stegen.shared.*;
 public abstract class ChangedMessagesCallback extends EventCallback<List<PlayerCommandDto>> {
 
 	@Override
-	public EventType getEventType() {
-		return EventType.CHANGED_MESSAGES;
+	public final Class<ChangedMessagesCallback> getCallbackClass() {
+		return ChangedMessagesCallback.class;
 	}
-
 }

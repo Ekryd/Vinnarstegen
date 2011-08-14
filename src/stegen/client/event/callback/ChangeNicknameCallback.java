@@ -6,8 +6,8 @@ import stegen.shared.*;
 public abstract class ChangeNicknameCallback extends EventCallback<PlayerDto> {
 
 	@Override
-	public EventType getEventType() {
-		return EventType.CHANGE_NICKNAME;
+	public final Class<ChangeNicknameCallback> getCallbackClass() {
+		return ChangeNicknameCallback.class;
 	}
 
 }

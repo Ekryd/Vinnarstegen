@@ -17,4 +17,6 @@ public interface EventBus {
 
 	void updateMessageList();
 
+	void updateScoreList();
+
 }

@@ -18,19 +18,9 @@ public class InputDialogBox2 implements IsWidget {
 	}
 
 	private void createButtonEvents() {
-		ClickHandler hideDialogAction = createHideDialogAction();
+		ClickHandler hideDialogAction = new HideDialogHandler(baseWidget);
 		buttonPanel.addClickCloseHandler(hideDialogAction);
 		buttonPanel.addClickOkHandler(hideDialogAction);
-	}
-
-	private ClickHandler createHideDialogAction() {
-		return new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				baseWidget.hide();
-			}
-		};
 	}
 
 	private void initLayout() {

@@ -1,11 +1,13 @@
 package stegen.client.gui.message;
 
+import stegen.client.gui.dialog.*;
+
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class MessageButton2 implements IsWidget {
 	private final Button baseWidget = new Button();
-	private MessageDialog2 messageDialog = new MessageDialog2();
+	private InputDialogBox2 messageDialog = new InputDialogBox2();
 
 	public MessageButton2() {
 		initLayout();

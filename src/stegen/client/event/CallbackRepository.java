@@ -1,15 +1,10 @@
 package stegen.client.event;
 
-import com.google.gwt.user.client.rpc.*;
-
 public interface CallbackRepository {
 
 	void clear();
 
-	void add(EventType event, AsyncCallback<?> callback);
+	<R> void add(EventCallback<R> callback);
 
-	AsyncCallback<?> get(EventType event);
-
-	<T> AsyncCallback<T> get(EventType event, Class<T> asynchReturnClass);
-
+	<T extends EventCallback<?>> T get(Class<T> callbackClass);
 }

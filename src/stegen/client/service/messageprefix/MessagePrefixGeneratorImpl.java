@@ -1,6 +1,8 @@
-package stegen.client.service;
+package stegen.client.service.messageprefix;
 
 import java.util.*;
+
+import stegen.client.service.*;
 
 public class MessagePrefixGeneratorImpl implements MessagePrefixGenerator {
 	private final Random random = new Random();

@@ -2,12 +2,14 @@ package stegen.client.gui.challenge;
 
 import java.util.*;
 
+import stegen.client.service.*;
+import stegen.client.service.insult.*;
 import stegen.shared.*;
 
 import com.google.gwt.i18n.client.*;
 
 public class ChallengeMessage {
-	private final static InsultFactory INSULT_FACTORY = new InsultFactory();
+	private final static InsultFactory INSULT_FACTORY = new InsultFactoryImpl();
 	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("'kl 'HH:mm' den 'dd/MM");
 
 	private static final String SUBJECT = "Utmaning från Vinnarstegen";

@@ -3,6 +3,7 @@ package stegen.client.gui.message;
 import stegen.client.gui.dialog.*;
 import stegen.client.messages.*;
 import stegen.client.service.*;
+import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class MessageDialog extends InputDialogBox {

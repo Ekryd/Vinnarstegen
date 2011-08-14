@@ -12,7 +12,7 @@ import com.google.gwt.user.client.ui.*;
 
 public class MessagesView implements Display {
 
-	private final VerticalPanel baseWidget = new VerticalPanel();
+	private final VerticalPanel panel = new VerticalPanel();
 	private final MessageButton2 messageButton = new MessageButton2();
 	private final MessageTable2 messageTable = new MessageTable2();
 
@@ -21,10 +21,10 @@ public class MessagesView implements Display {
 	}
 
 	private void initLayout() {
-		baseWidget.add(messageButton);
-		baseWidget.add(messageTable);
+		panel.add(messageButton);
+		panel.add(messageTable);
 		MESSAGES_AREA.clearPanel();
-		MESSAGES_AREA.addToPanel(baseWidget);
+		MESSAGES_AREA.addToPanel(panel);
 	}
 
 	@Override
