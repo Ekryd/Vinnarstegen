@@ -23,15 +23,8 @@ public class NonregisteredUserPresenterTest {
 
 	private void setupPresenter() {
 		view = EasyMock.createStrictMock(Display.class);
-		result = createLoginData();
+		result = LoginDataDtoFactory.createLoginData();
 		presenter = new NonregisteredUserPresenter(view, result);
-	}
-
-	private LoginDataDto createLoginData() {
-		EmailAddressDto email = new EmailAddressDto("address");
-		PlayerDto player = new PlayerDto(email, "nickname");
-		LoginDataDto result = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
-		return result;
 	}
 
 	private void setupInitializationExpects() {

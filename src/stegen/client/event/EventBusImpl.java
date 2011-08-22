@@ -30,6 +30,12 @@ public class EventBusImpl implements EventBus {
 	}
 
 	@Override
+	public void clearCallbacks() {
+		callbacks.clear();
+
+	}
+
+	@Override
 	public void addHandler(EventCallback<?> callback) {
 		callbacks.add(callback);
 	}

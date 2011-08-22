@@ -34,8 +34,7 @@ public class EventBusTest {
 	public void testUserLoginStatus() {
 		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
-		UserLoginStatusCallback callback = createMockBuilder(UserLoginStatusCallback.class)
-				.createStrictMock();
+		UserLoginStatusCallback callback = createMockBuilder(UserLoginStatusCallback.class).createStrictMock();
 		replay(callback);
 
 		eventBus.addHandler(callback);
@@ -50,28 +49,27 @@ public class EventBusTest {
 	public void testUpdateMessages() {
 		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
-		UpdateSendMessageListCallback callback = createMockBuilder(UpdateSendMessageListCallback.class).withConstructor()
-				.createStrictMock();
+		UpdateSendMessageListCallback callback = createMockBuilder(UpdateSendMessageListCallback.class)
+				.withConstructor().createStrictMock();
 		callback.onSuccess(anyObject(List.class));
 		replay(callback);
 
 		eventBus.addHandler(callback);
 
 		playerCommandService.getSendMessageCommandStack(eq(10), isA(AsyncCallback.class));
-		simulateCallToMethodOnSuccessByService();
+		simulateCallToMethodOnSuccessByService(new ArrayList<PlayerCommandDto>());
 		replay(playerCommandService, playerService);
 
 		eventBus.updateSendMessageList();
 	}
 
-	private void simulateCallToMethodOnSuccessByService() {
+	private void simulateCallToMethodOnSuccessByService(final Object returnValue) {
 		IAnswer<Object> answer = new IAnswer<Object>() {
 
 			@Override
 			public Object answer() throws Throwable {
-				AsyncCallback<List<PlayerCommandDto>> callback = (AsyncCallback<List<PlayerCommandDto>>) getCurrentArguments()[1];
-				List<PlayerCommandDto> result = new ArrayList<PlayerCommandDto>();
-				callback.onSuccess(result);
+				AsyncCallback<Object> callback = (AsyncCallback<Object>) getCurrentArguments()[1];
+				callback.onSuccess(returnValue);
 				return null;
 			}
 		};

@@ -1,8 +1,9 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
-import stegen.client.gui.score.ScoreCellTable2.ScoreCell;
 import stegen.shared.*;
+
+import com.google.gwt.event.dom.client.*;
 
 public class ChallengePresenter implements Presenter {
 	private final Display view;
@@ -10,6 +11,9 @@ public class ChallengePresenter implements Presenter {
 	private final EventBus eventBus;
 
 	public interface Display {
+		void addClickOpenChallengeInputHandler(ClickHandler clickHandler);
+
+		void addClickSendChallengeHandler(ClickHandler clickHandler);
 	}
 
 	public ChallengePresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
@@ -63,53 +67,4 @@ public class ChallengePresenter implements Presenter {
 	// };
 	// }
 
-	private static class ScoreCellImpl implements ScoreCell {
-		private final String name;
-		private final String score;
-		private final String ranking;
-		private final String changedDateTime;
-		private final String changedBy;
-		private final boolean currentUser;
-
-		public ScoreCellImpl(String name, String score, String ranking, String changedDateTime, String changedBy,
-				boolean currentUser) {
-			this.name = name;
-			this.score = score;
-			this.ranking = ranking;
-			this.changedDateTime = changedDateTime;
-			this.changedBy = changedBy;
-			this.currentUser = currentUser;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String getScore() {
-			return score;
-		}
-
-		@Override
-		public String getRanking() {
-			return ranking;
-		}
-
-		@Override
-		public String getChangedDateTime() {
-			return changedDateTime;
-		}
-
-		@Override
-		public String getChangedBy() {
-			return changedBy;
-		}
-
-		@Override
-		public boolean isCurrentUser() {
-			return currentUser;
-		}
-
-	}
 }

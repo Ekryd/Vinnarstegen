@@ -4,7 +4,6 @@ import static stegen.client.gui.BaseHtmlPage.*;
 
 import java.util.*;
 
-import stegen.client.gui.message.MessageTable2.MessageTableContent;
 import stegen.client.presenter.MessagesPresenter.Display;
 
 import com.google.gwt.event.dom.client.*;
@@ -53,7 +52,7 @@ public class MessagesView implements Display {
 	}
 
 	@Override
-	public void changeMessageList(List<MessageTableContent> content) {
+	public void changeMessageList(List<MessageTableRow> content) {
 		messageTable.changeContent(content);
 	}
 

@@ -2,7 +2,6 @@ package stegen.client.gui.score;
 
 import java.util.*;
 
-import stegen.client.gui.score.ScoreCellTable2.ScoreCell;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
@@ -33,7 +32,7 @@ public class ListScorePanel2 implements IsWidget {
 		cleanScoresButton.addClickCleanScoresHandler(clickHandler);
 	}
 
-	public void changeScoreList(List<ScoreCell> content) {
+	public void changeScoreList(List<ScoreTableRow> content) {
 		scoreCellTable.changeContent(content);
 	}
 

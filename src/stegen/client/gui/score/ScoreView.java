@@ -2,7 +2,6 @@ package stegen.client.gui.score;
 
 import java.util.*;
 
-import stegen.client.gui.score.ScoreCellTable2.ScoreCell;
 import stegen.client.presenter.ScorePresenter.Display;
 
 import com.google.gwt.event.dom.client.*;
@@ -21,7 +20,7 @@ public class ScoreView implements Display {
 	}
 
 	@Override
-	public void changeScoreList(List<ScoreCell> content) {
+	public void changeScoreList(List<ScoreTableRow> content) {
 		scorePanel.changeScoreList(content);
 	}
 

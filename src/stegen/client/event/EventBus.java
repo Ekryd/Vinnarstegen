@@ -20,4 +20,6 @@ public interface EventBus {
 
 	void clearAllScores(PlayerDto changedBy);
 
+	void clearCallbacks();
+
 }

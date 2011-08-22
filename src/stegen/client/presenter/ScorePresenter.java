@@ -4,7 +4,7 @@ import java.util.*;
 
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
-import stegen.client.gui.score.ScoreCellTable2.ScoreCell;
+import stegen.client.gui.score.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -13,14 +13,14 @@ public class ScorePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
-	final EventCallback<?> eventPlayerWonCallback = createPlayerWonCallback();
-	final EventCallback<?> eventChangedScoresCallback = creatEventChangedScoresCallback();
+	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
+	final UpdatePlayerScoreListCallback eventChangedScoresCallback = creatEventChangedScoresCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
 
-		void changeScoreList(List<ScoreCell> content);
+		void changeScoreList(List<ScoreTableRow> content);
 	}
 
 	public ScorePresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
@@ -42,7 +42,7 @@ public class ScorePresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventPlayerWonCallback);
+		eventBus.addHandler(eventClearScoresCallback);
 		eventBus.addHandler(eventChangedScoresCallback);
 	}
 
@@ -55,13 +55,13 @@ public class ScorePresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-
+				eventBus.clearAllScores(result.player);
 			}
 		};
 	}
 
-	private PlayerWonCallback createPlayerWonCallback() {
-		return new PlayerWonCallback() {
+	private ClearScoresCallback createClearScoresCallback() {
+		return new ClearScoresCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -75,10 +75,10 @@ public class ScorePresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(List<PlayerScoreDto> scores) {
-				List<ScoreCell> content = new ArrayList<ScoreCell>();
+				List<ScoreTableRow> content = new ArrayList<ScoreTableRow>();
 				for (PlayerScoreDto playerScoreDto : scores) {
 					boolean currentUser = playerScoreDto.player.email.equals(result.player.email);
-					content.add(new ScoreCellImpl(playerScoreDto.player.nickname, "" + playerScoreDto.score, ""
+					content.add(new ScoreTableRow(playerScoreDto.player.nickname, "" + playerScoreDto.score, ""
 							+ playerScoreDto.ranking, playerScoreDto.changedDateTime,
 							playerScoreDto.changedBy.nickname, currentUser));
 				}
@@ -87,53 +87,4 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private static class ScoreCellImpl implements ScoreCell {
-		private final String name;
-		private final String score;
-		private final String ranking;
-		private final String changedDateTime;
-		private final String changedBy;
-		private final boolean currentUser;
-
-		public ScoreCellImpl(String name, String score, String ranking, String changedDateTime, String changedBy,
-				boolean currentUser) {
-			this.name = name;
-			this.score = score;
-			this.ranking = ranking;
-			this.changedDateTime = changedDateTime;
-			this.changedBy = changedBy;
-			this.currentUser = currentUser;
-		}
-
-		@Override
-		public String getName() {
-			return name;
-		}
-
-		@Override
-		public String getScore() {
-			return score;
-		}
-
-		@Override
-		public String getRanking() {
-			return ranking;
-		}
-
-		@Override
-		public String getChangedDateTime() {
-			return changedDateTime;
-		}
-
-		@Override
-		public String getChangedBy() {
-			return changedBy;
-		}
-
-		@Override
-		public boolean isCurrentUser() {
-			return currentUser;
-		}
-
-	}
 }

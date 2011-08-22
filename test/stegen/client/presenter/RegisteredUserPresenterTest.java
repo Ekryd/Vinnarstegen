@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
-import org.easymock.*;
+import static org.easymock.EasyMock.*;
+
 import org.junit.*;
 
 import stegen.client.event.*;
@@ -46,38 +47,43 @@ public class RegisteredUserPresenterTest {
 		simulateChangeNicknameClick();
 	}
 
-	private void setupPresenter() {
-		view = EasyMock.createStrictMock(Display.class);
-		result = createLoginData();
-		eventBus = EasyMock.createStrictMock(EventBus.class);
-		presenter = new RegisteredUserPresenter(view, result, eventBus);
+	@Test
+	public void testChangeNicknameCallback() {
+		setupPresenter();
+
+		view.setUserName("nickname");
+		replay(view);
+
+		presenter.eventChangeNicknameHandler.onSuccess(new PlayerDto(null, "nickname"));
+
+		verify(view);
 	}
 
-	private LoginDataDto createLoginData() {
-		EmailAddressDto email = new EmailAddressDto("address");
-		PlayerDto player = new PlayerDto(email, "nickname");
-		LoginDataDto result = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
-		return result;
+	private void setupPresenter() {
+		view = createStrictMock(Display.class);
+		result = LoginDataDtoFactory.createLoginData();
+		eventBus = createStrictMock(EventBus.class);
+		presenter = new RegisteredUserPresenter(view, result, eventBus);
 	}
 
 	private void setupInitializationExpects() {
 		view.setUserName("nickname");
 		view.addClickChangeUserNameHandler(presenter.clickChangeUserNameHandler);
 		eventBus.addHandler(presenter.eventChangeNicknameHandler);
-		EasyMock.replay(view, eventBus);
+		replay(view, eventBus);
 	}
 
 	private void setupEmptyNicknameExpects() {
-		EasyMock.reset(view, eventBus);
-		EasyMock.expect(view.getNewNickname()).andReturn(nickname);
-		EasyMock.replay(view, eventBus);
+		reset(view, eventBus);
+		expect(view.getNewNickname()).andReturn(nickname);
+		replay(view, eventBus);
 	}
 
 	private void setupOkNicknameExpects() {
-		EasyMock.reset(view, eventBus);
-		EasyMock.expect(view.getNewNickname()).andReturn(nickname);
+		reset(view, eventBus);
+		expect(view.getNewNickname()).andReturn(nickname);
 		eventBus.changeNickname(result.player, nickname);
-		EasyMock.replay(view, eventBus);
+		replay(view, eventBus);
 	}
 
 	private void simulateChangeNicknameClick() {

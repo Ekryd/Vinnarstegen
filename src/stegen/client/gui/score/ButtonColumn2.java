@@ -1,13 +1,12 @@
 package stegen.client.gui.score;
 
-import stegen.client.gui.score.ScoreCellTable2.ScoreCell;
 
 import com.google.gwt.cell.client.*;
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.safehtml.shared.*;
 import com.google.gwt.user.cellview.client.*;
 
-public class ButtonColumn2 extends Column<ScoreCell, String> {
+public class ButtonColumn2 extends Column<ScoreTableRow, String> {
 	private final String buttonText;
 
 	public ButtonColumn2(String buttonText) {
@@ -16,17 +15,17 @@ public class ButtonColumn2 extends Column<ScoreCell, String> {
 	}
 
 	@Override
-	public String getValue(ScoreCell cell) {
+	public String getValue(ScoreTableRow cell) {
 		return buttonText;
 	}
 
 	@Override
-	public void render(Context context, ScoreCell cell, SafeHtmlBuilder sb) {
+	public void render(Context context, ScoreTableRow cell, SafeHtmlBuilder sb) {
 		dontDisplayButtonsForCurrentUser(context, cell, sb);
 	}
 
-	private void dontDisplayButtonsForCurrentUser(Context context, ScoreCell cell, SafeHtmlBuilder sb) {
-		if (!cell.isCurrentUser()) {
+	private void dontDisplayButtonsForCurrentUser(Context context, ScoreTableRow cell, SafeHtmlBuilder sb) {
+		if (!cell.currentUser) {
 			super.render(context, cell, sb);
 		}
 	}

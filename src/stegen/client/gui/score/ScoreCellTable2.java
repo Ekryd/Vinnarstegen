@@ -9,25 +9,11 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
 public class ScoreCellTable2 implements IsWidget {
-	public interface ScoreCell {
-		String getName();
-
-		String getScore();
-
-		String getRanking();
-
-		String getChangedDateTime();
-
-		String getChangedBy();
-
-		boolean isCurrentUser();
-	}
-
-	private final CellTable<ScoreCell> baseWidget = new CellTable<ScoreCell>();
-	private final ListDataProvider<ScoreCell> dataProvider = new ListDataProvider<ScoreCell>();;
-	private final Column<ScoreCell, String> winColumn = new ButtonColumn2("Jag vann mot");
-	private final Column<ScoreCell, String> loseColumn = new ButtonColumn2("Jag förlorade mot");
-	private final Column<ScoreCell, String> challengeColumn = new ButtonColumn2("Utmana!");
+	private final CellTable<ScoreTableRow> baseWidget = new CellTable<ScoreTableRow>();
+	private final ListDataProvider<ScoreTableRow> dataProvider = new ListDataProvider<ScoreTableRow>();;
+	private final Column<ScoreTableRow, String> winColumn = new ButtonColumn2("Jag vann mot");
+	private final Column<ScoreTableRow, String> loseColumn = new ButtonColumn2("Jag förlorade mot");
+	private final Column<ScoreTableRow, String> challengeColumn = new ButtonColumn2("Utmana!");
 	// private final GameResultDialogBox2 gameResultDialogBox;
 	private final ChallengeDialog2 challengeDialog = new ChallengeDialog2();
 
@@ -38,39 +24,39 @@ public class ScoreCellTable2 implements IsWidget {
 	}
 
 	private void initTextColumns() {
-		baseWidget.addColumn(new TextColumn<ScoreCell>() {
+		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {
 
 			@Override
-			public String getValue(ScoreCell cell) {
-				return cell.getName();
+			public String getValue(ScoreTableRow cell) {
+				return cell.name;
 			}
 		}, "Namn");
-		baseWidget.addColumn(new TextColumn<ScoreCell>() {
+		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {
 
 			@Override
-			public String getValue(ScoreCell cell) {
-				return cell.getScore();
+			public String getValue(ScoreTableRow cell) {
+				return cell.score;
 			}
 		}, "Poäng");
-		baseWidget.addColumn(new TextColumn<ScoreCell>() {
+		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {
 
 			@Override
-			public String getValue(ScoreCell cell) {
-				return cell.getRanking();
+			public String getValue(ScoreTableRow cell) {
+				return cell.ranking;
 			}
 		}, "Rankad");
-		baseWidget.addColumn(new TextColumn<ScoreCell>() {
+		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {
 
 			@Override
-			public String getValue(ScoreCell cell) {
-				return cell.getChangedDateTime();
+			public String getValue(ScoreTableRow cell) {
+				return cell.changedDateTime;
 			}
 		}, "Senast ändrad");
-		baseWidget.addColumn(new TextColumn<ScoreCell>() {
+		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {
 
 			@Override
-			public String getValue(ScoreCell cell) {
-				return cell.getChangedBy();
+			public String getValue(ScoreTableRow cell) {
+				return cell.changedBy;
 			}
 		}, "Ändrad av");
 
@@ -116,7 +102,7 @@ public class ScoreCellTable2 implements IsWidget {
 	// challengeColumn.setFieldUpdater(fieldUpdater);
 	// }
 
-	public Column<ScoreCell, String> getChallengeColumn() {
+	public Column<ScoreTableRow, String> getChallengeColumn() {
 		return challengeColumn;
 	}
 
@@ -124,10 +110,10 @@ public class ScoreCellTable2 implements IsWidget {
 		return challengeDialog;
 	}
 
-	public void changeContent(List<ScoreCell> scores) {
-		List<ScoreCell> tableList = dataProvider.getList();
+	public void changeContent(List<ScoreTableRow> scores) {
+		List<ScoreTableRow> tableList = dataProvider.getList();
 		tableList.clear();
-		for (ScoreCell playerScore : scores) {
+		for (ScoreTableRow playerScore : scores) {
 			tableList.add(playerScore);
 		}
 	}

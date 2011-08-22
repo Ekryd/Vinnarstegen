@@ -4,7 +4,7 @@ import java.util.*;
 
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
-import stegen.client.gui.message.MessageTable2.MessageTableContent;
+import stegen.client.gui.message.*;
 import stegen.client.service.*;
 import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
@@ -35,7 +35,7 @@ public class MessagesPresenter implements Presenter {
 
 		String getMessageInputContent();
 
-		void changeMessageList(List<MessageTableContent> content);
+		void changeMessageList(List<MessageTableRow> content);
 
 	}
 
@@ -116,43 +116,14 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(List<PlayerCommandDto> result) {
-				List<MessageTableContent> content = new ArrayList<MessageTableContent>();
+				List<MessageTableRow> content = new ArrayList<MessageTableRow>();
 				for (PlayerCommandDto playerCommandDto : result) {
-					content.add(new MessageTableContentImpl(playerCommandDto.player.nickname,
+					content.add(new MessageTableRow(playerCommandDto.player.nickname,
 							playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changeMessageList(content);
 			}
 		};
-	}
-
-	private static class MessageTableContentImpl implements MessageTableContent {
-
-		private final String nickname;
-		private final Date performedDateTime;
-		private final String description;
-
-		public MessageTableContentImpl(String nickname, Date performedDateTime, String description) {
-			this.nickname = nickname;
-			this.performedDateTime = performedDateTime;
-			this.description = description;
-		}
-
-		@Override
-		public String getPlayerName() {
-			return nickname;
-		}
-
-		@Override
-		public Date getMessageDate() {
-			return performedDateTime;
-		}
-
-		@Override
-		public String getMessage() {
-			return description;
-		}
-
 	}
 
 }

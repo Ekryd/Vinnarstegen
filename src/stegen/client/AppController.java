@@ -14,45 +14,73 @@ import stegen.shared.*;
 
 public class AppController {
 
-	private final EventBus eventBus;
+	final EventBus eventBus;
+	final UserLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
+	private String hostPageBaseURL;
+
+	private AppController(EventBus eventBus) {
+		this.eventBus = eventBus;
+	}
 
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
 			PlayerServiceAsync playerService) {
-		eventBus = EventBusImpl.create(playerCommandService, scoreService, playerService);
-		bindEvents();
+		this(EventBusImpl.create(playerCommandService, scoreService, playerService));
 	}
 
-	private void bindEvents() {
-		eventBus.addHandler(new UserLoginStatusCallback() {
-
-			@Override
-			public void onSuccessImpl(LoginDataDto result) {
-				switch (result.loginResponse) {
-				case NOT_LOGGED_IN:
-					new LoginPresenter(new LoginView(), result).go();
-					break;
-				case LOGGED_IN_GMAIL:
-					new LogoutPresenter(new LogoutView(), result).go();
-					new RegistrationPresenter(new RegistrationView(), result, eventBus).go();
-					new NonregisteredUserPresenter(new NonregisteredUserView(), result).go();
-					break;
-				case LOGGED_IN_AND_REGISTERED:
-					new LogoutPresenter(new LogoutView(), result).go();
-					new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
-					new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
-					new CompositeMainPresenter(new CompositeMainView(), result, eventBus).go();
-					// new LoggedInPresenter(new LoggedInView(), result,
-					// eventBus).go();
-					break;
-				default:
-					new LoginPresenter(new LoginView(), result).go();
-				}
-			}
-
-		});
+	public static AppController createForTest(EventBus eventBus) {
+		return new AppController(eventBus);
 	}
 
 	public void start(String hostPageBaseURL) {
+		this.hostPageBaseURL = hostPageBaseURL;
+		setupLoginStatusEvent();
 		eventBus.getUserLoginStatus(hostPageBaseURL);
+	}
+
+	private void setupLoginStatusEvent() {
+		eventBus.addHandler(eventCheckLoginStatusHandler);
+	}
+
+	private UserLoginStatusCallback createEventCheckLoginStatusHandler() {
+		return new UserLoginStatusCallback() {
+
+			@Override
+			public void onSuccessImpl(LoginDataDto result) {
+				eventBus.clearCallbacks();
+				setupLoginStatusEvent();
+
+				switch (result.loginResponse) {
+				case NOT_LOGGED_IN:
+					createLoginPresenter(result);
+					break;
+				case LOGGED_IN_GMAIL:
+					createRegistrationPresenters(result);
+					break;
+				case LOGGED_IN_AND_REGISTERED:
+					createLoggedInPresenters(result);
+					break;
+				default:
+					createLoginPresenter(result);
+				}
+			}
+
+		};
+	}
+
+	private void createLoginPresenter(LoginDataDto result) {
+		new LoginPresenter(new LoginView(), result).go();
+	}
+
+	private void createRegistrationPresenters(LoginDataDto result) {
+		new LogoutPresenter(new LogoutView(), result).go();
+		new RegistrationPresenter(new RegistrationView(), result, eventBus, hostPageBaseURL).go();
+		new NonregisteredUserPresenter(new NonregisteredUserView(), result).go();
+	}
+
+	private void createLoggedInPresenters(LoginDataDto result) {
+		new LogoutPresenter(new LogoutView(), result).go();
+		new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
+		new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
+		new CompositeMainPresenter(new CompositeMainView(), result, eventBus).go();
 	}
 }

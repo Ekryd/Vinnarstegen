@@ -58,20 +58,24 @@ public class RegisterationPresenterTest {
 		simulateRegistrationClick();
 	}
 
-	private void setupPresenter() {
-		result = createLoginData();
-		presenter = new RegistrationPresenter(view, result, eventBus);
+	@Test
+	public void testRegisterPlayerCallback() {
+		setupPresenter();
+
+		eventBus.getUserLoginStatus("hostPageBaseURL");
+		replay(view, eventBus);
+
+		presenter.eventRegisterPlayerHandler.onSuccess(null);
 	}
 
-	private LoginDataDto createLoginData() {
-		EmailAddressDto email = new EmailAddressDto("address");
-		PlayerDto player = new PlayerDto(email, "nickname");
-		LoginDataDto result = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
-		return result;
+	private void setupPresenter() {
+		result = LoginDataDtoFactory.createLoginData();
+		presenter = new RegistrationPresenter(view, result, eventBus, "hostPageBaseURL");
 	}
 
 	private void setupInitializationExpects() {
 		view.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
+		eventBus.addHandler(presenter.eventRegisterPlayerHandler);
 		replay(view, eventBus);
 	}
 

@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.event.callback.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -10,7 +11,9 @@ public class RegistrationPresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
-	final ClickHandler checkRegistrationOkHandler;
+	final ClickHandler checkRegistrationOkHandler = createCheckRegistrationOkHandler();
+	final RegisterPlayerCallback eventRegisterPlayerHandler = createEventRegisterPlayerHandler();
+	private final String hostPageBaseURL;
 
 	public interface Display {
 		void addClickRegistrationHandler(ClickHandler clickHandler);
@@ -20,11 +23,12 @@ public class RegistrationPresenter implements Presenter {
 		void showRegistrationFail();
 	}
 
-	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto result, EventBus eventBus) {
+	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto result, EventBus eventBus,
+			String hostPageBaseURL) {
 		this.view = loginButNotRegisteredView;
 		this.result = result;
 		this.eventBus = eventBus;
-		checkRegistrationOkHandler = createCheckRegistrationOkHandler();
+		this.hostPageBaseURL = hostPageBaseURL;
 	}
 
 	private ClickHandler createCheckRegistrationOkHandler() {
@@ -45,6 +49,17 @@ public class RegistrationPresenter implements Presenter {
 	@Override
 	public void go() {
 		view.addClickRegistrationHandler(checkRegistrationOkHandler);
+		eventBus.addHandler(eventRegisterPlayerHandler);
+	}
+
+	private RegisterPlayerCallback createEventRegisterPlayerHandler() {
+		return new RegisterPlayerCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				eventBus.getUserLoginStatus(hostPageBaseURL);
+			}
+		};
 	}
 
 }
