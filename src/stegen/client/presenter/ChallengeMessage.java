@@ -1,4 +1,4 @@
-package stegen.client.gui.challenge;
+package stegen.client.presenter;
 
 import java.util.*;
 

@@ -2,8 +2,10 @@ package stegen.client.gui.score;
 
 import java.util.*;
 
+import stegen.client.gui.challenge.*;
 
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class ListScorePanel2 implements IsWidget {
@@ -34,6 +36,14 @@ public class ListScorePanel2 implements IsWidget {
 
 	public void changeScoreList(List<ScoreTableRow> content) {
 		scoreCellTable.changeContent(content);
+	}
+
+	public Column<ScoreTableRow, String> getChallengeButtonColumn() {
+		return scoreCellTable.getChallengeColumn();
+	}
+
+	public ChallengeDialog2 getChallengeDialog() {
+		return scoreCellTable.getChallengeDialog();
 	}
 
 }

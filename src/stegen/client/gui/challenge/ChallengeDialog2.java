@@ -40,7 +40,7 @@ public class ChallengeDialog2 implements IsWidget {
 		buttonPanel.addClickOkHandler(clickHandler);
 	}
 
-	public void setChallengeeAndInitDialog(String challengeeName, String shortInsultText,
+	public void setupChallengeInputDialog(String challengeeName, String shortInsultText,
 			String challengeMessageSubject, String challengeMessage) {
 		insultLabel.setText("Du vill kalla " + challengeeName + " för " + shortInsultText
 				+ " och skicka en utmaning via mail!");
@@ -51,5 +51,9 @@ public class ChallengeDialog2 implements IsWidget {
 	@Override
 	public Widget asWidget() {
 		return baseWidget;
+	}
+
+	public void show() {
+		baseWidget.center();
 	}
 }

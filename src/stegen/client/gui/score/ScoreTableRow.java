@@ -1,16 +1,18 @@
 package stegen.client.gui.score;
 
+import stegen.shared.*;
+
 public class ScoreTableRow {
-	public final String name;
+	public final PlayerDto player;
 	public final String score;
 	public final String ranking;
 	public final String changedDateTime;
 	public final String changedBy;
 	public final boolean currentUser;
 
-	public ScoreTableRow(String name, String score, String ranking, String changedDateTime, String changedBy,
+	public ScoreTableRow(PlayerDto player, String score, String ranking, String changedDateTime, String changedBy,
 			boolean currentUser) {
-		this.name = name;
+		this.player = player;
 		this.score = score;
 		this.ranking = ranking;
 		this.changedDateTime = changedDateTime;

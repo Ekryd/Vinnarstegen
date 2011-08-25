@@ -22,4 +22,10 @@ public interface EventBus {
 
 	void clearCallbacks();
 
+	void undoPlayerCommand(PlayerDto player);
+
+	void challengePlayer(ChallengeMessageDto message);
+
+	void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy);
+
 }

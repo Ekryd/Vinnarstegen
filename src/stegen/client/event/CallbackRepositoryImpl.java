@@ -29,5 +29,4 @@ public class CallbackRepositoryImpl implements CallbackRepository {
 		T callback = (T) store.get(callbackClass);
 		return callback;
 	}
-
 }

@@ -4,6 +4,8 @@ import stegen.client.event.callback.*;
 import stegen.client.service.*;
 import stegen.shared.*;
 
+import com.google.gwt.user.client.rpc.*;
+
 public class EventBusImpl implements EventBus {
 
 	private final PlayerCommandServiceAsync playerCommandService;
@@ -43,43 +45,68 @@ public class EventBusImpl implements EventBus {
 	@Override
 	public void getUserLoginStatus(String hostPageBaseURL) {
 		UserLoginStatusCallback callback = callbacks.get(UserLoginStatusCallback.class);
-		playerService.getUserLoginStatus(hostPageBaseURL, callback);
+		playerService.getUserLoginStatus(hostPageBaseURL, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void changeNickname(final PlayerDto player, final String nickname) {
 		ChangeNicknameCallback callback = callbacks.get(ChangeNicknameCallback.class);
-		playerService.changeNickname(player, nickname, callback);
+		playerService.changeNickname(player, nickname, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void registerPlayer(EmailAddressDto email) {
 		RegisterPlayerCallback callback = callbacks.get(RegisterPlayerCallback.class);
-		playerService.registerPlayer(email, callback);
+		playerService.registerPlayer(email, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void sendMessage(PlayerDto player, String message) {
 		SendMessageCallback callback = callbacks.get(SendMessageCallback.class);
-		playerService.sendMessage(player, message, callback);
+		playerService.sendMessage(player, message, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void updateSendMessageList() {
 		UpdateSendMessageListCallback callback = callbacks.get(UpdateSendMessageListCallback.class);
-		playerCommandService.getSendMessageCommandStack(10, callback);
+		playerCommandService.getSendMessageCommandStack(10, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void updatePlayerScoreList() {
 		UpdatePlayerScoreListCallback callback = callbacks.get(UpdatePlayerScoreListCallback.class);
-		scoreService.getPlayerScoreList(callback);
+		scoreService.getPlayerScoreList(createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void clearAllScores(PlayerDto changedBy) {
 		ClearScoresCallback callback = callbacks.get(ClearScoresCallback.class);
-		scoreService.clearAllScores(changedBy, callback);
+		scoreService.clearAllScores(changedBy, createEmptyCallbackIfNull(callback));
+	}
+
+	@Override
+	public void challengePlayer(ChallengeMessageDto message) {
+		ChallengeCallback callback = callbacks.get(ChallengeCallback.class);
+		scoreService.challengePlayer(message, createEmptyCallbackIfNull(callback));
+	}
+
+	@Override
+	public void undoPlayerCommand(PlayerDto player) {
+		UndoCallback callback = callbacks.get(UndoCallback.class);
+		playerCommandService.undoPlayerCommand(player, createEmptyCallbackIfNull(callback));
+	}
+
+	@Override
+	public void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy) {
+		WonGameCallback callback = callbacks.get(WonGameCallback.class);
+		scoreService.playerWonOverPlayer(winner, loser, result, changedBy, createEmptyCallbackIfNull(callback));
+	}
+
+	private <T> AsyncCallback<T> createEmptyCallbackIfNull(AsyncCallback<T> callback) {
+		if (callback != null) {
+			return callback;
+		}
+		return new EmptyCallback<T>();
 	}
 
 }

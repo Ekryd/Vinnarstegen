@@ -1,2 +1,0 @@
-serviceClass: stegen.client.service.PlayerService
-path: F11F3CEF5D0105069F58C5BBBAA9581B.gwt.rpc

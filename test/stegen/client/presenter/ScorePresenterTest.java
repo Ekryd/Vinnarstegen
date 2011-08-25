@@ -103,7 +103,7 @@ public class ScorePresenterTest {
 				assertEquals(result.player.nickname, content.get(0).changedBy);
 				assertEquals("date", content.get(0).changedDateTime);
 				assertEquals(true, content.get(0).currentUser);
-				assertEquals(result.player.nickname, content.get(0).name);
+				assertEquals(result.player.nickname, content.get(0).player.nickname);
 				assertEquals("10", content.get(0).ranking);
 				assertEquals("42", content.get(0).score);
 				return null;

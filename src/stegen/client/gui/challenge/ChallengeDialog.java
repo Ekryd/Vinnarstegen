@@ -2,6 +2,7 @@ package stegen.client.gui.challenge;
 
 import stegen.client.gui.common.*;
 import stegen.client.messages.*;
+import stegen.client.presenter.*;
 import stegen.shared.*;
 
 import com.google.gwt.user.client.ui.*;

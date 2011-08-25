@@ -28,7 +28,7 @@ public class ScoreCellTable2 implements IsWidget {
 
 			@Override
 			public String getValue(ScoreTableRow cell) {
-				return cell.name;
+				return cell.player.nickname;
 			}
 		}, "Namn");
 		baseWidget.addColumn(new TextColumn<ScoreTableRow>() {

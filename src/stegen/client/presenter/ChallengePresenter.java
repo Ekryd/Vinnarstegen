@@ -1,19 +1,29 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.gui.score.*;
 import stegen.shared.*;
 
+import com.google.gwt.cell.client.*;
 import com.google.gwt.event.dom.client.*;
 
 public class ChallengePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
+	private FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
+	private ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
+	protected ChallengeMessage message;
 
 	public interface Display {
-		void addClickOpenChallengeInputHandler(ClickHandler clickHandler);
+		void addClickOpenChallengeInputHandler(FieldUpdater<ScoreTableRow, String> fieldUpdater);
 
 		void addClickSendChallengeHandler(ClickHandler clickHandler);
+
+		void setupChallengeInputDialog(String challengeeName, String shortInsultText, String challengeMessageSubject,
+				String challengeMessage);
+
+		void openChallengeInputDialog();
 	}
 
 	public ChallengePresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
@@ -24,47 +34,36 @@ public class ChallengePresenter implements Presenter {
 
 	@Override
 	public void go() {
-		// initView();
-		// initEvents();
-		// loadScores();
+		initView();
 	}
 
-	// private void initEvents() {
-	// eventBus.addHandler(eventPlayerWonCallback);
-	// eventBus.addHandler(eventChangedScoresCallback);
-	// }
-	//
-	// private void loadScores() {
-	// eventBus.updatePlayerScoreList();
-	// }
-	//
-	// private PlayerWonCallback createPlayerWonCallback() {
-	// return new PlayerWonCallback() {
-	//
-	// @Override
-	// public void onSuccessImpl(Void result) {
-	// eventBus.updatePlayerScoreList();
-	// }
-	// };
-	// }
-	//
-	// private UpdatePlayerScoreListCallback creatEventChangedScoresCallback() {
-	// return new UpdatePlayerScoreListCallback() {
-	//
-	// @Override
-	// public void onSuccessImpl(List<PlayerScoreDto> scores) {
-	// List<ScoreCell> content = new ArrayList<ScoreCell>();
-	// for (PlayerScoreDto playerScoreDto : scores) {
-	// boolean currentUser =
-	// playerScoreDto.player.email.equals(result.player.email);
-	// content.add(new ScoreCellImpl(playerScoreDto.player.nickname, "" +
-	// playerScoreDto.score, ""
-	// + playerScoreDto.ranking, playerScoreDto.changedDateTime,
-	// playerScoreDto.changedBy.nickname, currentUser));
-	// }
-	// view.changeScoreList(content);
-	// }
-	// };
-	// }
+	private void initView() {
+		view.addClickOpenChallengeInputHandler(openChallengeInputhandler);
+		view.addClickSendChallengeHandler(clickSendChallengeHandler);
+	}
 
+	private FieldUpdater<ScoreTableRow, String> createOpenChallengeInputhandler() {
+		return new FieldUpdater<ScoreTableRow, String>() {
+
+			@Override
+			public void update(int index, ScoreTableRow row, String value) {
+				PlayerDto challenger = result.player;
+				PlayerDto challengee = row.player;
+				message = new ChallengeMessage(challenger, challengee);
+				view.setupChallengeInputDialog(row.player.nickname, message.getInsult(), message.getSubject(),
+						message.getMessage());
+				view.openChallengeInputDialog();
+			}
+		};
+	}
+
+	private ClickHandler createClickSendChallengeHandler() {
+		return new ClickHandler() {
+
+			@Override
+			public void onClick(ClickEvent event) {
+				eventBus.challengePlayer(message.createDto());
+			}
+		};
+	}
 }
