@@ -1,11 +1,10 @@
-package stegen.client.gui.challenge;
+package stegen.client.service.insult;
 
 import org.junit.*;
 
 import stegen.client.service.*;
-import stegen.client.service.insult.*;
 
-public class InsultFactoryTest {
+public class InsultFactoryImplTest {
 
 	@Test
 	public void test() {

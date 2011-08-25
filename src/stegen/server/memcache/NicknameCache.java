@@ -33,8 +33,4 @@ public class NicknameCache {
 		return (String) cache.put(emailAddress, nickname);
 	}
 
-	public String remove(String emailAddress) {
-		return (String) cache.remove(emailAddress);
-	}
-
 }
