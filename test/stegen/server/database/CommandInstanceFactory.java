@@ -47,7 +47,11 @@ public class CommandInstanceFactory {
 		result.setScores[0].gameWinnerScore = 11;
 		result.setScores[0].gameLoserScore = 0;
 		result.setScores[1].gameWinnerScore = 11;
-		result.setScores[1].gameWinnerScore = 5;
+		result.setScores[1].gameLoserScore = 5;
+		result.setScores[2].gameWinnerScore = 5;
+		result.setScores[2].gameLoserScore = 11;
+		result.setScores[3].gameWinnerScore = 11;
+		result.setScores[3].gameLoserScore = 5;
 		PlayerCommand command = new PlayerWonOverPlayer(winnerEmail, loserEmail, result, changedBy);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy);
 		return commandInstanceToStore;

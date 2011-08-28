@@ -3,6 +3,7 @@ package stegen.client.gui.score;
 import java.util.*;
 
 import stegen.client.gui.challenge.*;
+import stegen.client.gui.gameresult.*;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.cellview.client.*;
@@ -44,6 +45,18 @@ public class ListScorePanel2 implements IsWidget {
 
 	public ChallengeDialog2 getChallengeDialog() {
 		return scoreCellTable.getChallengeDialog();
+	}
+
+	public Column<ScoreTableRow, String> getWinnerButtonColumn() {
+		return scoreCellTable.getWinnerColumn();
+	}
+
+	public Column<ScoreTableRow, String> getLoserButtonColumn() {
+		return scoreCellTable.getLoserColumn();
+	}
+
+	public WinGameDialogBox2 getWinGameDialog() {
+		return scoreCellTable.getWinGameDialog();
 	}
 
 }

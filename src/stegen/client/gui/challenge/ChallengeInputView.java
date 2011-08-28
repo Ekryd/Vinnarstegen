@@ -7,12 +7,12 @@ import com.google.gwt.cell.client.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.cellview.client.*;
 
-public class ChallengeView implements Display {
+public class ChallengeInputView implements Display {
 
 	private final Column<ScoreTableRow, String> challengeButtonColumn;
 	private final ChallengeDialog2 challengeDialog;
 
-	public ChallengeView(Column<ScoreTableRow, String> challengeButtonColumn, ChallengeDialog2 challengeDialog) {
+	public ChallengeInputView(Column<ScoreTableRow, String> challengeButtonColumn, ChallengeDialog2 challengeDialog) {
 		this.challengeButtonColumn = challengeButtonColumn;
 		this.challengeDialog = challengeDialog;
 	}

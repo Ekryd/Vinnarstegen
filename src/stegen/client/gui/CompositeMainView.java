@@ -2,20 +2,24 @@ package stegen.client.gui;
 
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.gui.challenge.*;
+import stegen.client.gui.gameresult.*;
 import stegen.client.gui.score.*;
 import stegen.client.presenter.CompositeMainPresenter.Display;
 
 public class CompositeMainView implements Display {
 	private final MainContentTable mainContentTable = new MainContentTable();
 	private final ScoreView scoreView;
-	private final ChallengeView challengeView;
+	private final ChallengeInputView challengeView;
+	private final WinGameInputView gameInputView;
 
 	public CompositeMainView() {
 		MAIN_AREA.clearPanel();
 		MAIN_AREA.addToPanel(mainContentTable);
 		ListScorePanel2 scorePanel = mainContentTable.getScorePanel();
 		scoreView = new ScoreView(scorePanel);
-		challengeView = new ChallengeView(scorePanel.getChallengeButtonColumn(), scorePanel.getChallengeDialog());
+		challengeView = new ChallengeInputView(scorePanel.getChallengeButtonColumn(), scorePanel.getChallengeDialog());
+		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),
+				scorePanel.getWinGameDialog());
 	}
 
 	@Override
@@ -24,8 +28,13 @@ public class CompositeMainView implements Display {
 	}
 
 	@Override
-	public stegen.client.presenter.ChallengePresenter.Display getChallengeView() {
+	public stegen.client.presenter.ChallengePresenter.Display getChallengeInputView() {
 		return challengeView;
+	}
+
+	@Override
+	public stegen.client.presenter.WinGameInputPresenter.Display getWinGameInputView() {
+		return gameInputView;
 	}
 
 }

@@ -15,7 +15,9 @@ public class CompositeMainPresenter implements Presenter {
 
 		stegen.client.presenter.ScorePresenter.Display getScoreView();
 
-		stegen.client.presenter.ChallengePresenter.Display getChallengeView();
+		stegen.client.presenter.ChallengePresenter.Display getChallengeInputView();
+
+		stegen.client.presenter.WinGameInputPresenter.Display getWinGameInputView();
 
 	}
 
@@ -34,7 +36,8 @@ public class CompositeMainPresenter implements Presenter {
 
 	private void initPresenterParts() {
 		new ScorePresenter(view.getScoreView(), result, eventBus).go();
-		new ChallengePresenter(view.getChallengeView(), result, eventBus, insultFactory).go();
+		new ChallengePresenter(view.getChallengeInputView(), result, eventBus, insultFactory).go();
+		new WinGameInputPresenter(view.getWinGameInputView(), result, eventBus).go();
 		// new GameResultPresenter(view.getGameResultView(), result, eventBus);
 		// new LoginStatusesPresenter(view.getLoginStatusesView(), result,
 		// eventBus);

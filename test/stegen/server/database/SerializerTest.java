@@ -71,7 +71,7 @@ public class SerializerTest {
 	public void serializeClearAllScores() {
 		CommandInstance command = CommandInstanceFactory.clearAllScores(player.email);
 		Assert.assertEquals(
-				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":1},{\"playerEmail\":{\"address\":\"address2\"},\"score\":0}],\"changedBy\":{\"address\":\"address\"}}",
+				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":4},{\"playerEmail\":{\"address\":\"address2\"},\"score\":1}],\"changedBy\":{\"address\":\"address\"}}",
 				command.getCommandSerialized());
 	}
 
@@ -96,10 +96,18 @@ public class SerializerTest {
 		GameResultDto result = GameResultDto.createEmptyGameResult();
 		result.setScores[0].gameWinnerScore = 11;
 		result.setScores[0].gameLoserScore = 5;
+		result.setScores[1].gameWinnerScore = 1;
+		result.setScores[1].gameLoserScore = 5;
+		result.setScores[2].gameWinnerScore = 11;
+		result.setScores[2].gameLoserScore = 5;
+		result.setScores[3].gameWinnerScore = 1;
+		result.setScores[3].gameLoserScore = 5;
+		result.setScores[4].gameWinnerScore = 11;
+		result.setScores[4].gameLoserScore = 5;
 		PlayerCommand command = new PlayerWonOverPlayer(player.email, player2.email, result, player.email);
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
-				"{\"scores\":{\"oldWinnerScore\":1,\"oldLoserScore\":0,\"newWinnerScore\":2,\"newLoserScore\":0},\"winnerEmail\":{\"address\":\"address\"},\"loserEmail\":{\"address\":\"address2\"},\"changedBy\":{\"address\":\"address\"}}",
+				"{\"scores\":{\"oldWinnerScore\":4,\"oldLoserScore\":1,\"newWinnerScore\":7,\"newLoserScore\":3},\"winnerEmail\":{\"address\":\"address\"},\"loserEmail\":{\"address\":\"address2\"},\"changedBy\":{\"address\":\"address\"}}",
 				actual);
 	}
 
@@ -151,7 +159,7 @@ public class SerializerTest {
 		command.execute();
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
-				"{\"player\":{\"address\":\"address\"},\"result\":\"SUCCESS\",\"commandUndoDescription\":\"address vann över address2 och ökade sina poäng från 1 till 2. Förloraren fick 0 poäng\"}",
+				"{\"player\":{\"address\":\"address\"},\"result\":\"SUCCESS\",\"commandUndoDescription\":\"address vann över address2 och ökade sina poäng från 4 till 8. Förloraren fick 1 poäng\"}",
 				actual);
 	}
 

@@ -24,8 +24,7 @@ public class GameResultCalculator {
 		wonSets = 0;
 		lostSets = 0;
 		for (SetScoreDto setScore : gameResult.setScores) {
-			boolean notNull = setScore.gameLoserScore != null && setScore.gameWinnerScore != null;
-			if (notNull && (setScore.gameLoserScore != setScore.gameWinnerScore)) {
+			if (setScore.gameLoserScore != setScore.gameWinnerScore) {
 				if (setScore.gameLoserScore < setScore.gameWinnerScore) {
 					wonSets++;
 				} else {

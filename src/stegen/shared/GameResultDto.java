@@ -15,7 +15,7 @@ public class GameResultDto implements Serializable {
 		GameResultDto gameResult = new GameResultDto();
 		gameResult.setScores = new SetScoreDto[5];
 		for (int i = 0; i < gameResult.setScores.length; i++) {
-			gameResult.setScores[i] = new SetScoreDto();
+			gameResult.setScores[i] = new SetScoreDto(0, 0);
 		}
 		return gameResult;
 	}

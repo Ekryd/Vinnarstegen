@@ -43,7 +43,7 @@ public class CommandInstanceTest {
 		ClearAllScores deserialize = new Serializer().deserialize(serialized, ClearAllScores.class);
 		serialized = new Serializer().deepSerialize(deserialize);
 		Assert.assertEquals(
-				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"winner\"},\"score\":1},{\"playerEmail\":{\"address\":\"loser\"},\"score\":0}],"
+				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"winner\"},\"score\":4},{\"playerEmail\":{\"address\":\"loser\"},\"score\":1}],"
 						+ "\"changedBy\":{\"address\":\"winner\"}}", serialized);
 	}
 }
