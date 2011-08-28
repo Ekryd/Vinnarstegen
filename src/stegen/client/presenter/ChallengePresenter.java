@@ -2,6 +2,7 @@ package stegen.client.presenter;
 
 import stegen.client.event.*;
 import stegen.client.gui.score.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.cell.client.*;
@@ -11,9 +12,12 @@ public class ChallengePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
-	private FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
-	private ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
-	protected ChallengeMessage message;
+	private final InsultFactory insultFactory;
+
+	FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
+	ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
+
+	ChallengeMessage message;
 
 	public interface Display {
 		void addClickOpenChallengeInputHandler(FieldUpdater<ScoreTableRow, String> fieldUpdater);
@@ -26,10 +30,11 @@ public class ChallengePresenter implements Presenter {
 		void openChallengeInputDialog();
 	}
 
-	public ChallengePresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
+	public ChallengePresenter(Display scoreView, LoginDataDto result, EventBus eventBus, InsultFactory insultFactory) {
 		this.view = scoreView;
 		this.result = result;
 		this.eventBus = eventBus;
+		this.insultFactory = insultFactory;
 	}
 
 	@Override
@@ -49,7 +54,8 @@ public class ChallengePresenter implements Presenter {
 			public void update(int index, ScoreTableRow row, String value) {
 				PlayerDto challenger = result.player;
 				PlayerDto challengee = row.player;
-				message = new ChallengeMessage(challenger, challengee);
+				message = new ChallengeMessage(challenger, challengee, insultFactory.createCompleteInsult(),
+						insultFactory.createCompleteInsult(), insultFactory.getChallengeDateDefaultOneDayFromNow());
 				view.setupChallengeInputDialog(row.player.nickname, message.getInsult(), message.getSubject(),
 						message.getMessage());
 				view.openChallengeInputDialog();

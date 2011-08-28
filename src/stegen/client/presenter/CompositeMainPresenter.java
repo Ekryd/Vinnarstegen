@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 public class CompositeMainPresenter implements Presenter {
@@ -8,6 +9,7 @@ public class CompositeMainPresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto result;
 	private final EventBus eventBus;
+	private final InsultFactory insultFactory;
 
 	public interface Display {
 
@@ -17,10 +19,12 @@ public class CompositeMainPresenter implements Presenter {
 
 	}
 
-	public CompositeMainPresenter(Display compositeMainView, LoginDataDto result, EventBus eventBus) {
+	public CompositeMainPresenter(Display compositeMainView, LoginDataDto result, EventBus eventBus,
+			InsultFactory insultFactory) {
 		this.view = compositeMainView;
 		this.result = result;
 		this.eventBus = eventBus;
+		this.insultFactory = insultFactory;
 	}
 
 	@Override
@@ -30,7 +34,7 @@ public class CompositeMainPresenter implements Presenter {
 
 	private void initPresenterParts() {
 		new ScorePresenter(view.getScoreView(), result, eventBus).go();
-		new ChallengePresenter(view.getChallengeView(), result, eventBus).go();
+		new ChallengePresenter(view.getChallengeView(), result, eventBus, insultFactory).go();
 		// new GameResultPresenter(view.getGameResultView(), result, eventBus);
 		// new LoginStatusesPresenter(view.getLoginStatusesView(), result,
 		// eventBus);

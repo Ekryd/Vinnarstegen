@@ -4,4 +4,5 @@ public interface InsultFactory {
 
 	String createCompleteInsult();
 
+	String getChallengeDateDefaultOneDayFromNow();
 }

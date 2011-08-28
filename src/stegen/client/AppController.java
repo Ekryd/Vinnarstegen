@@ -9,6 +9,7 @@ import stegen.client.gui.player.*;
 import stegen.client.gui.register.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
+import stegen.client.service.insult.*;
 import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
@@ -81,6 +82,6 @@ public class AppController {
 		new LogoutPresenter(new LogoutView(), result).go();
 		new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
 		new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
-		new CompositeMainPresenter(new CompositeMainView(), result, eventBus).go();
+		new CompositeMainPresenter(new CompositeMainView(), result, eventBus, new InsultFactoryImpl()).go();
 	}
 }

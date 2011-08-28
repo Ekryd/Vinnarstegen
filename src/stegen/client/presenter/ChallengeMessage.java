@@ -1,29 +1,23 @@
 package stegen.client.presenter;
 
-import java.util.*;
-
-import stegen.client.service.*;
-import stegen.client.service.insult.*;
 import stegen.shared.*;
 
-import com.google.gwt.i18n.client.*;
-
 public class ChallengeMessage {
-	private final static InsultFactory INSULT_FACTORY = new InsultFactoryImpl();
-	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("'kl 'HH:mm' den 'dd/MM");
-
 	private static final String SUBJECT = "Utmaning från Vinnarstegen";
 	private final PlayerDto challenger;
 	private final PlayerDto challengee;
-	private final Date challengeDateTime;
+	private final String challengeDateTime;
 	private String message;
 	private final String insult;
+	private final String alternativeInsult;
 
-	public ChallengeMessage(PlayerDto challenger, PlayerDto challengee) {
+	public ChallengeMessage(PlayerDto challenger, PlayerDto challengee, String insult, String alternativeInsult,
+			String challengeDateTime) {
 		this.challenger = challenger;
 		this.challengee = challengee;
-		this.challengeDateTime = new Date(System.currentTimeMillis() + (1000L * 60 * 60 * 24));
-		this.insult = INSULT_FACTORY.createCompleteInsult();
+		this.alternativeInsult = alternativeInsult;
+		this.challengeDateTime = challengeDateTime;
+		this.insult = insult;
 		createDefaultMessage();
 	}
 
@@ -33,10 +27,9 @@ public class ChallengeMessage {
 				.append("), ");
 		messageBuilder.append(" tycker att du, ").append(challengee.nickname).append(", är ").append(insult)
 				.append("!\n");
-		messageBuilder.append("Försvara din ära! Möt mig i pingis ").append(dateFormat.format(challengeDateTime))
-				.append(".\n");
-		messageBuilder.append("Annars kommer hela världen att veta att du är ")
-				.append(INSULT_FACTORY.createCompleteInsult()).append("\n\n");
+		messageBuilder.append("Försvara din ära! Möt mig i pingis ").append(challengeDateTime).append(".\n");
+		messageBuilder.append("Annars kommer hela världen att veta att du är ").append(alternativeInsult)
+				.append("\n\n");
 		messageBuilder.append("Med vänliga hälsningar\n");
 		messageBuilder.append(challenger.nickname);
 		message = messageBuilder.toString();
@@ -50,6 +43,7 @@ public class ChallengeMessage {
 		return message;
 	}
 
+	@Deprecated
 	public void setMessage(String message) {
 		this.message = message;
 	}

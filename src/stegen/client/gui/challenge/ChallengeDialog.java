@@ -3,11 +3,17 @@ package stegen.client.gui.challenge;
 import stegen.client.gui.common.*;
 import stegen.client.messages.*;
 import stegen.client.presenter.*;
+import stegen.client.service.*;
+import stegen.client.service.insult.*;
 import stegen.shared.*;
 
+import com.google.gwt.i18n.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class ChallengeDialog extends DialogBox {
+
+	private final static InsultFactory INSULT_FACTORY = new InsultFactoryImpl();
+	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("'kl 'HH:mm' den 'dd/MM");
 
 	private final MessageCentral messageCentral;
 	private final LoginDataDto loginData;
@@ -57,7 +63,8 @@ public class ChallengeDialog extends DialogBox {
 	}
 
 	public void setChallengeeAndInitDialog(PlayerDto challengee) {
-		challengeMessage = new ChallengeMessage(loginData.player, challengee);
+		challengeMessage = new ChallengeMessage(loginData.player, challengee, INSULT_FACTORY.createCompleteInsult(),
+				INSULT_FACTORY.createCompleteInsult(), INSULT_FACTORY.getChallengeDateDefaultOneDayFromNow());
 		insultLabel.setText("Du vill kalla " + challengee.nickname + " för " + challengeMessage.getInsult()
 				+ " och skicka en utmaning via mail!");
 		subjectLabel.setText("Ämne för mailet är " + challengeMessage.getSubject());
