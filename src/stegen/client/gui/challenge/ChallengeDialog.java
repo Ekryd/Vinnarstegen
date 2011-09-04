@@ -7,13 +7,11 @@ import stegen.client.service.*;
 import stegen.client.service.insult.*;
 import stegen.shared.*;
 
-import com.google.gwt.i18n.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class ChallengeDialog extends DialogBox {
 
 	private final static InsultFactory INSULT_FACTORY = new InsultFactoryImpl();
-	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("'kl 'HH:mm' den 'dd/MM");
 
 	private final MessageCentral messageCentral;
 	private final LoginDataDto loginData;

@@ -102,6 +102,18 @@ public class EventBusImpl implements EventBus {
 		scoreService.playerWonOverPlayer(winner, loser, result, changedBy, createEmptyCallbackIfNull(callback));
 	}
 
+	@Override
+	public void refresh() {
+		RefreshCallback callback = callbacks.get(RefreshCallback.class);
+		createEmptyCallbackIfNull(callback).onSuccess(null);
+	}
+
+	@Override
+	public void updateGameResultList() {
+		UpdateGameResultListCallback callback = callbacks.get(UpdateGameResultListCallback.class);
+		playerCommandService.getGameResultCommandStack(10, createEmptyCallbackIfNull(callback));
+	}
+
 	private <T> AsyncCallback<T> createEmptyCallbackIfNull(AsyncCallback<T> callback) {
 		if (callback != null) {
 			return callback;

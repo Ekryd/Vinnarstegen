@@ -21,6 +21,7 @@ public class MessagesPresenter implements Presenter {
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
 	final UpdateSendMessageListCallback eventChangedMessagesCallback = creatEventChangedMessagesCallback();
 	final SendMessageCallback eventSendMessageCallback = createEventSendMessageCallback();
+	final RefreshCallback eventRefreshCallback = createRefreshMessagesCallback();
 	private MessagePrefix currentMessagePrefix;
 
 	public interface Display {
@@ -49,18 +50,18 @@ public class MessagesPresenter implements Presenter {
 
 	@Override
 	public void go() {
-		nextMessagePrefix();
+		changeMessagePrefixOnButton();
 		initView();
 		initEvents();
 		loadMessages();
 	}
 
-	private void nextMessagePrefix() {
+	private void changeMessagePrefixOnButton() {
 		this.currentMessagePrefix = messagePrefixGenerator.getRandomizedPrefix();
+		view.setMessageButtonTitle(currentMessagePrefix.buttonText);
 	}
 
 	private void initView() {
-		view.setMessageButtonTitle(currentMessagePrefix.buttonText);
 		view.addClickOpenMessageInputHandler(clickOpenMessageInputHandler);
 		view.addClickSendMessageHandler(clickSendMessageHandler);
 	}
@@ -68,6 +69,7 @@ public class MessagesPresenter implements Presenter {
 	private void initEvents() {
 		eventBus.addHandler(eventSendMessageCallback);
 		eventBus.addHandler(eventChangedMessagesCallback);
+		eventBus.addHandler(eventRefreshCallback);
 	}
 
 	private void loadMessages() {
@@ -107,6 +109,7 @@ public class MessagesPresenter implements Presenter {
 			@Override
 			public void onSuccessImpl(Void result) {
 				eventBus.updateSendMessageList();
+				changeMessagePrefixOnButton();
 			}
 		};
 	}
@@ -122,6 +125,17 @@ public class MessagesPresenter implements Presenter {
 							playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changeMessageList(content);
+			}
+		};
+	}
+
+	private RefreshCallback createRefreshMessagesCallback() {
+		return new RefreshCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				eventBus.updateSendMessageList();
+				changeMessagePrefixOnButton();
 			}
 		};
 	}

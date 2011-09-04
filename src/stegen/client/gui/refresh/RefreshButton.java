@@ -1,4 +1,4 @@
-package stegen.client.gui;
+package stegen.client.gui.refresh;
 
 import stegen.client.messages.*;
 

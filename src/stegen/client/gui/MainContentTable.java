@@ -1,5 +1,6 @@
 package stegen.client.gui;
 
+import stegen.client.gui.playeraction.*;
 import stegen.client.gui.score.*;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -11,6 +12,7 @@ public class MainContentTable implements IsWidget {
 	private static final Unit BAR_UNIT = Unit.EM;
 	private final TabLayoutPanel baseWidget = new TabLayoutPanel(BAR_HEIGHT, BAR_UNIT);
 	private ListScorePanel2 scorePanel = new ListScorePanel2();
+	private GameResultPanel2 gameResultPanel = new GameResultPanel2();
 
 	public MainContentTable() {
 		initLayout();
@@ -19,8 +21,7 @@ public class MainContentTable implements IsWidget {
 	private void initLayout() {
 		baseWidget.setAnimationDuration(1000);
 		baseWidget.add(scorePanel, "Poängställning");
-		// baseWidget.add(new GameResultPanel(messageCentral, loginData),
-		// "Matcher");
+		baseWidget.add(gameResultPanel, "Matcher");
 		// baseWidget.add(new LoginStatusTable(messageCentral), "Inloggning");
 		// baseWidget.add(new PlayerMiscCommandTable(messageCentral), "Övrigt");
 		baseWidget.setHeight("400px");
@@ -34,6 +35,10 @@ public class MainContentTable implements IsWidget {
 
 	public ListScorePanel2 getScorePanel() {
 		return scorePanel;
+	}
+
+	public GameResultPanel2 getGameResultPanel() {
+		return gameResultPanel;
 	}
 
 }

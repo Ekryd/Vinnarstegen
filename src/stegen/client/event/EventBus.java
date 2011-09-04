@@ -28,4 +28,8 @@ public interface EventBus {
 
 	void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy);
 
+	void refresh();
+
+	void updateGameResultList();
+
 }
