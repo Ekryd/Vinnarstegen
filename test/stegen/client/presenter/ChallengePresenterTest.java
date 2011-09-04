@@ -13,7 +13,7 @@ import stegen.shared.*;
 public class ChallengePresenterTest {
 
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 	private EventBus eventBus;
 	private ChallengePresenter presenter;
 	private InsultFactory insultFactory;
@@ -51,11 +51,11 @@ public class ChallengePresenterTest {
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
 		insultFactory = createStrictMock(InsultFactory.class);
-		presenter = new ChallengePresenter(view, result, eventBus, insultFactory);
+		presenter = new ChallengePresenter(view, loginData, eventBus, insultFactory);
 	}
 
 	private void setupInitializationExpects() {

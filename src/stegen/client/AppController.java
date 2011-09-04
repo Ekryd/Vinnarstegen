@@ -47,43 +47,43 @@ public class AppController {
 		return new UserLoginStatusCallback() {
 
 			@Override
-			public void onSuccessImpl(LoginDataDto result) {
+			public void onSuccessImpl(LoginDataDto loginData) {
 				eventBus.clearCallbacks();
 				setupLoginStatusEvent();
 
-				switch (result.loginResponse) {
+				switch (loginData.loginResponse) {
 				case NOT_LOGGED_IN:
-					createLoginPresenter(result);
+					createLoginPresenter(loginData);
 					break;
 				case LOGGED_IN_GMAIL:
-					createRegistrationPresenters(result);
+					createRegistrationPresenters(loginData);
 					break;
 				case LOGGED_IN_AND_REGISTERED:
-					createLoggedInPresenters(result);
+					createLoggedInPresenters(loginData);
 					break;
 				default:
-					createLoginPresenter(result);
+					createLoginPresenter(loginData);
 				}
 			}
 
 		};
 	}
 
-	private void createLoginPresenter(LoginDataDto result) {
-		new LoginPresenter(new LoginView(), result).go();
+	private void createLoginPresenter(LoginDataDto loginData) {
+		new LoginPresenter(new LoginView(), loginData).go();
 	}
 
-	private void createRegistrationPresenters(LoginDataDto result) {
-		new LogoutPresenter(new LogoutView(), result).go();
-		new RegistrationPresenter(new RegistrationView(), result, eventBus, hostPageBaseURL).go();
-		new NonregisteredUserPresenter(new NonregisteredUserView(), result).go();
+	private void createRegistrationPresenters(LoginDataDto loginData) {
+		new LogoutPresenter(new LogoutView(), loginData).go();
+		new RegistrationPresenter(new RegistrationView(), loginData, eventBus, hostPageBaseURL).go();
+		new NonregisteredUserPresenter(new NonregisteredUserView(), loginData).go();
 	}
 
-	private void createLoggedInPresenters(LoginDataDto result) {
-		new LogoutPresenter(new LogoutView(), result).go();
-		new RegisteredUserPresenter(new RegisteredUserView(), result, eventBus).go();
-		new MessagesPresenter(new MessagesView(), result, new MessagePrefixGeneratorImpl(), eventBus).go();
-		new CompositeMainPresenter(new CompositeMainView(), result, eventBus, new InsultFactoryImpl()).go();
+	private void createLoggedInPresenters(LoginDataDto loginData) {
+		new LogoutPresenter(new LogoutView(), loginData).go();
+		new RegisteredUserPresenter(new RegisteredUserView(), loginData, eventBus).go();
+		new MessagesPresenter(new MessagesView(), loginData, new MessagePrefixGeneratorImpl(), eventBus).go();
+		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl()).go();
 		new RefreshPresenter(new RefreshView(), eventBus).go();
 	}
 }

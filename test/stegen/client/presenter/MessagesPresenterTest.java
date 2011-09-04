@@ -17,7 +17,7 @@ import stegen.shared.*;
 public class MessagesPresenterTest {
 
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 	private EventBus eventBus;
 	private MessagesPresenter presenter;
 	private MessagePrefixGenerator messagePrefixGenerator;
@@ -85,18 +85,18 @@ public class MessagesPresenterTest {
 		replay(view);
 
 		List<PlayerCommandDto> list = new ArrayList<PlayerCommandDto>();
-		list.add(new PlayerCommandDto(result.player, new Date(10000L), "description"));
+		list.add(new PlayerCommandDto(loginData.player, new Date(10000L), "description"));
 		presenter.eventChangedMessagesCallback.onSuccess(list);
 
 		verify(view);
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
 		messagePrefixGenerator = createStrictMock(MessagePrefixGenerator.class);
-		presenter = new MessagesPresenter(view, result, messagePrefixGenerator, eventBus);
+		presenter = new MessagesPresenter(view, loginData, messagePrefixGenerator, eventBus);
 
 		MessagePrefix messagePrefix = new MessagePrefix("buttonText", "actionText");
 		expect(messagePrefixGenerator.getRandomizedPrefix()).andReturn(messagePrefix);
@@ -137,7 +137,7 @@ public class MessagesPresenterTest {
 	private void setupSendOkMessageExpects() {
 		reset(view, eventBus, messagePrefixGenerator);
 		expect(view.getMessageInputContent()).andReturn("message");
-		eventBus.sendMessage(result.player, "nickname actionText message");
+		eventBus.sendMessage(loginData.player, "nickname actionText message");
 		replay(view, eventBus, messagePrefixGenerator);
 	}
 

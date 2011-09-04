@@ -11,6 +11,10 @@ public class GameResultsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdateGameResultListCallback eventUpdateGameResultListCallback = creatUpdateGameResultListCallback();
+	final RefreshCallback refreshCallback = createRefreshCallback();
+	final UndoCallback undoCallback = createUndoCallback();
+	final PlayerWonCallback playerWonCallback = createPlayerWonCallback();
+	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
 
 	public interface Display {
 		void changeGameResultList(List<GameResultsRow> content);
@@ -29,6 +33,10 @@ public class GameResultsPresenter implements Presenter {
 
 	private void initEvents() {
 		eventBus.addHandler(eventUpdateGameResultListCallback);
+		eventBus.addHandler(refreshCallback);
+		eventBus.addHandler(undoCallback);
+		eventBus.addHandler(playerWonCallback);
+		eventBus.addHandler(eventClearScoresCallback);
 	}
 
 	private void loadGameResults() {
@@ -46,6 +54,46 @@ public class GameResultsPresenter implements Presenter {
 							playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changeGameResultList(content);
+			}
+		};
+	}
+
+	private RefreshCallback createRefreshCallback() {
+		return new RefreshCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				loadGameResults();
+			}
+		};
+	}
+
+	private UndoCallback createUndoCallback() {
+		return new UndoCallback() {
+
+			@Override
+			public void onSuccessImpl(UndoPlayerCommandResult result) {
+				loadGameResults();
+			}
+		};
+	}
+
+	private PlayerWonCallback createPlayerWonCallback() {
+		return new PlayerWonCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				loadGameResults();
+			}
+		};
+	}
+
+	private ClearScoresCallback createClearScoresCallback() {
+		return new ClearScoresCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				loadGameResults();
 			}
 		};
 	}

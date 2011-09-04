@@ -16,7 +16,7 @@ import stegen.shared.*;
 public class ScorePresenterTest {
 
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 	private EventBus eventBus;
 	private ScorePresenter presenter;
 
@@ -61,30 +61,33 @@ public class ScorePresenterTest {
 		replay(view, eventBus);
 
 		List<PlayerScoreDto> scores = new ArrayList<PlayerScoreDto>();
-		PlayerScoreDto playerScoreDto = new PlayerScoreDto(result.player, 42, result.player, "date");
+		PlayerScoreDto playerScoreDto = new PlayerScoreDto(loginData.player, 42, loginData.player, "date");
 		playerScoreDto.ranking = 10;
 		scores.add(playerScoreDto);
 		presenter.eventChangedScoresCallback.onSuccess(scores);
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
-		presenter = new ScorePresenter(view, result, eventBus);
+		presenter = new ScorePresenter(view, loginData, eventBus);
 	}
 
 	private void setupInitializationExpects() {
 		view.addCleanScoresHandler(presenter.clickCleanScoresHandler);
 		eventBus.addHandler(presenter.eventClearScoresCallback);
 		eventBus.addHandler(presenter.eventChangedScoresCallback);
+		eventBus.addHandler(presenter.refreshCallback);
+		eventBus.addHandler(presenter.undoCallback);
+		eventBus.addHandler(presenter.playerWonCallback);
 		eventBus.updatePlayerScoreList();
 		replay(view, eventBus);
 	}
 
 	private void setupCleanAllScoresExpects() {
 		reset(view, eventBus);
-		eventBus.clearAllScores(result.player);
+		eventBus.clearAllScores(loginData.player);
 		replay(view, eventBus);
 	}
 
@@ -100,10 +103,10 @@ public class ScorePresenterTest {
 				@SuppressWarnings("unchecked")
 				List<ScoreTableRow> content = (List<ScoreTableRow>) getCurrentArguments()[0];
 				assertEquals(1, content.size());
-				assertEquals(result.player.nickname, content.get(0).changedBy);
+				assertEquals(loginData.player.nickname, content.get(0).changedBy);
 				assertEquals("date", content.get(0).changedDateTime);
 				assertEquals(true, content.get(0).currentUser);
-				assertEquals(result.player.nickname, content.get(0).player.nickname);
+				assertEquals(loginData.player.nickname, content.get(0).player.nickname);
 				assertEquals("10", content.get(0).ranking);
 				assertEquals("42", content.get(0).score);
 				return null;

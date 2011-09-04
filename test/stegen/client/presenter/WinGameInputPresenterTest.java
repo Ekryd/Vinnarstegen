@@ -13,7 +13,7 @@ import stegen.shared.*;
 public class WinGameInputPresenterTest {
 
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 	private EventBus eventBus;
 	private WinGameInputPresenter presenter;
 	private PlayerDto otherPlayer = new PlayerDto(new EmailAddressDto("otherEmail"), "otherName");
@@ -74,10 +74,10 @@ public class WinGameInputPresenterTest {
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
-		presenter = new WinGameInputPresenter(view, result, eventBus);
+		presenter = new WinGameInputPresenter(view, loginData, eventBus);
 	}
 
 	private void setupInitializationExpects() {
@@ -88,14 +88,14 @@ public class WinGameInputPresenterTest {
 
 	private void setupOpenDialogExpectsWonGame() {
 		reset(view, eventBus);
-		view.setupWinGameInputDialog(result.player.nickname, otherPlayer.nickname);
+		view.setupWinGameInputDialog(loginData.player.nickname, otherPlayer.nickname);
 		view.openWinGameInputDialog();
 		replay(view, eventBus);
 	}
 
 	private void setupOpenDialogExpectsLostGame() {
 		reset(view, eventBus);
-		view.setupWinGameInputDialog(otherPlayer.nickname, result.player.nickname);
+		view.setupWinGameInputDialog(otherPlayer.nickname, loginData.player.nickname);
 		view.openWinGameInputDialog();
 		replay(view, eventBus);
 	}
@@ -117,7 +117,7 @@ public class WinGameInputPresenterTest {
 		GameResultDto gameResult = GameResultDto.createEmptyGameResult();
 		gameResult.setScores[0] = new SetScoreDto(11, 7);
 		expect(view.getGameResult()).andReturn(gameResult);
-		eventBus.playerWonOverPlayer(result.player, otherPlayer, gameResult, result.player);
+		eventBus.playerWonOverPlayer(loginData.player, otherPlayer, gameResult, loginData.player);
 		replay(view, eventBus);
 	}
 
@@ -126,7 +126,7 @@ public class WinGameInputPresenterTest {
 		GameResultDto gameResult = GameResultDto.createEmptyGameResult();
 		gameResult.setScores[0] = new SetScoreDto(11, 7);
 		expect(view.getGameResult()).andReturn(gameResult);
-		eventBus.playerWonOverPlayer(otherPlayer, result.player, gameResult, result.player);
+		eventBus.playerWonOverPlayer(otherPlayer, loginData.player, gameResult, loginData.player);
 		replay(view, eventBus);
 	}
 

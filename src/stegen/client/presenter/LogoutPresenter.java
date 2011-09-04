@@ -4,21 +4,21 @@ import stegen.shared.*;
 
 public class LogoutPresenter implements Presenter {
 
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final Display view;
 
 	public interface Display {
 		void setLogoutUrl(String logoutUrl);
 	}
 
-	public LogoutPresenter(Display view, LoginDataDto result) {
+	public LogoutPresenter(Display view, LoginDataDto loginData) {
 		this.view = view;
-		this.result = result;
+		this.loginData = loginData;
 	}
 
 	@Override
 	public void go() {
-		view.setLogoutUrl(result.logoutUrl);
+		view.setLogoutUrl(loginData.logoutUrl);
 	}
 
 }

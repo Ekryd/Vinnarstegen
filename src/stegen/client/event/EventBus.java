@@ -32,4 +32,6 @@ public interface EventBus {
 
 	void updateGameResultList();
 
+	void updateUndoCommand();
+
 }

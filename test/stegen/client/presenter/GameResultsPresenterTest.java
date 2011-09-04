@@ -20,7 +20,7 @@ public class GameResultsPresenterTest {
 	private Display view;
 	private EventBus eventBus;
 	private GameResultsPresenter presenter;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 
 	@Test
 	public void testShowView() {
@@ -43,14 +43,14 @@ public class GameResultsPresenterTest {
 		replay(view, eventBus);
 
 		List<PlayerCommandDto> gameResults = new ArrayList<PlayerCommandDto>();
-		PlayerCommandDto playerScoreDto = new PlayerCommandDto(result.player, new LocalDate(2011, 10, 10)
+		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new LocalDate(2011, 10, 10)
 				.toDateMidnight().toDate(), "1 - 3");
 		gameResults.add(playerScoreDto);
 		presenter.eventUpdateGameResultListCallback.onSuccess(gameResults);
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
 		presenter = new GameResultsPresenter(view, eventBus);
@@ -58,6 +58,10 @@ public class GameResultsPresenterTest {
 
 	private void setupInitializationExpects() {
 		eventBus.addHandler(presenter.eventUpdateGameResultListCallback);
+		eventBus.addHandler(presenter.refreshCallback);
+		eventBus.addHandler(presenter.undoCallback);
+		eventBus.addHandler(presenter.playerWonCallback);
+		eventBus.addHandler(presenter.eventClearScoresCallback);
 		eventBus.updateGameResultList();
 		replay(view, eventBus);
 	}
@@ -70,7 +74,7 @@ public class GameResultsPresenterTest {
 				@SuppressWarnings("unchecked")
 				List<GameResultsRow> content = (List<GameResultsRow>) getCurrentArguments()[0];
 				assertEquals(1, content.size());
-				assertEquals(result.player.nickname, content.get(0).playerName);
+				assertEquals(loginData.player.nickname, content.get(0).playerName);
 				assertEquals(new LocalDate(2011, 10, 10).toDateMidnight().toDate(), content.get(0).gameDateTime);
 				assertEquals("1 - 3", content.get(0).result);
 				return null;

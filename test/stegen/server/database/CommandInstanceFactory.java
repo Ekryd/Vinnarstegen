@@ -8,23 +8,23 @@ public class CommandInstanceFactory {
 	private static final PlayerDto player = new PlayerDto(email, "nickname");
 
 	public static CommandInstance getUserIsNotLoggedInCommand() {
-		LoginDataDto result = LoginDataDto.userIsNotLoggedIn("signInUrl");
-		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", result);
+		LoginDataDto loginData = LoginDataDto.userIsNotLoggedIn("signInUrl");
+		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
 		EmailAddressDto email = new EmailAddressDto("address");
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
 		return commandInstanceToStore;
 	}
 
 	public static CommandInstance getUserIsNotRegistered() {
-		LoginDataDto result = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
-		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", result);
+		LoginDataDto loginData = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
+		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
 		return commandInstanceToStore;
 	}
 
 	public static CommandInstance getUserIsLoggedInAndRegistered() {
-		LoginDataDto result = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
-		CheckLoginStatus command = CheckLoginStatus.createForTest("requestUri", result);
+		LoginDataDto loginData = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
+		CheckLoginStatus command = CheckLoginStatus.createForTest("requestUri", loginData);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
 		return commandInstanceToStore;
 	}

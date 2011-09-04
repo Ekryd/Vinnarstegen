@@ -12,7 +12,7 @@ public class RegisteredUserPresenterTest {
 
 	private RegisteredUserPresenter presenter;
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 	private String nickname;
 	private EventBus eventBus;
 
@@ -61,9 +61,9 @@ public class RegisteredUserPresenterTest {
 
 	private void setupPresenter() {
 		view = createStrictMock(Display.class);
-		result = LoginDataDtoFactory.createLoginData();
+		loginData = LoginDataDtoFactory.createLoginData();
 		eventBus = createStrictMock(EventBus.class);
-		presenter = new RegisteredUserPresenter(view, result, eventBus);
+		presenter = new RegisteredUserPresenter(view, loginData, eventBus);
 	}
 
 	private void setupInitializationExpects() {
@@ -82,7 +82,7 @@ public class RegisteredUserPresenterTest {
 	private void setupOkNicknameExpects() {
 		reset(view, eventBus);
 		expect(view.getNewNickname()).andReturn(nickname);
-		eventBus.changeNickname(result.player, nickname);
+		eventBus.changeNickname(loginData.player, nickname);
 		replay(view, eventBus);
 	}
 

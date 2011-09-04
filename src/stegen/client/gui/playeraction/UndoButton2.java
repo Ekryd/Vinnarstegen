@@ -1,7 +1,6 @@
 package stegen.client.gui.playeraction;
 
 import com.google.gwt.event.dom.client.*;
-import com.google.gwt.event.shared.*;
 import com.google.gwt.user.client.ui.*;
 
 public class UndoButton2 implements IsWidget {
@@ -48,8 +47,8 @@ public class UndoButton2 implements IsWidget {
 		baseWidget.setVisible(false);
 	}
 
-	public HandlerRegistration addClickHandler(ClickHandler handler) {
-		return baseWidget.addClickHandler(handler);
+	public void addClickHandler(ClickHandler handler) {
+		baseWidget.addClickHandler(handler);
 	}
 
 }

@@ -27,8 +27,8 @@ public class Login implements EntryPoint {
 		messageCentral.userLoginStatus(new DefaultCallback<LoginDataDto>() {
 
 			@Override
-			public void onSuccess(LoginDataDto result) {
-				loginData = result;
+			public void onSuccess(LoginDataDto newLoginData) {
+				loginData = newLoginData;
 				onLoginPageStart();
 			}
 		});

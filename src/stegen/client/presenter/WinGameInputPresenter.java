@@ -10,7 +10,7 @@ import com.google.gwt.event.dom.client.*;
 
 public class WinGameInputPresenter implements Presenter {
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private ButtonType clickedWonOrLostButton;
 	private PlayerDto otherPlayer;
@@ -31,9 +31,9 @@ public class WinGameInputPresenter implements Presenter {
 
 	}
 
-	public WinGameInputPresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
+	public WinGameInputPresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus) {
 		this.view = scoreView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 	}
 
@@ -55,9 +55,9 @@ public class WinGameInputPresenter implements Presenter {
 				clickedWonOrLostButton = buttonType;
 				otherPlayer = row.player;
 				if (clickedWonOrLostButton == ButtonType.WIN) {
-					view.setupWinGameInputDialog(result.player.nickname, otherPlayer.nickname);
+					view.setupWinGameInputDialog(loginData.player.nickname, otherPlayer.nickname);
 				} else {
-					view.setupWinGameInputDialog(otherPlayer.nickname, result.player.nickname);
+					view.setupWinGameInputDialog(otherPlayer.nickname, loginData.player.nickname);
 				}
 				view.openWinGameInputDialog();
 			}
@@ -70,9 +70,9 @@ public class WinGameInputPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (clickedWonOrLostButton == ButtonType.WIN) {
-					eventBus.playerWonOverPlayer(result.player, otherPlayer, view.getGameResult(), result.player);
+					eventBus.playerWonOverPlayer(loginData.player, otherPlayer, view.getGameResult(), loginData.player);
 				} else {
-					eventBus.playerWonOverPlayer(otherPlayer, result.player, view.getGameResult(), result.player);
+					eventBus.playerWonOverPlayer(otherPlayer, loginData.player, view.getGameResult(), loginData.player);
 				}
 			}
 		};

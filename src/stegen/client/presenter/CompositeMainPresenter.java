@@ -7,7 +7,7 @@ import stegen.shared.*;
 public class CompositeMainPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
 
@@ -21,12 +21,14 @@ public class CompositeMainPresenter implements Presenter {
 
 		stegen.client.presenter.GameResultsPresenter.Display getGameResultsView();
 
+		stegen.client.presenter.UndoPresenter.Display getUndoView();
+
 	}
 
-	public CompositeMainPresenter(Display compositeMainView, LoginDataDto result, EventBus eventBus,
+	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData, EventBus eventBus,
 			InsultFactory insultFactory) {
 		this.view = compositeMainView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
 	}
@@ -37,14 +39,15 @@ public class CompositeMainPresenter implements Presenter {
 	}
 
 	private void initPresenterParts() {
-		new ScorePresenter(view.getScoreView(), result, eventBus).go();
-		new ChallengePresenter(view.getChallengeInputView(), result, eventBus, insultFactory).go();
-		new WinGameInputPresenter(view.getWinGameInputView(), result, eventBus).go();
+		new ScorePresenter(view.getScoreView(), loginData, eventBus).go();
+		new ChallengePresenter(view.getChallengeInputView(), loginData, eventBus, insultFactory).go();
+		new WinGameInputPresenter(view.getWinGameInputView(), loginData, eventBus).go();
 		new GameResultsPresenter(view.getGameResultsView(), eventBus).go();
-		// new LoginStatusesPresenter(view.getLoginStatusesView(), result,
+		new UndoPresenter(view.getUndoView(), loginData, eventBus).go();
+		// new LoginStatusesPresenter(view.getLoginStatusesView(), loginData,
 		// eventBus);
 		// new MiscPlayerCommandPresenter(view.getMiscPlayerCommandView(),
-		// result, eventBus);
+		// loginData, eventBus);
 	}
 
 }

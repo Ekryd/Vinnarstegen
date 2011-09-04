@@ -9,7 +9,7 @@ import com.google.gwt.event.dom.client.*;
 public class RegistrationPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler checkRegistrationOkHandler = createCheckRegistrationOkHandler();
 	final RegisterPlayerCallback eventRegisterPlayerHandler = createEventRegisterPlayerHandler();
@@ -23,10 +23,10 @@ public class RegistrationPresenter implements Presenter {
 		void showRegistrationFail();
 	}
 
-	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto result, EventBus eventBus,
+	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, EventBus eventBus,
 			String hostPageBaseURL) {
 		this.view = loginButNotRegisteredView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.hostPageBaseURL = hostPageBaseURL;
 	}
@@ -38,7 +38,7 @@ public class RegistrationPresenter implements Presenter {
 			public void onClick(ClickEvent event) {
 				String registrationCode = view.getRegistrationCode();
 				if (registrationCode.equals("SuckoPust")) {
-					eventBus.registerPlayer(result.player.email);
+					eventBus.registerPlayer(loginData.player.email);
 				} else {
 					view.showRegistrationFail();
 				}

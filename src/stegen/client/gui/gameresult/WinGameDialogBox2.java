@@ -68,6 +68,8 @@ public class WinGameDialogBox2 implements IsWidget {
 
 	public void setupWinGameInputDialog(String winnerName, String loserName) {
 		setScoreDropdown.setPlayers(winnerName, loserName);
+		setScoreDropdown.resetScoreToZeroZero();
+		updateScoreLabel();
 	}
 
 	public SetResult getSetResult() {

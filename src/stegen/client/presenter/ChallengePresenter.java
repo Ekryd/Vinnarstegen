@@ -10,7 +10,7 @@ import com.google.gwt.event.dom.client.*;
 
 public class ChallengePresenter implements Presenter {
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
 
@@ -30,9 +30,9 @@ public class ChallengePresenter implements Presenter {
 		void openChallengeInputDialog();
 	}
 
-	public ChallengePresenter(Display scoreView, LoginDataDto result, EventBus eventBus, InsultFactory insultFactory) {
+	public ChallengePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus, InsultFactory insultFactory) {
 		this.view = scoreView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
 	}
@@ -52,7 +52,7 @@ public class ChallengePresenter implements Presenter {
 
 			@Override
 			public void update(int index, ScoreTableRow row, String value) {
-				PlayerDto challenger = result.player;
+				PlayerDto challenger = loginData.player;
 				PlayerDto challengee = row.player;
 				message = new ChallengeMessage(challenger, challengee, insultFactory.createCompleteInsult(),
 						insultFactory.createCompleteInsult(), insultFactory.getChallengeDateDefaultOneDayFromNow());

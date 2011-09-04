@@ -14,7 +14,7 @@ public class RegisterationPresenterTest {
 	private EventBus eventBus;
 	private Display view;
 	private String passcode;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 
 	@Before
 	public void before() {
@@ -69,8 +69,8 @@ public class RegisterationPresenterTest {
 	}
 
 	private void setupPresenter() {
-		result = LoginDataDtoFactory.createLoginData();
-		presenter = new RegistrationPresenter(view, result, eventBus, "hostPageBaseURL");
+		loginData = LoginDataDtoFactory.createLoginData();
+		presenter = new RegistrationPresenter(view, loginData, eventBus, "hostPageBaseURL");
 	}
 
 	private void setupInitializationExpects() {
@@ -89,7 +89,7 @@ public class RegisterationPresenterTest {
 	private void setupRegistrationSucceedExpectations() {
 		reset(view, eventBus);
 		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.registerPlayer(result.player.email);
+		eventBus.registerPlayer(loginData.player.email);
 		replay(view, eventBus);
 	}
 

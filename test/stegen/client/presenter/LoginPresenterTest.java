@@ -11,8 +11,8 @@ public class LoginPresenterTest {
 	@Test
 	public void test() {
 		Display loginView = EasyMock.createStrictMock(Display.class);
-		LoginDataDto result = LoginDataDto.userIsNotLoggedIn("signInUrl");
-		LoginPresenter presenter = new LoginPresenter(loginView, result);
+		LoginDataDto loginData = LoginDataDto.userIsNotLoggedIn("signInUrl");
+		LoginPresenter presenter = new LoginPresenter(loginView, loginData);
 
 		loginView.setSignInUrl("signInUrl");
 		EasyMock.replay(loginView);

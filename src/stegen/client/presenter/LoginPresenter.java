@@ -5,19 +5,19 @@ import stegen.shared.*;
 public class LoginPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 
 	public interface Display {
 		void setSignInUrl(String signInUrl);
 	}
 
-	public LoginPresenter(Display loginView, LoginDataDto result) {
+	public LoginPresenter(Display loginView, LoginDataDto loginData) {
 		this.view = loginView;
-		this.result = result;
+		this.loginData = loginData;
 	}
 
 	@Override
 	public void go() {
-		view.setSignInUrl(result.signInUrl);
+		view.setSignInUrl(loginData.signInUrl);
 	}
 }

@@ -43,4 +43,8 @@ public class SetScoreDropdown2 implements IsWidget {
 		listBox.addChangeHandler(onScoreChangeEventHandler);
 	}
 
+	public void resetScoreToZeroZero() {
+		listBox.setItemSelected(0, true);
+	}
+
 }

@@ -13,6 +13,7 @@ public class CompositeMainView implements Display {
 	private final ChallengeInputView challengeView;
 	private final WinGameInputView gameInputView;
 	private final GameResultsView gameResultsView;
+	private final UndoView undoView;
 
 	public CompositeMainView() {
 		MAIN_AREA.clearPanel();
@@ -24,6 +25,7 @@ public class CompositeMainView implements Display {
 		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),
 				scorePanel.getWinGameDialog());
 		gameResultsView = new GameResultsView(gameResultPanel);
+		undoView = new UndoView(gameResultPanel.getUndoButton());
 	}
 
 	@Override
@@ -44,6 +46,11 @@ public class CompositeMainView implements Display {
 	@Override
 	public stegen.client.presenter.GameResultsPresenter.Display getGameResultsView() {
 		return gameResultsView;
+	}
+
+	@Override
+	public stegen.client.presenter.UndoPresenter.Display getUndoView() {
+		return undoView;
 	}
 
 }

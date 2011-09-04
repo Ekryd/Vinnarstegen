@@ -9,7 +9,7 @@ import com.google.gwt.event.dom.client.*;
 public class RegisteredUserPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler clickChangeUserNameHandler = createClickChangeUserNameHandler();
 	final ChangeNicknameCallback eventChangeNicknameHandler = createEventChangeNicknameHandler();
@@ -22,15 +22,15 @@ public class RegisteredUserPresenter implements Presenter {
 		void addClickChangeUserNameHandler(ClickHandler clickHandler);
 	}
 
-	public RegisteredUserPresenter(Display loginButNotRegisteredView, LoginDataDto result, EventBus eventBus) {
+	public RegisteredUserPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, EventBus eventBus) {
 		this.view = loginButNotRegisteredView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 	}
 
 	@Override
 	public void go() {
-		view.setUserName(result.player.nickname);
+		view.setUserName(loginData.player.nickname);
 		view.addClickChangeUserNameHandler(clickChangeUserNameHandler);
 
 		eventBus.addHandler(eventChangeNicknameHandler);
@@ -44,7 +44,7 @@ public class RegisteredUserPresenter implements Presenter {
 				String newNickname = view.getNewNickname();
 				boolean emptyNickname = newNickname.trim().isEmpty();
 				if (!emptyNickname) {
-					eventBus.changeNickname(result.player, newNickname);
+					eventBus.changeNickname(loginData.player, newNickname);
 				}
 			}
 		};

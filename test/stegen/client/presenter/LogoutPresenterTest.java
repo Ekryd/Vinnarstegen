@@ -10,7 +10,7 @@ public class LogoutPresenterTest {
 
 	private LogoutPresenter presenter;
 	private Display view;
-	private LoginDataDto result;
+	private LoginDataDto loginData;
 
 	@Test
 	public void testShowView() {
@@ -23,8 +23,8 @@ public class LogoutPresenterTest {
 
 	private void setupPresenter() {
 		view = EasyMock.createStrictMock(Display.class);
-		result = LoginDataDtoFactory.createLoginData();
-		presenter = new LogoutPresenter(view, result);
+		loginData = LoginDataDtoFactory.createLoginData();
+		presenter = new LogoutPresenter(view, loginData);
 	}
 
 	private void setupInitializationExpects() {

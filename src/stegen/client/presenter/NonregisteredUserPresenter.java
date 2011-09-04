@@ -5,20 +5,20 @@ import stegen.shared.*;
 public class NonregisteredUserPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 
 	public interface Display {
 		void setUserName(String name);
 	}
 
-	public NonregisteredUserPresenter(Display loginButNotRegisteredView, LoginDataDto result) {
+	public NonregisteredUserPresenter(Display loginButNotRegisteredView, LoginDataDto loginData) {
 		this.view = loginButNotRegisteredView;
-		this.result = result;
+		this.loginData = loginData;
 	}
 
 	@Override
 	public void go() {
-		view.setUserName(result.player.nickname);
+		view.setUserName(loginData.player.nickname);
 	}
 
 }

@@ -14,7 +14,7 @@ import com.google.gwt.event.dom.client.*;
 public class MessagesPresenter implements Presenter {
 
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private final MessagePrefixGenerator messagePrefixGenerator;
 	final ClickHandler clickOpenMessageInputHandler = createClickOpenMessageInputHandler();
@@ -40,10 +40,10 @@ public class MessagesPresenter implements Presenter {
 
 	}
 
-	public MessagesPresenter(Display messagesView, LoginDataDto result, MessagePrefixGenerator messagePrefixGenerator,
-			EventBus eventBus) {
+	public MessagesPresenter(Display messagesView, LoginDataDto loginData,
+			MessagePrefixGenerator messagePrefixGenerator, EventBus eventBus) {
 		this.view = messagesView;
-		this.result = result;
+		this.loginData = loginData;
 		this.messagePrefixGenerator = messagePrefixGenerator;
 		this.eventBus = eventBus;
 	}
@@ -81,7 +81,7 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				view.setMessageInputTitle(result.player.nickname + " " + currentMessagePrefix.actionText);
+				view.setMessageInputTitle(loginData.player.nickname + " " + currentMessagePrefix.actionText);
 			}
 		};
 	}
@@ -94,9 +94,9 @@ public class MessagesPresenter implements Presenter {
 				String messageContent = view.getMessageInputContent();
 				boolean emptyMessageContent = messageContent.trim().isEmpty();
 				if (!emptyMessageContent) {
-					String completeMessage = result.player.nickname + " " + currentMessagePrefix.actionText + " "
+					String completeMessage = loginData.player.nickname + " " + currentMessagePrefix.actionText + " "
 							+ messageContent;
-					eventBus.sendMessage(result.player, completeMessage);
+					eventBus.sendMessage(loginData.player, completeMessage);
 				}
 
 			}
@@ -134,7 +134,7 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				eventBus.updateSendMessageList();
+				loadMessages();
 				changeMessagePrefixOnButton();
 			}
 		};

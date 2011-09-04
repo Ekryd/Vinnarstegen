@@ -49,8 +49,8 @@ public class SerializerTest {
 
 	@Test
 	public void serializeCheckLoginStatus() {
-		LoginDataDto result = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
-		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", result);
+		LoginDataDto loginData = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
+		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
 				"{\"result\":{\"logoutUrl\":\"logoutUrl\",\"loginResponse\":\"LOGGED_IN_AND_REGISTERED\",\"signInUrl\":\"\",\"player\":{\"email\":{\"address\":\"address\"},\"nickname\":\"nickname\"}}}",

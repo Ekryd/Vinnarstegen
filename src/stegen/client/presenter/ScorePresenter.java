@@ -11,11 +11,14 @@ import com.google.gwt.event.dom.client.*;
 
 public class ScorePresenter implements Presenter {
 	private final Display view;
-	private final LoginDataDto result;
+	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
 	final UpdatePlayerScoreListCallback eventChangedScoresCallback = creatEventChangedScoresCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
+	final RefreshCallback refreshCallback = createRefreshCallback();
+	final UndoCallback undoCallback = createUndoCallback();
+	final PlayerWonCallback playerWonCallback = createPlayerWonCallback();
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
@@ -23,9 +26,9 @@ public class ScorePresenter implements Presenter {
 		void changeScoreList(List<ScoreTableRow> content);
 	}
 
-	public ScorePresenter(Display scoreView, LoginDataDto result, EventBus eventBus) {
+	public ScorePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus) {
 		this.view = scoreView;
-		this.result = result;
+		this.loginData = loginData;
 		this.eventBus = eventBus;
 	}
 
@@ -44,6 +47,9 @@ public class ScorePresenter implements Presenter {
 	private void initEvents() {
 		eventBus.addHandler(eventClearScoresCallback);
 		eventBus.addHandler(eventChangedScoresCallback);
+		eventBus.addHandler(refreshCallback);
+		eventBus.addHandler(undoCallback);
+		eventBus.addHandler(playerWonCallback);
 	}
 
 	private void loadScores() {
@@ -55,7 +61,7 @@ public class ScorePresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				eventBus.clearAllScores(result.player);
+				eventBus.clearAllScores(loginData.player);
 			}
 		};
 	}
@@ -65,7 +71,7 @@ public class ScorePresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				eventBus.updatePlayerScoreList();
+				loadScores();
 			}
 		};
 	}
@@ -77,7 +83,7 @@ public class ScorePresenter implements Presenter {
 			public void onSuccessImpl(List<PlayerScoreDto> scores) {
 				List<ScoreTableRow> content = new ArrayList<ScoreTableRow>();
 				for (PlayerScoreDto playerScoreDto : scores) {
-					boolean currentUser = playerScoreDto.player.email.equals(result.player.email);
+					boolean currentUser = playerScoreDto.player.email.equals(loginData.player.email);
 					content.add(new ScoreTableRow(playerScoreDto.player, "" + playerScoreDto.score, ""
 							+ playerScoreDto.ranking, playerScoreDto.changedDateTime,
 							playerScoreDto.changedBy.nickname, currentUser));
@@ -87,4 +93,33 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
+	private RefreshCallback createRefreshCallback() {
+		return new RefreshCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				loadScores();
+			}
+		};
+	}
+
+	private UndoCallback createUndoCallback() {
+		return new UndoCallback() {
+
+			@Override
+			public void onSuccessImpl(UndoPlayerCommandResult result) {
+				loadScores();
+			}
+		};
+	}
+
+	private PlayerWonCallback createPlayerWonCallback() {
+		return new PlayerWonCallback() {
+
+			@Override
+			public void onSuccessImpl(Void result) {
+				loadScores();
+			}
+		};
+	}
 }
