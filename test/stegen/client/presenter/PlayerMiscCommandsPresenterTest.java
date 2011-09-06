@@ -10,16 +10,16 @@ import org.junit.*;
 
 import stegen.client.event.*;
 import stegen.client.gui.playeraction.*;
-import stegen.client.presenter.GameResultsPresenter.Display;
+import stegen.client.presenter.PlayerMiscCommandsPresenter.Display;
 import stegen.shared.*;
 
 import com.google.appengine.repackaged.org.joda.time.*;
 
-public class GameResultsPresenterTest {
+public class PlayerMiscCommandsPresenterTest {
 
 	private Display view;
 	private EventBus eventBus;
-	private GameResultsPresenter presenter;
+	private PlayerMiscCommandsPresenter presenter;
 	private LoginDataDto loginData;
 
 	@Test
@@ -38,46 +38,40 @@ public class GameResultsPresenterTest {
 		presenter.go();
 
 		reset(view, eventBus);
-		view.changeGameResultList(anyObject(List.class));
+		view.changePlayerMiscCommandList(anyObject(List.class));
 		verifyListContentForPreviousMethod();
 		replay(view, eventBus);
 
 		List<PlayerCommandDto> gameResults = new ArrayList<PlayerCommandDto>();
 		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new LocalDate(2011, 10, 10)
-				.toDateMidnight().toDate(), "1 - 3");
+				.toDateMidnight().toDate(), "Loggade in");
 		gameResults.add(playerScoreDto);
-		presenter.eventUpdateGameResultListCallback.onSuccess(gameResults);
+		presenter.eventUpdatePlayerMiscCommandListCallback.onSuccess(gameResults);
 	}
 
 	@Test
 	public void testUpdateListEvents() {
 		setupPresenter();
 
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventClearScoresCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateGameResultList();
+		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
 		presenter.eventChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updateGameResultList();
+		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventPlayerWonCallback.onSuccess(null);
+		presenter.eventChallengeCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updateGameResultList();
+		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
 		presenter.eventRefreshCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updateGameResultList();
+		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
 		presenter.eventUndoCallback.onSuccess(null);
 		verify(eventBus, view);
@@ -88,17 +82,16 @@ public class GameResultsPresenterTest {
 		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
-		presenter = new GameResultsPresenter(view, eventBus);
+		presenter = new PlayerMiscCommandsPresenter(view, eventBus);
 	}
 
 	private void setupInitializationExpects() {
-		eventBus.addHandler(presenter.eventUpdateGameResultListCallback);
+		eventBus.addHandler(presenter.eventUpdatePlayerMiscCommandListCallback);
 		eventBus.addHandler(presenter.eventRefreshCallback);
 		eventBus.addHandler(presenter.eventUndoCallback);
-		eventBus.addHandler(presenter.eventPlayerWonCallback);
-		eventBus.addHandler(presenter.eventClearScoresCallback);
+		eventBus.addHandler(presenter.eventChallengeCallback);
 		eventBus.addHandler(presenter.eventChangeNicknameCallback);
-		eventBus.updateGameResultList();
+		eventBus.updatePlayerMiscCommandList();
 		replay(view, eventBus);
 	}
 
@@ -108,11 +101,10 @@ public class GameResultsPresenterTest {
 			@Override
 			public Object answer() throws Throwable {
 				@SuppressWarnings("unchecked")
-				List<GameResultsRow> content = (List<GameResultsRow>) getCurrentArguments()[0];
+				List<PlayerMiscCommandRow> content = (List<PlayerMiscCommandRow>) getCurrentArguments()[0];
 				assertEquals(1, content.size());
-				assertEquals(loginData.player.nickname, content.get(0).playerName);
-				assertEquals(new LocalDate(2011, 10, 10).toDateMidnight().toDate(), content.get(0).gameDateTime);
-				assertEquals("1 - 3", content.get(0).result);
+				assertEquals(loginData.player.nickname, content.get(0).performedBy);
+				assertEquals("Loggade in", content.get(0).description);
 				return null;
 			}
 		};

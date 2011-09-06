@@ -40,13 +40,38 @@ public class ScorePresenterTest {
 	}
 
 	@Test
-	public void testEventPlayerWon() {
+	public void testUpdateListEvents() {
 		setupPresenter();
 
 		eventBus.updatePlayerScoreList();
-		replay(eventBus);
-
+		replay(eventBus, view);
 		presenter.eventClearScoresCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+
+		eventBus.updatePlayerScoreList();
+		replay(eventBus, view);
+		presenter.eventChangeNicknameCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+
+		eventBus.updatePlayerScoreList();
+		replay(eventBus, view);
+		presenter.eventPlayerWonCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+
+		eventBus.updatePlayerScoreList();
+		replay(eventBus, view);
+		presenter.eventRefreshCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+
+		eventBus.updatePlayerScoreList();
+		replay(eventBus, view);
+		presenter.eventUndoCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -78,9 +103,10 @@ public class ScorePresenterTest {
 		view.addCleanScoresHandler(presenter.clickCleanScoresHandler);
 		eventBus.addHandler(presenter.eventClearScoresCallback);
 		eventBus.addHandler(presenter.eventChangedScoresCallback);
-		eventBus.addHandler(presenter.refreshCallback);
-		eventBus.addHandler(presenter.undoCallback);
-		eventBus.addHandler(presenter.playerWonCallback);
+		eventBus.addHandler(presenter.eventRefreshCallback);
+		eventBus.addHandler(presenter.eventUndoCallback);
+		eventBus.addHandler(presenter.eventPlayerWonCallback);
+		eventBus.addHandler(presenter.eventChangeNicknameCallback);
 		eventBus.updatePlayerScoreList();
 		replay(view, eventBus);
 	}

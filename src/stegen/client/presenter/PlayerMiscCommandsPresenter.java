@@ -7,21 +7,20 @@ import stegen.client.event.callback.*;
 import stegen.client.gui.playeraction.*;
 import stegen.shared.*;
 
-public class GameResultsPresenter implements Presenter {
+public class PlayerMiscCommandsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
-	final UpdateGameResultListCallback eventUpdateGameResultListCallback = creatUpdateGameResultListCallback();
+	final UpdatePlayerMiscCommandListCallback eventUpdatePlayerMiscCommandListCallback = creatUpdatePlayerMiscCommandListCallback();
 	final RefreshCallback eventRefreshCallback = createRefreshCallback();
 	final UndoCallback eventUndoCallback = createUndoCallback();
-	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
-	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
+	final ChallengeCallback eventChallengeCallback = createChallengeCallback();
 	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
 
 	public interface Display {
-		void changeGameResultList(List<GameResultsRow> content);
+		void changePlayerMiscCommandList(List<PlayerMiscCommandRow> content);
 	}
 
-	public GameResultsPresenter(Display scoreView, EventBus eventBus) {
+	public PlayerMiscCommandsPresenter(Display scoreView, EventBus eventBus) {
 		this.view = scoreView;
 		this.eventBus = eventBus;
 	}
@@ -29,33 +28,31 @@ public class GameResultsPresenter implements Presenter {
 	@Override
 	public void go() {
 		initEvents();
-		loadGameResults();
+		loadPlayerMiscCommands();
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventUpdateGameResultListCallback);
+		eventBus.addHandler(eventUpdatePlayerMiscCommandListCallback);
 		eventBus.addHandler(eventRefreshCallback);
 		eventBus.addHandler(eventUndoCallback);
-		eventBus.addHandler(eventPlayerWonCallback);
-		eventBus.addHandler(eventClearScoresCallback);
+		eventBus.addHandler(eventChallengeCallback);
 		eventBus.addHandler(eventChangeNicknameCallback);
 	}
 
-	private void loadGameResults() {
-		eventBus.updateGameResultList();
+	private void loadPlayerMiscCommands() {
+		eventBus.updatePlayerMiscCommandList();
 	}
 
-	private UpdateGameResultListCallback creatUpdateGameResultListCallback() {
-		return new UpdateGameResultListCallback() {
+	private UpdatePlayerMiscCommandListCallback creatUpdatePlayerMiscCommandListCallback() {
+		return new UpdatePlayerMiscCommandListCallback() {
 
 			@Override
 			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
-				List<GameResultsRow> content = new ArrayList<GameResultsRow>();
+				List<PlayerMiscCommandRow> content = new ArrayList<PlayerMiscCommandRow>();
 				for (PlayerCommandDto playerCommandDto : gameResults) {
-					content.add(new GameResultsRow(playerCommandDto.player.nickname,
-							playerCommandDto.performedDateTime, playerCommandDto.description));
+					content.add(new PlayerMiscCommandRow(playerCommandDto.player.nickname, playerCommandDto.description));
 				}
-				view.changeGameResultList(content);
+				view.changePlayerMiscCommandList(content);
 			}
 		};
 	}
@@ -65,7 +62,7 @@ public class GameResultsPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				loadGameResults();
+				loadPlayerMiscCommands();
 			}
 		};
 	}
@@ -75,27 +72,17 @@ public class GameResultsPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(UndoPlayerCommandResult result) {
-				loadGameResults();
+				loadPlayerMiscCommands();
 			}
 		};
 	}
 
-	private PlayerWonCallback createPlayerWonCallback() {
-		return new PlayerWonCallback() {
+	private ChallengeCallback createChallengeCallback() {
+		return new ChallengeCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
-				loadGameResults();
-			}
-		};
-	}
-
-	private ClearScoresCallback createClearScoresCallback() {
-		return new ClearScoresCallback() {
-
-			@Override
-			public void onSuccessImpl(Void result) {
-				loadGameResults();
+				loadPlayerMiscCommands();
 			}
 		};
 	}
@@ -105,7 +92,7 @@ public class GameResultsPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {
-				loadGameResults();
+				loadPlayerMiscCommands();
 			}
 
 		};

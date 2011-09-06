@@ -43,12 +43,23 @@ public class RefreshPresenterTest {
 		presenter.clickRefreshHandler.onClick(null);
 	}
 
+	@Test
+	public void testTimerTick() {
+		setupPresenter();
+
+		eventBus.refresh();
+		replay(view, eventBus);
+
+		presenter.timerCommand.run();
+	}
+
 	private void setupPresenter() {
 		presenter = new RefreshPresenter(view, eventBus);
 	}
 
 	private void setupInitializationExpects() {
 		view.addClickRefreshHandler(presenter.clickRefreshHandler);
+		view.startTimer(presenter.timerCommand);
 		replay(view, eventBus);
 	}
 }

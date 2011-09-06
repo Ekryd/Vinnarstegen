@@ -11,8 +11,10 @@ public class MainContentTable implements IsWidget {
 	private static final double BAR_HEIGHT = 2.5;
 	private static final Unit BAR_UNIT = Unit.EM;
 	private final TabLayoutPanel baseWidget = new TabLayoutPanel(BAR_HEIGHT, BAR_UNIT);
-	private ListScorePanel2 scorePanel = new ListScorePanel2();
-	private GameResultPanel2 gameResultPanel = new GameResultPanel2();
+	private final ListScorePanel2 scorePanel = new ListScorePanel2();
+	private final GameResultPanel2 gameResultPanel = new GameResultPanel2();
+	private final LoginStatusTable2 loginStatusTable = new LoginStatusTable2();
+	private final PlayerMiscCommandTable2 playerMiscCommandTable = new PlayerMiscCommandTable2();
 
 	public MainContentTable() {
 		initLayout();
@@ -22,8 +24,8 @@ public class MainContentTable implements IsWidget {
 		baseWidget.setAnimationDuration(1000);
 		baseWidget.add(scorePanel, "Poängställning");
 		baseWidget.add(gameResultPanel, "Matcher");
-		// baseWidget.add(new LoginStatusTable(messageCentral), "Inloggning");
-		// baseWidget.add(new PlayerMiscCommandTable(messageCentral), "Övrigt");
+		baseWidget.add(loginStatusTable, "Inloggning");
+		baseWidget.add(playerMiscCommandTable, "Övrigt");
 		baseWidget.setHeight("400px");
 		baseWidget.selectTab(0);
 	}
@@ -39,6 +41,14 @@ public class MainContentTable implements IsWidget {
 
 	public GameResultPanel2 getGameResultPanel() {
 		return gameResultPanel;
+	}
+
+	public LoginStatusTable2 getLoginStatusesPanel() {
+		return loginStatusTable;
+	}
+
+	public PlayerMiscCommandTable2 getPlayerMiscCommandsPanel() {
+		return playerMiscCommandTable;
 	}
 
 }

@@ -120,6 +120,18 @@ public class EventBusImpl implements EventBus {
 		playerCommandService.getUndoCommand(createEmptyCallbackIfNull(callback));
 	}
 
+	@Override
+	public void updatePlayerMiscCommandList() {
+		UpdatePlayerMiscCommandListCallback callback = callbacks.get(UpdatePlayerMiscCommandListCallback.class);
+		playerCommandService.getMiscPlayerCommandStack(10, createEmptyCallbackIfNull(callback));
+	}
+
+	@Override
+	public void updateLoginStatusList() {
+		UpdateLoginStatusListCallback callback = callbacks.get(UpdateLoginStatusListCallback.class);
+		playerCommandService.getLoginStatusCommandStack(10, createEmptyCallbackIfNull(callback));
+	}
+
 	private <T> AsyncCallback<T> createEmptyCallbackIfNull(AsyncCallback<T> callback) {
 		if (callback != null) {
 			return callback;

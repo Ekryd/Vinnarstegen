@@ -91,6 +91,29 @@ public class MessagesPresenterTest {
 		verify(view);
 	}
 
+	@Test
+	public void testChangeNicknameCallback() {
+		setupPresenter();
+
+		eventBus.updateSendMessageList();
+		replay(eventBus, view);
+		presenter.eventChangeNicknameCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+	}
+
+	@Test
+	public void testRefreshCallback() {
+		setupPresenter();
+
+		view.setMessageButtonTitle("buttonText");
+		eventBus.updateSendMessageList();
+		replay(eventBus, view);
+		presenter.eventRefreshCallback.onSuccess(null);
+		verify(eventBus, view);
+		reset(eventBus, view);
+	}
+
 	private void setupPresenter() {
 		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
@@ -110,6 +133,7 @@ public class MessagesPresenterTest {
 		eventBus.addHandler(presenter.eventSendMessageCallback);
 		eventBus.addHandler(presenter.eventChangedMessagesCallback);
 		eventBus.addHandler(presenter.eventRefreshCallback);
+		eventBus.addHandler(presenter.eventChangeNicknameCallback);
 		eventBus.updateSendMessageList();
 		replay(view, eventBus);
 	}

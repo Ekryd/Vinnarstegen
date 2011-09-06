@@ -34,4 +34,8 @@ public interface EventBus {
 
 	void updateUndoCommand();
 
+	void updateLoginStatusList();
+
+	void updatePlayerMiscCommandList();
+
 }

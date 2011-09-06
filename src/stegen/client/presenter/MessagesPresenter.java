@@ -22,6 +22,7 @@ public class MessagesPresenter implements Presenter {
 	final UpdateSendMessageListCallback eventChangedMessagesCallback = creatEventChangedMessagesCallback();
 	final SendMessageCallback eventSendMessageCallback = createEventSendMessageCallback();
 	final RefreshCallback eventRefreshCallback = createRefreshMessagesCallback();
+	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
 	private MessagePrefix currentMessagePrefix;
 
 	public interface Display {
@@ -70,6 +71,7 @@ public class MessagesPresenter implements Presenter {
 		eventBus.addHandler(eventSendMessageCallback);
 		eventBus.addHandler(eventChangedMessagesCallback);
 		eventBus.addHandler(eventRefreshCallback);
+		eventBus.addHandler(eventChangeNicknameCallback);
 	}
 
 	private void loadMessages() {
@@ -140,4 +142,14 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
+	private ChangeNicknameCallback createChangeNicknameCallback() {
+		return new ChangeNicknameCallback() {
+
+			@Override
+			public void onSuccessImpl(PlayerDto result) {
+				loadMessages();
+			}
+
+		};
+	}
 }

@@ -23,6 +23,7 @@ public class ChangeNicknameButton2 implements IsWidget {
 			public void onClick(ClickEvent event) {
 				int left = baseWidget.getAbsoluteLeft() + 10;
 				int top = baseWidget.getAbsoluteTop() + 10;
+				dialog.resetInputText();
 				dialog.setPopupPosition(left, top);
 
 				dialog.showDialog();

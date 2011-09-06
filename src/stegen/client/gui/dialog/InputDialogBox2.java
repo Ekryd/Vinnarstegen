@@ -66,4 +66,8 @@ public class InputDialogBox2 implements IsWidget {
 		buttonPanel.addClickOkHandler(clickHandler);
 	}
 
+	public void resetInputText() {
+		messageBox.setText("");
+	}
+
 }

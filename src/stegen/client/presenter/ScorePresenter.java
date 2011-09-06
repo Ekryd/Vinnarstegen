@@ -16,9 +16,10 @@ public class ScorePresenter implements Presenter {
 	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
 	final UpdatePlayerScoreListCallback eventChangedScoresCallback = creatEventChangedScoresCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
-	final RefreshCallback refreshCallback = createRefreshCallback();
-	final UndoCallback undoCallback = createUndoCallback();
-	final PlayerWonCallback playerWonCallback = createPlayerWonCallback();
+	final RefreshCallback eventRefreshCallback = createRefreshCallback();
+	final UndoCallback eventUndoCallback = createUndoCallback();
+	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
+	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
@@ -47,9 +48,10 @@ public class ScorePresenter implements Presenter {
 	private void initEvents() {
 		eventBus.addHandler(eventClearScoresCallback);
 		eventBus.addHandler(eventChangedScoresCallback);
-		eventBus.addHandler(refreshCallback);
-		eventBus.addHandler(undoCallback);
-		eventBus.addHandler(playerWonCallback);
+		eventBus.addHandler(eventRefreshCallback);
+		eventBus.addHandler(eventUndoCallback);
+		eventBus.addHandler(eventPlayerWonCallback);
+		eventBus.addHandler(eventChangeNicknameCallback);
 	}
 
 	private void loadScores() {
@@ -120,6 +122,17 @@ public class ScorePresenter implements Presenter {
 			public void onSuccessImpl(Void result) {
 				loadScores();
 			}
+		};
+	}
+
+	private ChangeNicknameCallback createChangeNicknameCallback() {
+		return new ChangeNicknameCallback() {
+
+			@Override
+			public void onSuccessImpl(PlayerDto result) {
+				loadScores();
+			}
+
 		};
 	}
 }

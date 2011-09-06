@@ -23,6 +23,10 @@ public class CompositeMainPresenter implements Presenter {
 
 		stegen.client.presenter.UndoPresenter.Display getUndoView();
 
+		stegen.client.presenter.LoginStatusesPresenter.Display getLoginStatusesView();
+
+		stegen.client.presenter.PlayerMiscCommandsPresenter.Display getPlayerMiscCommandView();
+
 	}
 
 	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData, EventBus eventBus,
@@ -44,10 +48,8 @@ public class CompositeMainPresenter implements Presenter {
 		new WinGameInputPresenter(view.getWinGameInputView(), loginData, eventBus).go();
 		new GameResultsPresenter(view.getGameResultsView(), eventBus).go();
 		new UndoPresenter(view.getUndoView(), loginData, eventBus).go();
-		// new LoginStatusesPresenter(view.getLoginStatusesView(), loginData,
-		// eventBus);
-		// new MiscPlayerCommandPresenter(view.getMiscPlayerCommandView(),
-		// loginData, eventBus);
+		new LoginStatusesPresenter(view.getLoginStatusesView(), eventBus).go();
+		new PlayerMiscCommandsPresenter(view.getPlayerMiscCommandView(), eventBus).go();
 	}
 
 }

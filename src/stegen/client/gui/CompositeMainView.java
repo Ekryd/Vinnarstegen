@@ -14,6 +14,8 @@ public class CompositeMainView implements Display {
 	private final WinGameInputView gameInputView;
 	private final GameResultsView gameResultsView;
 	private final UndoView undoView;
+	private final LoginStatusesView loginStatusesView;
+	private final PlayerMiscCommandsView playerMiscCommandView;
 
 	public CompositeMainView() {
 		MAIN_AREA.clearPanel();
@@ -26,6 +28,8 @@ public class CompositeMainView implements Display {
 				scorePanel.getWinGameDialog());
 		gameResultsView = new GameResultsView(gameResultPanel);
 		undoView = new UndoView(gameResultPanel.getUndoButton());
+		loginStatusesView = new LoginStatusesView(mainContentTable.getLoginStatusesPanel());
+		playerMiscCommandView = new PlayerMiscCommandsView(mainContentTable.getPlayerMiscCommandsPanel());
 	}
 
 	@Override
@@ -51,6 +55,16 @@ public class CompositeMainView implements Display {
 	@Override
 	public stegen.client.presenter.UndoPresenter.Display getUndoView() {
 		return undoView;
+	}
+
+	@Override
+	public stegen.client.presenter.LoginStatusesPresenter.Display getLoginStatusesView() {
+		return loginStatusesView;
+	}
+
+	@Override
+	public stegen.client.presenter.PlayerMiscCommandsPresenter.Display getPlayerMiscCommandView() {
+		return playerMiscCommandView;
 	}
 
 }

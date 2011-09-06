@@ -9,9 +9,12 @@ public class RefreshPresenter implements Presenter {
 	private final EventBus eventBus;
 
 	ClickHandler clickRefreshHandler = createClickRefreshHandler();
+	Runnable timerCommand = createTimerCommand();
 
 	public interface Display {
 		void addClickRefreshHandler(ClickHandler clickHandler);
+
+		void startTimer(Runnable commandToRun);
 	}
 
 	public RefreshPresenter(Display scoreView, EventBus eventBus) {
@@ -26,6 +29,7 @@ public class RefreshPresenter implements Presenter {
 
 	private void initView() {
 		view.addClickRefreshHandler(clickRefreshHandler);
+		view.startTimer(timerCommand);
 	}
 
 	private ClickHandler createClickRefreshHandler() {
@@ -37,4 +41,15 @@ public class RefreshPresenter implements Presenter {
 			}
 		};
 	}
+
+	private Runnable createTimerCommand() {
+		return new Runnable() {
+
+			@Override
+			public void run() {
+				eventBus.refresh();
+			}
+		};
+	}
+
 }
