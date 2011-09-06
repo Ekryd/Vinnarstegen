@@ -1,10 +1,12 @@
 package stegen.client.presenter;
 
 import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 import org.junit.*;
 
 import stegen.client.event.*;
+import stegen.client.gui.gameresult.*;
 import stegen.client.gui.gameresult.WinGameFieldUpdater.ButtonType;
 import stegen.client.gui.score.*;
 import stegen.client.presenter.WinGameInputPresenter.Display;
@@ -17,6 +19,55 @@ public class WinGameInputPresenterTest {
 	private EventBus eventBus;
 	private WinGameInputPresenter presenter;
 	private PlayerDto otherPlayer = new PlayerDto(new EmailAddressDto("otherEmail"), "otherName");
+
+	@Test
+	public void testConverterZeroZero() {
+		GameResultDto gameResult = WinGameInputPresenter.convert(SetResult.NOLL_NOLL);
+		assertEquals(5, gameResult.setScores.length);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[0]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[1]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[2]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[3]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[4]);
+	}
+
+	@Test
+	public void testConverterThreeZero() {
+		GameResultDto gameResult = WinGameInputPresenter.convert(SetResult.TRE_NOLL);
+		assertEquals(5, gameResult.setScores.length);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[0]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[1]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[2]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[3]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[4]);
+	}
+
+	@Test
+	public void testConverterThreeOne() {
+		GameResultDto gameResult = WinGameInputPresenter.convert(SetResult.TRE_ETT);
+		assertEquals(5, gameResult.setScores.length);
+		assertSetWinnerAndLoserScoreEquals(1, 11, gameResult.setScores[0]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[1]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[2]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[3]);
+		assertSetWinnerAndLoserScoreEquals(0, 0, gameResult.setScores[4]);
+	}
+
+	@Test
+	public void testConverterThreeTwo() {
+		GameResultDto gameResult = WinGameInputPresenter.convert(SetResult.TRE_TVA);
+		assertEquals(5, gameResult.setScores.length);
+		assertSetWinnerAndLoserScoreEquals(1, 11, gameResult.setScores[0]);
+		assertSetWinnerAndLoserScoreEquals(1, 11, gameResult.setScores[1]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[2]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[3]);
+		assertSetWinnerAndLoserScoreEquals(11, 1, gameResult.setScores[4]);
+	}
+
+	private void assertSetWinnerAndLoserScoreEquals(int winnerScore, int loserScore, SetScoreDto setScoreDto) {
+		assertEquals(winnerScore, (int) setScoreDto.gameWinnerScore);
+		assertEquals(loserScore, (int) setScoreDto.gameLoserScore);
+	}
 
 	@Test
 	public void testShowView() {
@@ -114,19 +165,19 @@ public class WinGameInputPresenterTest {
 
 	private void setupWonGameExpects() {
 		reset(view, eventBus);
-		GameResultDto gameResult = GameResultDto.createEmptyGameResult();
-		gameResult.setScores[0] = new SetScoreDto(11, 7);
-		expect(view.getGameResult()).andReturn(gameResult);
-		eventBus.playerWonOverPlayer(loginData.player, otherPlayer, gameResult, loginData.player);
+		SetResult setResult = SetResult.TRE_TVA;
+		expect(view.getGameResult()).andReturn(setResult);
+		eventBus.playerWonOverPlayer(eq(loginData.player), eq(otherPlayer), anyObject(GameResultDto.class),
+				eq(loginData.player));
 		replay(view, eventBus);
 	}
 
 	private void setupLostGameExpects() {
 		reset(view, eventBus);
-		GameResultDto gameResult = GameResultDto.createEmptyGameResult();
-		gameResult.setScores[0] = new SetScoreDto(11, 7);
-		expect(view.getGameResult()).andReturn(gameResult);
-		eventBus.playerWonOverPlayer(otherPlayer, loginData.player, gameResult, loginData.player);
+		SetResult setResult = SetResult.TRE_TVA;
+		expect(view.getGameResult()).andReturn(setResult);
+		eventBus.playerWonOverPlayer(eq(otherPlayer), eq(loginData.player), anyObject(GameResultDto.class),
+				eq(loginData.player));
 		replay(view, eventBus);
 	}
 

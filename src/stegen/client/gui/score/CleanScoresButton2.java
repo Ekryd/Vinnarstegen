@@ -32,6 +32,7 @@ public class CleanScoresButton2 implements IsWidget {
 		return baseWidget;
 	}
 
+	// TODO: Bryt ut?
 	private static class OpenDialogHandler implements ClickHandler {
 		private final DialogBox dialogBox = new DialogBox();
 		private final Button okButton = new Button("Ja, skryk är skönt!");

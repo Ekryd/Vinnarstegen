@@ -2,6 +2,7 @@ package stegen.client.dto;
 
 import stegen.shared.*;
 
+//TODO: borde inte ligga här
 public class GameResultCalculator {
 	private final GameResultDto gameResult;
 	private int wonSets;

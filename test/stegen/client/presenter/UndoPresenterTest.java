@@ -56,6 +56,12 @@ public class UndoPresenterTest {
 		presenter.eventRefreshCallback.onSuccessImpl(null);
 		verify(view, eventBus);
 		reset(view, eventBus);
+
+		eventBus.updateUndoCommand();
+		replay(view, eventBus);
+		presenter.eventChangeNicknameCallback.onSuccessImpl(null);
+		verify(view, eventBus);
+		reset(view, eventBus);
 	}
 
 	@Test

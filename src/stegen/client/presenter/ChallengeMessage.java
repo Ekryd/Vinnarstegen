@@ -2,6 +2,7 @@ package stegen.client.presenter;
 
 import stegen.shared.*;
 
+//TODO: Ska den ligga här?
 public class ChallengeMessage {
 	private static final String SUBJECT = "Utmaning från Vinnarstegen";
 	private final PlayerDto challenger;
@@ -41,11 +42,6 @@ public class ChallengeMessage {
 
 	public String getMessage() {
 		return message;
-	}
-
-	@Deprecated
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	public String getSubject() {

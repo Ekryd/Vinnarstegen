@@ -18,21 +18,24 @@ public class EventBusTest {
 
 	private PlayerServiceAsync playerService;
 	private PlayerCommandServiceAsync playerCommandService;
+	private ScoreServiceAsync scoreService;
+	private EventBus eventBus;
 
 	@Before
 	public void before() {
 		playerService = createStrictMock(PlayerServiceAsync.class);
 		playerCommandService = createStrictMock(PlayerCommandServiceAsync.class);
+		scoreService = createStrictMock(ScoreServiceAsync.class);
+		eventBus = EventBusImpl.create(playerCommandService, scoreService, playerService);
 	}
 
 	@After
 	public void after() {
-		verify(playerService, playerCommandService);
+		verify(playerService, playerCommandService, scoreService);
 	}
 
 	@Test
 	public void testUserLoginStatus() {
-		EventBus eventBus = EventBusImpl.create(playerCommandService, null, playerService);
 
 		UserLoginStatusCallback callback = createMockBuilder(UserLoginStatusCallback.class).createStrictMock();
 		replay(callback);

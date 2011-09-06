@@ -27,7 +27,7 @@ public class WinGameInputPresenter implements Presenter {
 
 		void openWinGameInputDialog();
 
-		GameResultDto getGameResult();
+		SetResult getGameResult();
 
 	}
 
@@ -70,11 +70,39 @@ public class WinGameInputPresenter implements Presenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				if (clickedWonOrLostButton == ButtonType.WIN) {
-					eventBus.playerWonOverPlayer(loginData.player, otherPlayer, view.getGameResult(), loginData.player);
+					eventBus.playerWonOverPlayer(loginData.player, otherPlayer, convert(view.getGameResult()),
+							loginData.player);
 				} else {
-					eventBus.playerWonOverPlayer(otherPlayer, loginData.player, view.getGameResult(), loginData.player);
+					eventBus.playerWonOverPlayer(otherPlayer, loginData.player, convert(view.getGameResult()),
+							loginData.player);
 				}
 			}
 		};
 	}
+
+	static GameResultDto convert(SetResult setResult) {
+		GameResultDto returnValue = GameResultDto.createEmptyGameResult();
+		switch (setResult) {
+		case TRE_NOLL:
+			returnValue.setScores[0] = new SetScoreDto(11, 1);
+			returnValue.setScores[1] = new SetScoreDto(11, 1);
+			returnValue.setScores[2] = new SetScoreDto(11, 1);
+			return returnValue;
+		case TRE_ETT:
+			returnValue.setScores[0] = new SetScoreDto(1, 11);
+			returnValue.setScores[1] = new SetScoreDto(11, 1);
+			returnValue.setScores[2] = new SetScoreDto(11, 1);
+			returnValue.setScores[3] = new SetScoreDto(11, 1);
+			return returnValue;
+		case TRE_TVA:
+			returnValue.setScores[0] = new SetScoreDto(1, 11);
+			returnValue.setScores[1] = new SetScoreDto(1, 11);
+			returnValue.setScores[2] = new SetScoreDto(11, 1);
+			returnValue.setScores[3] = new SetScoreDto(11, 1);
+			returnValue.setScores[4] = new SetScoreDto(11, 1);
+			return returnValue;
+		}
+		return returnValue;
+	}
+
 }

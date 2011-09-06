@@ -16,7 +16,8 @@ public class UndoPresenter implements Presenter {
 	final UndoCallback eventUndoCommandCallback = createUndoCallback();
 	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
 	final ClearScoresCallback eventClearAllScoresCallback = createClearScoresCallback();
-	final UpdateUndoCommandCallback eventUpdateUndoCommandCallback = createUpdateUndoCommandCallback();;
+	final UpdateUndoCommandCallback eventUpdateUndoCommandCallback = createUpdateUndoCommandCallback();
+	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
 
 	public interface Display {
 
@@ -101,6 +102,16 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
+	private ChangeNicknameCallback createChangeNicknameCallback() {
+		return new ChangeNicknameCallback() {
+
+			@Override
+			public void onSuccessImpl(PlayerDto result) {
+				loadUndoButton();
+			}
+		};
+	}
+
 	private UndoCallback createUndoCallback() {
 		return new UndoCallback() {
 
@@ -128,7 +139,7 @@ public class UndoPresenter implements Presenter {
 			}
 
 			private boolean ownsLastUndoCommand(PlayerCommandDto result) {
-				return result != null && result.player.email.equals(loginData.player.email);
+				return result != null && result.player.email.address.equals(loginData.player.email.address);
 			}
 		};
 	}

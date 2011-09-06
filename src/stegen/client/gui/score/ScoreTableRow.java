@@ -2,6 +2,7 @@ package stegen.client.gui.score;
 
 import stegen.shared.*;
 
+// Går det att få bort PlayerDTO?
 public class ScoreTableRow {
 	public final PlayerDto player;
 	public final String score;

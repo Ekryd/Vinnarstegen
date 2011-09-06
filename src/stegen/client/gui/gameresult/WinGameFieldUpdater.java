@@ -4,6 +4,7 @@ import stegen.client.gui.score.*;
 
 import com.google.gwt.cell.client.*;
 
+//TODO: vad gör den här?
 public abstract class WinGameFieldUpdater {
 	public enum ButtonType {
 		WIN,

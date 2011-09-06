@@ -7,7 +7,7 @@ import stegen.shared.*;
 
 import com.google.appengine.tools.development.testing.*;
 
-public class SerializerTest {
+public class SerializeDatabaseEntitiesTest {
 	private static final EmailAddressDto email = new EmailAddressDto("address");
 	private static final EmailAddressDto email2 = new EmailAddressDto("address2");
 	private static final PlayerDto player = new PlayerDto(email, "nickname");

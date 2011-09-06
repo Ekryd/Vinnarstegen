@@ -85,7 +85,7 @@ public class ScorePresenter implements Presenter {
 			public void onSuccessImpl(List<PlayerScoreDto> scores) {
 				List<ScoreTableRow> content = new ArrayList<ScoreTableRow>();
 				for (PlayerScoreDto playerScoreDto : scores) {
-					boolean currentUser = playerScoreDto.player.email.equals(loginData.player.email);
+					boolean currentUser = playerScoreDto.player.email.address.equals(loginData.player.email.address);
 					content.add(new ScoreTableRow(playerScoreDto.player, "" + playerScoreDto.score, ""
 							+ playerScoreDto.ranking, playerScoreDto.changedDateTime,
 							playerScoreDto.changedBy.nickname, currentUser));
