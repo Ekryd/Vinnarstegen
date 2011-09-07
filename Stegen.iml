@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="EclipseModuleManager">
+    <libelement value="jar://$USER_HOME$/Library/appengine-java-sdk-1.5.0.1/lib/testing/appengine-testing.jar!/" />
+    <libelement value="jar://$USER_HOME$/Library/appengine-java-sdk-1.5.0.1/lib/impl/appengine-api-stubs.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/war/WEB-INF/lib/gson-1.7.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/junit-4.8.1.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/cglib-nodep-2.2.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/easymock-3.0.jar!/" />
+    <libelement value="jar://$MODULE_DIR$/lib/objenesis-1.2.jar!/" />
+    <conelement value="com.google.appengine.eclipse.core.GAE_CONTAINER" />
+    <conelement value="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT" />
+    <conelement value="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)" />
+    <src_description expected_position="0">
+      <src_folder value="file://$MODULE_DIR$/src" expected_position="0" />
+      <src_folder value="file://$MODULE_DIR$/test" expected_position="1" />
+    </src_description>
+  </component>
+  <component name="FacetManager">
+    <facet type="gwt" name="GWT">
+      <configuration>
+        <setting name="compilerMaxHeapSize" value="128" />
+        <setting name="gwtScriptOutputStyle" value="DETAILED" />
+        <setting name="gwtSdkUrl" value="file://$USER_HOME$/Library/gwt-2.3.0" />
+      </configuration>
+    </facet>
+  </component>
+  <component name="NewModuleRootManager" inherit-compiler-output="false">
+    <output url="file://$MODULE_DIR$/war/WEB-INF/classes" />
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="false" />
+    </content>
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="com.google.appengine.eclipse.core.GAE_CONTAINER" level="application" />
+    <orderEntry type="library" name="com.google.gwt.eclipse.core.GWT_CONTAINER/GWT" level="application" />
+    <orderEntry type="inheritedJdk" />
+    <orderEntry type="module-library">
+      <library name="appengine-testing.jar">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Library/appengine-java-sdk-1.5.0.1/lib/testing/appengine-testing.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="appengine-api-stubs.jar">
+        <CLASSES>
+          <root url="jar://$USER_HOME$/Library/appengine-java-sdk-1.5.0.1/lib/impl/appengine-api-stubs.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="gson-1.7.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/war/WEB-INF/lib/gson-1.7.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="com.google.appengine.eclipse.core.GAE_CONTAINER/App Engine (1)" level="application" />
+    <orderEntry type="module-library">
+      <library name="junit-4.8.1.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/junit-4.8.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="cglib-nodep-2.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/cglib-nodep-2.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="easymock-3.0.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/easymock-3.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/easymock/easymock/3.0/easymock-3.0-sources.jar!/" />
+        </SOURCES>
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library name="objenesis-1.2.jar">
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/lib/objenesis-1.2.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="GAE tools" level="project" />
+    <orderEntry type="library" name="gwt-user" level="project" />
+  </component>
+</module>
+

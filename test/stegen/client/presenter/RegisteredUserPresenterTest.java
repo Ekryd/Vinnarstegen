@@ -54,7 +54,7 @@ public class RegisteredUserPresenterTest {
 		view.setUserName("nickname");
 		replay(view);
 
-		presenter.eventChangeNicknameHandler.onSuccess(new PlayerDto(null, "nickname"));
+		presenter.eventCommandChangeNicknameHandler.onSuccess(new PlayerDto(null, "nickname"));
 
 		verify(view);
 	}
@@ -69,7 +69,7 @@ public class RegisteredUserPresenterTest {
 	private void setupInitializationExpects() {
 		view.setUserName("nickname");
 		view.addClickChangeUserNameHandler(presenter.clickChangeUserNameHandler);
-		eventBus.addHandler(presenter.eventChangeNicknameHandler);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameHandler);
 		replay(view, eventBus);
 	}
 

@@ -19,10 +19,10 @@ public class MessagesPresenter implements Presenter {
 	private final MessagePrefixGenerator messagePrefixGenerator;
 	final ClickHandler clickOpenMessageInputHandler = createClickOpenMessageInputHandler();
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
-	final UpdateSendMessageListCallback eventChangedMessagesCallback = creatEventChangedMessagesCallback();
-	final SendMessageCallback eventSendMessageCallback = createEventSendMessageCallback();
-	final RefreshCallback eventRefreshCallback = createRefreshMessagesCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final UpdateSendMessageListCallback eventUpdateSendMessageListCallback = createUpdateSendMessageListCallback();
+	final CommandSendMessageCallback eventCommandSendMessageCallback = createCommandSendMessageCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 	private MessagePrefix currentMessagePrefix;
 
 	public interface Display {
@@ -68,10 +68,10 @@ public class MessagesPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventSendMessageCallback);
-		eventBus.addHandler(eventChangedMessagesCallback);
-		eventBus.addHandler(eventRefreshCallback);
-		eventBus.addHandler(eventChangeNicknameCallback);
+		eventBus.addHandler(eventCommandSendMessageCallback);
+		eventBus.addHandler(eventUpdateSendMessageListCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private void loadMessages() {
@@ -105,8 +105,8 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private SendMessageCallback createEventSendMessageCallback() {
-		return new SendMessageCallback() {
+	private CommandSendMessageCallback createCommandSendMessageCallback() {
+		return new CommandSendMessageCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -116,7 +116,7 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private UpdateSendMessageListCallback creatEventChangedMessagesCallback() {
+	private UpdateSendMessageListCallback createUpdateSendMessageListCallback() {
 		return new UpdateSendMessageListCallback() {
 
 			@Override
@@ -131,8 +131,8 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshMessagesCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createCommandRefreshMessagesCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -142,8 +142,8 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {

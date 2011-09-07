@@ -12,7 +12,7 @@ public class RegisteredUserPresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler clickChangeUserNameHandler = createClickChangeUserNameHandler();
-	final ChangeNicknameCallback eventChangeNicknameHandler = createEventChangeNicknameHandler();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameHandler = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void setUserName(String name);
@@ -33,7 +33,7 @@ public class RegisteredUserPresenter implements Presenter {
 		view.setUserName(loginData.player.nickname);
 		view.addClickChangeUserNameHandler(clickChangeUserNameHandler);
 
-		eventBus.addHandler(eventChangeNicknameHandler);
+		eventBus.addHandler(eventCommandChangeNicknameHandler);
 	}
 
 	private ClickHandler createClickChangeUserNameHandler() {
@@ -50,8 +50,8 @@ public class RegisteredUserPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createEventChangeNicknameHandler() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {

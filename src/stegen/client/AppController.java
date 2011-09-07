@@ -17,7 +17,7 @@ import stegen.shared.*;
 public class AppController {
 
 	final EventBus eventBus;
-	final UserLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
+	final UpdateLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
 	private String hostPageBaseURL;
 
 	private AppController(EventBus eventBus) {
@@ -43,8 +43,8 @@ public class AppController {
 		eventBus.addHandler(eventCheckLoginStatusHandler);
 	}
 
-	private UserLoginStatusCallback createEventCheckLoginStatusHandler() {
-		return new UserLoginStatusCallback() {
+	private UpdateLoginStatusCallback createEventCheckLoginStatusHandler() {
+		return new UpdateLoginStatusCallback() {
 
 			@Override
 			public void onSuccessImpl(LoginDataDto loginData) {

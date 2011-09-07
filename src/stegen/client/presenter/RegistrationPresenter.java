@@ -12,7 +12,7 @@ public class RegistrationPresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler checkRegistrationOkHandler = createCheckRegistrationOkHandler();
-	final RegisterPlayerCallback eventRegisterPlayerHandler = createEventRegisterPlayerHandler();
+	final CommandRegisterPlayerCallback eventCommandRegisterPlayerHandler = createCommandRegisterPlayerCallback();
 	private final String hostPageBaseURL;
 
 	public interface Display {
@@ -49,11 +49,11 @@ public class RegistrationPresenter implements Presenter {
 	@Override
 	public void go() {
 		view.addClickRegistrationHandler(checkRegistrationOkHandler);
-		eventBus.addHandler(eventRegisterPlayerHandler);
+		eventBus.addHandler(eventCommandRegisterPlayerHandler);
 	}
 
-	private RegisterPlayerCallback createEventRegisterPlayerHandler() {
-		return new RegisterPlayerCallback() {
+	private CommandRegisterPlayerCallback createCommandRegisterPlayerCallback() {
+		return new CommandRegisterPlayerCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {

@@ -65,7 +65,7 @@ public class RegisterationPresenterTest {
 		eventBus.getUserLoginStatus("hostPageBaseURL");
 		replay(view, eventBus);
 
-		presenter.eventRegisterPlayerHandler.onSuccess(null);
+		presenter.eventCommandRegisterPlayerHandler.onSuccess(null);
 	}
 
 	private void setupPresenter() {
@@ -75,7 +75,7 @@ public class RegisterationPresenterTest {
 
 	private void setupInitializationExpects() {
 		view.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
-		eventBus.addHandler(presenter.eventRegisterPlayerHandler);
+		eventBus.addHandler(presenter.eventCommandRegisterPlayerHandler);
 		replay(view, eventBus);
 	}
 

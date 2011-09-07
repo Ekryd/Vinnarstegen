@@ -11,10 +11,10 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdatePlayerMiscCommandListCallback eventUpdatePlayerMiscCommandListCallback = creatUpdatePlayerMiscCommandListCallback();
-	final RefreshCallback eventRefreshCallback = createRefreshCallback();
-	final UndoCallback eventUndoCallback = createUndoCallback();
-	final ChallengeCallback eventChallengeCallback = createChallengeCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createRefreshCallback();
+	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
+	final CommandChallengeCallback eventCommandChallengeCallback = createCommandChallengeCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void changePlayerMiscCommandList(List<PlayerMiscCommandRow> content);
@@ -33,10 +33,10 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 
 	private void initEvents() {
 		eventBus.addHandler(eventUpdatePlayerMiscCommandListCallback);
-		eventBus.addHandler(eventRefreshCallback);
-		eventBus.addHandler(eventUndoCallback);
-		eventBus.addHandler(eventChallengeCallback);
-		eventBus.addHandler(eventChangeNicknameCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
+		eventBus.addHandler(eventCommandUndoCallback);
+		eventBus.addHandler(eventCommandChallengeCallback);
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private void loadPlayerMiscCommands() {
@@ -57,8 +57,8 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createRefreshCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -67,8 +67,8 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private UndoCallback createUndoCallback() {
-		return new UndoCallback() {
+	private CommandUndoCallback createCommandUndoCallback() {
+		return new CommandUndoCallback() {
 
 			@Override
 			public void onSuccessImpl(UndoPlayerCommandResult result) {
@@ -77,8 +77,8 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private ChallengeCallback createChallengeCallback() {
-		return new ChallengeCallback() {
+	private CommandChallengeCallback createCommandChallengeCallback() {
+		return new CommandChallengeCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -87,8 +87,8 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {

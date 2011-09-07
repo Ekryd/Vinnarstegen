@@ -18,11 +18,6 @@ public class EventBusImpl implements EventBus {
 		return new EventBusImpl(playerCommandService, scoreService, playerService, new CallbackRepositoryImpl());
 	}
 
-	public static EventBus createForTest(PlayerCommandServiceAsync playerCommandService,
-			ScoreServiceAsync scoreService, PlayerServiceAsync playerService, CallbackRepository callbacks) {
-		return new EventBusImpl(playerCommandService, scoreService, playerService, callbacks);
-	}
-
 	private EventBusImpl(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
 			PlayerServiceAsync playerService, CallbackRepository callbacks) {
 		this.playerCommandService = playerCommandService;
@@ -44,26 +39,26 @@ public class EventBusImpl implements EventBus {
 
 	@Override
 	public void getUserLoginStatus(String hostPageBaseURL) {
-		UserLoginStatusCallback callback = callbacks.get(UserLoginStatusCallback.class);
+		UpdateLoginStatusCallback callback = callbacks.get(UpdateLoginStatusCallback.class);
 		playerService.getUserLoginStatus(hostPageBaseURL, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override
 	public void changeNickname(final PlayerDto player, final String nickname) {
-		ChangeNicknameCallback callback = callbacks.get(ChangeNicknameCallback.class);
-		playerService.changeNickname(player, nickname, createEmptyCallbackIfNull(callback));
+		CommandChangeNicknameCallback callbackCommand = callbacks.get(CommandChangeNicknameCallback.class);
+		playerService.changeNickname(player, nickname, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void registerPlayer(EmailAddressDto email) {
-		RegisterPlayerCallback callback = callbacks.get(RegisterPlayerCallback.class);
-		playerService.registerPlayer(email, createEmptyCallbackIfNull(callback));
+		CommandRegisterPlayerCallback callbackCommand = callbacks.get(CommandRegisterPlayerCallback.class);
+		playerService.registerPlayer(email, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void sendMessage(PlayerDto player, String message) {
-		SendMessageCallback callback = callbacks.get(SendMessageCallback.class);
-		playerService.sendMessage(player, message, createEmptyCallbackIfNull(callback));
+		CommandSendMessageCallback callbackCommand = callbacks.get(CommandSendMessageCallback.class);
+		playerService.sendMessage(player, message, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
@@ -80,32 +75,32 @@ public class EventBusImpl implements EventBus {
 
 	@Override
 	public void clearAllScores(PlayerDto changedBy) {
-		ClearScoresCallback callback = callbacks.get(ClearScoresCallback.class);
-		scoreService.clearAllScores(changedBy, createEmptyCallbackIfNull(callback));
+		CommandClearScoresCallback callbackCommand = callbacks.get(CommandClearScoresCallback.class);
+		scoreService.clearAllScores(changedBy, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void challengePlayer(ChallengeMessageDto message) {
-		ChallengeCallback callback = callbacks.get(ChallengeCallback.class);
-		scoreService.challengePlayer(message, createEmptyCallbackIfNull(callback));
+		CommandChallengeCallback callbackCommand = callbacks.get(CommandChallengeCallback.class);
+		scoreService.challengePlayer(message, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void undoPlayerCommand(PlayerDto player) {
-		UndoCallback callback = callbacks.get(UndoCallback.class);
-		playerCommandService.undoPlayerCommand(player, createEmptyCallbackIfNull(callback));
+		CommandUndoCallback callbackCommand = callbacks.get(CommandUndoCallback.class);
+		playerCommandService.undoPlayerCommand(player, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy) {
-		PlayerWonCallback callback = callbacks.get(PlayerWonCallback.class);
-		scoreService.playerWonOverPlayer(winner, loser, result, changedBy, createEmptyCallbackIfNull(callback));
+		CommandPlayerWonCallback callbackCommand = callbacks.get(CommandPlayerWonCallback.class);
+		scoreService.playerWonOverPlayer(winner, loser, result, changedBy, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
 	public void refresh() {
-		RefreshCallback callback = callbacks.get(RefreshCallback.class);
-		createEmptyCallbackIfNull(callback).onSuccess(null);
+		CommandRefreshCallback callbackCommand = callbacks.get(CommandRefreshCallback.class);
+		createEmptyCallbackIfNull(callbackCommand).onSuccess(null);
 	}
 
 	@Override

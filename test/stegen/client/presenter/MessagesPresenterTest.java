@@ -70,7 +70,7 @@ public class MessagesPresenterTest {
 		eventBus.updateSendMessageList();
 		replay(eventBus);
 
-		presenter.eventSendMessageCallback.onSuccess(null);
+		presenter.eventCommandSendMessageCallback.onSuccess(null);
 
 		verify(eventBus);
 	}
@@ -86,7 +86,7 @@ public class MessagesPresenterTest {
 
 		List<PlayerCommandDto> list = new ArrayList<PlayerCommandDto>();
 		list.add(new PlayerCommandDto(loginData.player, new Date(10000L), "description"));
-		presenter.eventChangedMessagesCallback.onSuccess(list);
+		presenter.eventUpdateSendMessageListCallback.onSuccess(list);
 
 		verify(view);
 	}
@@ -97,7 +97,7 @@ public class MessagesPresenterTest {
 
 		eventBus.updateSendMessageList();
 		replay(eventBus, view);
-		presenter.eventChangeNicknameCallback.onSuccess(null);
+		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 	}
@@ -109,7 +109,7 @@ public class MessagesPresenterTest {
 		view.setMessageButtonTitle("buttonText");
 		eventBus.updateSendMessageList();
 		replay(eventBus, view);
-		presenter.eventRefreshCallback.onSuccess(null);
+		presenter.eventCommandRefreshCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 	}
@@ -130,10 +130,10 @@ public class MessagesPresenterTest {
 		view.setMessageButtonTitle("buttonText");
 		view.addClickOpenMessageInputHandler(presenter.clickOpenMessageInputHandler);
 		view.addClickSendMessageHandler(presenter.clickSendMessageHandler);
-		eventBus.addHandler(presenter.eventSendMessageCallback);
-		eventBus.addHandler(presenter.eventChangedMessagesCallback);
-		eventBus.addHandler(presenter.eventRefreshCallback);
-		eventBus.addHandler(presenter.eventChangeNicknameCallback);
+		eventBus.addHandler(presenter.eventCommandSendMessageCallback);
+		eventBus.addHandler(presenter.eventUpdateSendMessageListCallback);
+		eventBus.addHandler(presenter.eventCommandRefreshCallback);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		eventBus.updateSendMessageList();
 		replay(view, eventBus);
 	}

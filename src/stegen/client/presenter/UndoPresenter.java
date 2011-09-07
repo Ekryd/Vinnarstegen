@@ -12,12 +12,12 @@ public class UndoPresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler clickUndoInputHandler = createClickUndoHandler();
-	final RefreshCallback eventRefreshCallback = createRefreshCallback();
-	final UndoCallback eventUndoCommandCallback = createUndoCallback();
-	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
-	final ClearScoresCallback eventClearAllScoresCallback = createClearScoresCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final CommandUndoCallback eventCommandUndoCommandCallback = createCommandUndoCallback();
+	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
+	final CommandClearScoresCallback eventCommandClearAllScoresCallback = createCommandClearScoresCallback();
 	final UpdateUndoCommandCallback eventUpdateUndoCommandCallback = createUpdateUndoCommandCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 
@@ -52,10 +52,10 @@ public class UndoPresenter implements Presenter {
 
 	private void initEvents() {
 		eventBus.addHandler(eventUpdateUndoCommandCallback);
-		eventBus.addHandler(eventUndoCommandCallback);
-		eventBus.addHandler(eventPlayerWonCallback);
-		eventBus.addHandler(eventClearAllScoresCallback);
-		eventBus.addHandler(eventRefreshCallback);
+		eventBus.addHandler(eventCommandUndoCommandCallback);
+		eventBus.addHandler(eventCommandPlayerWonCallback);
+		eventBus.addHandler(eventCommandClearAllScoresCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
 	}
 
 	private void loadUndoButton() {
@@ -72,8 +72,8 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createCommandRefreshCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -82,8 +82,8 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private ClearScoresCallback createClearScoresCallback() {
-		return new ClearScoresCallback() {
+	private CommandClearScoresCallback createCommandClearScoresCallback() {
+		return new CommandClearScoresCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -92,8 +92,8 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private PlayerWonCallback createPlayerWonCallback() {
-		return new PlayerWonCallback() {
+	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
+		return new CommandPlayerWonCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -102,8 +102,8 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {
@@ -112,8 +112,8 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private UndoCallback createUndoCallback() {
-		return new UndoCallback() {
+	private CommandUndoCallback createCommandUndoCallback() {
+		return new CommandUndoCallback() {
 
 			@Override
 			public void onSuccessImpl(UndoPlayerCommandResult result) {

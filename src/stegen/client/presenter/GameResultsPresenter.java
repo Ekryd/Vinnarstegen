@@ -10,12 +10,12 @@ import stegen.shared.*;
 public class GameResultsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
-	final UpdateGameResultListCallback eventUpdateGameResultListCallback = creatUpdateGameResultListCallback();
-	final RefreshCallback eventRefreshCallback = createRefreshCallback();
-	final UndoCallback eventUndoCallback = createUndoCallback();
-	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
-	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final UpdateGameResultListCallback eventUpdateGameResultListCallback = createUpdateGameResultListCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
+	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
+	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void changeGameResultList(List<GameResultsRow> content);
@@ -34,18 +34,18 @@ public class GameResultsPresenter implements Presenter {
 
 	private void initEvents() {
 		eventBus.addHandler(eventUpdateGameResultListCallback);
-		eventBus.addHandler(eventRefreshCallback);
-		eventBus.addHandler(eventUndoCallback);
-		eventBus.addHandler(eventPlayerWonCallback);
-		eventBus.addHandler(eventClearScoresCallback);
-		eventBus.addHandler(eventChangeNicknameCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
+		eventBus.addHandler(eventCommandUndoCallback);
+		eventBus.addHandler(eventCommandPlayerWonCallback);
+		eventBus.addHandler(eventCommandClearScoresCallback);
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private void loadGameResults() {
 		eventBus.updateGameResultList();
 	}
 
-	private UpdateGameResultListCallback creatUpdateGameResultListCallback() {
+	private UpdateGameResultListCallback createUpdateGameResultListCallback() {
 		return new UpdateGameResultListCallback() {
 
 			@Override
@@ -60,8 +60,8 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createCommandRefreshCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -70,8 +70,8 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private UndoCallback createUndoCallback() {
-		return new UndoCallback() {
+	private CommandUndoCallback createCommandUndoCallback() {
+		return new CommandUndoCallback() {
 
 			@Override
 			public void onSuccessImpl(UndoPlayerCommandResult result) {
@@ -80,8 +80,8 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private PlayerWonCallback createPlayerWonCallback() {
-		return new PlayerWonCallback() {
+	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
+		return new CommandPlayerWonCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -90,8 +90,8 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private ClearScoresCallback createClearScoresCallback() {
-		return new ClearScoresCallback() {
+	private CommandClearScoresCallback createCommandClearScoresCallback() {
+		return new CommandClearScoresCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -100,8 +100,8 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {

@@ -55,25 +55,25 @@ public class PlayerMiscCommandsPresenterTest {
 
 		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventChangeNicknameCallback.onSuccess(null);
+		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventChallengeCallback.onSuccess(null);
+		presenter.eventCommandChallengeCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventRefreshCallback.onSuccess(null);
+		presenter.eventCommandRefreshCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventUndoCallback.onSuccess(null);
+		presenter.eventCommandUndoCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 	}
@@ -87,10 +87,10 @@ public class PlayerMiscCommandsPresenterTest {
 
 	private void setupInitializationExpects() {
 		eventBus.addHandler(presenter.eventUpdatePlayerMiscCommandListCallback);
-		eventBus.addHandler(presenter.eventRefreshCallback);
-		eventBus.addHandler(presenter.eventUndoCallback);
-		eventBus.addHandler(presenter.eventChallengeCallback);
-		eventBus.addHandler(presenter.eventChangeNicknameCallback);
+		eventBus.addHandler(presenter.eventCommandRefreshCallback);
+		eventBus.addHandler(presenter.eventCommandUndoCallback);
+		eventBus.addHandler(presenter.eventCommandChallengeCallback);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		eventBus.updatePlayerMiscCommandList();
 		replay(view, eventBus);
 	}

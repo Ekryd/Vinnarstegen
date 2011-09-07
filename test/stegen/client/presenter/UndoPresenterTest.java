@@ -41,25 +41,25 @@ public class UndoPresenterTest {
 
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventClearAllScoresCallback.onSuccessImpl(null);
+		presenter.eventCommandClearAllScoresCallback.onSuccessImpl(null);
 		verify(view, eventBus);
 		reset(view, eventBus);
 
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventPlayerWonCallback.onSuccessImpl(null);
+		presenter.eventCommandPlayerWonCallback.onSuccessImpl(null);
 		verify(view, eventBus);
 		reset(view, eventBus);
 
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventRefreshCallback.onSuccessImpl(null);
+		presenter.eventCommandRefreshCallback.onSuccessImpl(null);
 		verify(view, eventBus);
 		reset(view, eventBus);
 
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventChangeNicknameCallback.onSuccessImpl(null);
+		presenter.eventCommandChangeNicknameCallback.onSuccessImpl(null);
 		verify(view, eventBus);
 		reset(view, eventBus);
 	}
@@ -71,7 +71,7 @@ public class UndoPresenterTest {
 		view.showUndoFailAlert();
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventUndoCommandCallback.onSuccessImpl(UndoPlayerCommandResult.FAILURE);
+		presenter.eventCommandUndoCommandCallback.onSuccessImpl(UndoPlayerCommandResult.FAILURE);
 		verify(view, eventBus);
 		reset(view, eventBus);
 	}
@@ -111,10 +111,10 @@ public class UndoPresenterTest {
 	private void setupInitializationExpects() {
 		view.addClickUndoHandler(presenter.clickUndoInputHandler);
 		eventBus.addHandler(presenter.eventUpdateUndoCommandCallback);
-		eventBus.addHandler(presenter.eventUndoCommandCallback);
-		eventBus.addHandler(presenter.eventPlayerWonCallback);
-		eventBus.addHandler(presenter.eventClearAllScoresCallback);
-		eventBus.addHandler(presenter.eventRefreshCallback);
+		eventBus.addHandler(presenter.eventCommandUndoCommandCallback);
+		eventBus.addHandler(presenter.eventCommandPlayerWonCallback);
+		eventBus.addHandler(presenter.eventCommandClearAllScoresCallback);
+		eventBus.addHandler(presenter.eventCommandRefreshCallback);
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
 	}

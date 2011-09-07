@@ -11,8 +11,8 @@ public class LoginStatusesPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdateLoginStatusListCallback eventUpdateLoginStatusListCallback = creatUpdateLoginStatusListCallback();
-	final RefreshCallback eventRefreshCallback = createRefreshCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void changeLoginStatusList(List<LoginStatusRow> content);
@@ -31,8 +31,8 @@ public class LoginStatusesPresenter implements Presenter {
 
 	private void initEvents() {
 		eventBus.addHandler(eventUpdateLoginStatusListCallback);
-		eventBus.addHandler(eventRefreshCallback);
-		eventBus.addHandler(eventChangeNicknameCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private void loadLoginStatuses() {
@@ -53,8 +53,8 @@ public class LoginStatusesPresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createCommandRefreshCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -63,8 +63,8 @@ public class LoginStatusesPresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {

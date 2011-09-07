@@ -55,31 +55,31 @@ public class GameResultsPresenterTest {
 
 		eventBus.updateGameResultList();
 		replay(eventBus, view);
-		presenter.eventClearScoresCallback.onSuccess(null);
+		presenter.eventCommandClearScoresCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updateGameResultList();
 		replay(eventBus, view);
-		presenter.eventChangeNicknameCallback.onSuccess(null);
+		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updateGameResultList();
 		replay(eventBus, view);
-		presenter.eventPlayerWonCallback.onSuccess(null);
+		presenter.eventCommandPlayerWonCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updateGameResultList();
 		replay(eventBus, view);
-		presenter.eventRefreshCallback.onSuccess(null);
+		presenter.eventCommandRefreshCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updateGameResultList();
 		replay(eventBus, view);
-		presenter.eventUndoCallback.onSuccess(null);
+		presenter.eventCommandUndoCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 	}
@@ -93,11 +93,11 @@ public class GameResultsPresenterTest {
 
 	private void setupInitializationExpects() {
 		eventBus.addHandler(presenter.eventUpdateGameResultListCallback);
-		eventBus.addHandler(presenter.eventRefreshCallback);
-		eventBus.addHandler(presenter.eventUndoCallback);
-		eventBus.addHandler(presenter.eventPlayerWonCallback);
-		eventBus.addHandler(presenter.eventClearScoresCallback);
-		eventBus.addHandler(presenter.eventChangeNicknameCallback);
+		eventBus.addHandler(presenter.eventCommandRefreshCallback);
+		eventBus.addHandler(presenter.eventCommandUndoCallback);
+		eventBus.addHandler(presenter.eventCommandPlayerWonCallback);
+		eventBus.addHandler(presenter.eventCommandClearScoresCallback);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		eventBus.updateGameResultList();
 		replay(view, eventBus);
 	}

@@ -55,13 +55,13 @@ public class LoginStatusesPresenterTest {
 
 		eventBus.updateLoginStatusList();
 		replay(eventBus, view);
-		presenter.eventChangeNicknameCallback.onSuccess(null);
+		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
 		eventBus.updateLoginStatusList();
 		replay(eventBus, view);
-		presenter.eventRefreshCallback.onSuccess(null);
+		presenter.eventCommandRefreshCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 	}
@@ -75,8 +75,8 @@ public class LoginStatusesPresenterTest {
 
 	private void setupInitializationExpects() {
 		eventBus.addHandler(presenter.eventUpdateLoginStatusListCallback);
-		eventBus.addHandler(presenter.eventRefreshCallback);
-		eventBus.addHandler(presenter.eventChangeNicknameCallback);
+		eventBus.addHandler(presenter.eventCommandRefreshCallback);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		eventBus.updateLoginStatusList();
 		replay(view, eventBus);
 	}

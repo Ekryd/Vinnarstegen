@@ -13,13 +13,13 @@ public class ScorePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
-	final ClearScoresCallback eventClearScoresCallback = createClearScoresCallback();
-	final UpdatePlayerScoreListCallback eventChangedScoresCallback = creatEventChangedScoresCallback();
+	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
+	final UpdatePlayerScoreListCallback eventChangedScoresCallback = createUpdatePlayerScoreListCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
-	final RefreshCallback eventRefreshCallback = createRefreshCallback();
-	final UndoCallback eventUndoCallback = createUndoCallback();
-	final PlayerWonCallback eventPlayerWonCallback = createPlayerWonCallback();
-	final ChangeNicknameCallback eventChangeNicknameCallback = createChangeNicknameCallback();
+	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
+	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
@@ -46,12 +46,12 @@ public class ScorePresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventClearScoresCallback);
+		eventBus.addHandler(eventCommandClearScoresCallback);
 		eventBus.addHandler(eventChangedScoresCallback);
-		eventBus.addHandler(eventRefreshCallback);
-		eventBus.addHandler(eventUndoCallback);
-		eventBus.addHandler(eventPlayerWonCallback);
-		eventBus.addHandler(eventChangeNicknameCallback);
+		eventBus.addHandler(eventCommandRefreshCallback);
+		eventBus.addHandler(eventCommandUndoCallback);
+		eventBus.addHandler(eventCommandPlayerWonCallback);
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private void loadScores() {
@@ -68,8 +68,8 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private ClearScoresCallback createClearScoresCallback() {
-		return new ClearScoresCallback() {
+	private CommandClearScoresCallback createCommandClearScoresCallback() {
+		return new CommandClearScoresCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -78,7 +78,7 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private UpdatePlayerScoreListCallback creatEventChangedScoresCallback() {
+	private UpdatePlayerScoreListCallback createUpdatePlayerScoreListCallback() {
 		return new UpdatePlayerScoreListCallback() {
 
 			@Override
@@ -95,8 +95,8 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private RefreshCallback createRefreshCallback() {
-		return new RefreshCallback() {
+	private CommandRefreshCallback createCommandRefreshCallback() {
+		return new CommandRefreshCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -105,8 +105,8 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private UndoCallback createUndoCallback() {
-		return new UndoCallback() {
+	private CommandUndoCallback createCommandUndoCallback() {
+		return new CommandUndoCallback() {
 
 			@Override
 			public void onSuccessImpl(UndoPlayerCommandResult result) {
@@ -115,8 +115,8 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private PlayerWonCallback createPlayerWonCallback() {
-		return new PlayerWonCallback() {
+	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
+		return new CommandPlayerWonCallback() {
 
 			@Override
 			public void onSuccessImpl(Void result) {
@@ -125,8 +125,8 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private ChangeNicknameCallback createChangeNicknameCallback() {
-		return new ChangeNicknameCallback() {
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
 
 			@Override
 			public void onSuccessImpl(PlayerDto result) {
