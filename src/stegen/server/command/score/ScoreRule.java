@@ -1,6 +1,5 @@
-package stegen.server;
+package stegen.server.command.score;
 
-import stegen.client.dto.*;
 import stegen.server.database.*;
 import stegen.shared.*;
 
