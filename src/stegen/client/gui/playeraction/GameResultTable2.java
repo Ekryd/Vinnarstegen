@@ -2,16 +2,17 @@ package stegen.client.gui.playeraction;
 
 import java.util.*;
 
-import com.google.gwt.i18n.client.*;
+import stegen.client.gui.*;
+import stegen.client.service.*;
+
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
 public class GameResultTable2 implements IsWidget {
 	private final CellTable<GameResultsRow> baseWidget = new CellTable<GameResultsRow>();
-
 	private final ListDataProvider<GameResultsRow> undoListDataProvider = new ListDataProvider<GameResultsRow>();
-	private DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
+	private DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
 	public GameResultTable2() {
 		initLayout();
@@ -30,7 +31,7 @@ public class GameResultTable2 implements IsWidget {
 
 			@Override
 			public String getValue(GameResultsRow object) {
-				return dateTimeFormat.format(object.gameDateTime);
+				return dateTimeFormats.formatDate(object.gameDateTime);
 			}
 		}, "Datum");
 		baseWidget.addColumn(new TextColumn<GameResultsRow>() {

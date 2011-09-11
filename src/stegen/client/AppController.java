@@ -83,7 +83,8 @@ public class AppController {
 		new LogoutPresenter(new LogoutView(), loginData).go();
 		new RegisteredUserPresenter(new RegisteredUserView(), loginData, eventBus).go();
 		new MessagesPresenter(new MessagesView(), loginData, new MessagePrefixGeneratorImpl(), eventBus).go();
-		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl()).go();
+		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl(),
+				new DateTimeFormatsImpl()).go();
 		new RefreshPresenter(new RefreshView(), eventBus).go();
 	}
 }

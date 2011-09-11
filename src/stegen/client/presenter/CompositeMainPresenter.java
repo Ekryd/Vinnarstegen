@@ -10,6 +10,7 @@ public class CompositeMainPresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
+	private final DateTimeFormats dateTimeFormats;
 
 	public interface Display {
 
@@ -30,11 +31,12 @@ public class CompositeMainPresenter implements Presenter {
 	}
 
 	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData, EventBus eventBus,
-			InsultFactory insultFactory) {
+			InsultFactory insultFactory, DateTimeFormats dateTimeFormats) {
 		this.view = compositeMainView;
 		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
+		this.dateTimeFormats = dateTimeFormats;
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class CompositeMainPresenter implements Presenter {
 
 	private void initPresenterParts() {
 		new ScorePresenter(view.getScoreView(), loginData, eventBus).go();
-		new ChallengePresenter(view.getChallengeInputView(), loginData, eventBus, insultFactory).go();
+		new ChallengePresenter(view.getChallengeInputView(), loginData, eventBus, insultFactory, dateTimeFormats).go();
 		new WinGameInputPresenter(view.getWinGameInputView(), loginData, eventBus).go();
 		new GameResultsPresenter(view.getGameResultsView(), eventBus).go();
 		new UndoPresenter(view.getUndoView(), loginData, eventBus).go();

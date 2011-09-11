@@ -13,6 +13,7 @@ public class ChallengePresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
+	private final DateTimeFormats dateTimeFormats;
 
 	FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
 	ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
@@ -30,11 +31,13 @@ public class ChallengePresenter implements Presenter {
 		void openChallengeInputDialog();
 	}
 
-	public ChallengePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus, InsultFactory insultFactory) {
+	public ChallengePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus,
+			InsultFactory insultFactory, DateTimeFormats dateTimeFormats) {
 		this.view = scoreView;
 		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
+		this.dateTimeFormats = dateTimeFormats;
 	}
 
 	@Override
@@ -55,7 +58,7 @@ public class ChallengePresenter implements Presenter {
 				PlayerDto challenger = loginData.player;
 				PlayerDto challengee = row.player;
 				message = new ChallengeMessage(challenger, challengee, insultFactory.createCompleteInsult(),
-						insultFactory.createCompleteInsult(), insultFactory.getChallengeDateDefaultOneDayFromNow());
+						insultFactory.createCompleteInsult(), dateTimeFormats.getChallengeDateDefaultOneDayFromNow());
 				view.setupChallengeInputDialog(row.player.nickname, message.getInsult(), message.getSubject(),
 						message.getMessage());
 				view.openChallengeInputDialog();

@@ -4,10 +4,7 @@ import java.util.*;
 
 import stegen.client.service.*;
 
-import com.google.gwt.i18n.client.*;
-
 public class InsultFactoryImpl implements InsultFactory {
-	private final DateTimeFormat dateFormat = DateTimeFormat.getFormat("'kl 'HH:mm' den 'dd/MM");
 
 	private final Random random = new Random();
 	private final InsultAdjective[] adjectives = new InsultAdjective[] { new InsultAdjective("gammal", "gammlat"),
@@ -46,12 +43,6 @@ public class InsultFactoryImpl implements InsultFactory {
 		returnValue.append(adjective.getText(noun.enOrEtt)).append(" ");
 		returnValue.append(noun.nounText);
 		return returnValue.toString();
-	}
-
-	@Override
-	public String getChallengeDateDefaultOneDayFromNow() {
-		Date date = new Date(System.currentTimeMillis() + (1000L * 60 * 60 * 24));
-		return dateFormat.format(date);
 	}
 
 }

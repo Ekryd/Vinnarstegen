@@ -2,7 +2,9 @@ package stegen.client.gui.message;
 
 import java.util.*;
 
-import com.google.gwt.i18n.client.*;
+import stegen.client.gui.*;
+import stegen.client.service.*;
+
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
@@ -10,7 +12,7 @@ import com.google.gwt.view.client.*;
 public class MessageTable2 implements IsWidget {
 	private final CellTable<MessageTableRow> baseWidget = new CellTable<MessageTableRow>();
 	private final ListDataProvider<MessageTableRow> dataProvider = new ListDataProvider<MessageTableRow>();
-	private DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat("yyyy-MM-dd HH:mm");
+	private final DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
 	public MessageTable2() {
 		init();
@@ -29,7 +31,7 @@ public class MessageTable2 implements IsWidget {
 
 			@Override
 			public String getValue(MessageTableRow object) {
-				return dateTimeFormat.format(object.messageDate);
+				return dateTimeFormats.formatDate(object.messageDate);
 			}
 		}, "Datum");
 		baseWidget.addColumn(new TextColumn<MessageTableRow>() {

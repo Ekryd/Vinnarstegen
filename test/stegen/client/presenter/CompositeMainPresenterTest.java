@@ -16,6 +16,7 @@ public class CompositeMainPresenterTest {
 	private EventBus eventBus;
 	private CompositeMainPresenter presenter;
 	private InsultFactory insultFactory;
+	private DateTimeFormats dateTimeFormats;
 
 	@Test
 	public void testShowView() {
@@ -31,7 +32,8 @@ public class CompositeMainPresenterTest {
 		view = createStrictMock(Display.class);
 		eventBus = createNiceMock(EventBus.class);
 		insultFactory = createStrictMock(InsultFactory.class);
-		presenter = new CompositeMainPresenter(view, loginData, eventBus, insultFactory);
+		dateTimeFormats = createStrictMock(DateTimeFormats.class);
+		presenter = new CompositeMainPresenter(view, loginData, eventBus, insultFactory, dateTimeFormats);
 	}
 
 	private void setupInitializationExpects() {

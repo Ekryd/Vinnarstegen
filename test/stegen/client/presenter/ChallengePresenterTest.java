@@ -17,6 +17,7 @@ public class ChallengePresenterTest {
 	private EventBus eventBus;
 	private ChallengePresenter presenter;
 	private InsultFactory insultFactory;
+	private DateTimeFormats dateTimeFormats;
 
 	@Test
 	public void testShowView() {
@@ -55,7 +56,8 @@ public class ChallengePresenterTest {
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
 		insultFactory = createStrictMock(InsultFactory.class);
-		presenter = new ChallengePresenter(view, loginData, eventBus, insultFactory);
+		dateTimeFormats = createStrictMock(DateTimeFormats.class);
+		presenter = new ChallengePresenter(view, loginData, eventBus, insultFactory, dateTimeFormats);
 	}
 
 	private void setupInitializationExpects() {
@@ -68,14 +70,14 @@ public class ChallengePresenterTest {
 		reset(view, eventBus, insultFactory);
 		expect(insultFactory.createCompleteInsult()).andReturn("insult1");
 		expect(insultFactory.createCompleteInsult()).andReturn("insult2");
-		expect(insultFactory.getChallengeDateDefaultOneDayFromNow()).andReturn("nextDay");
+		expect(dateTimeFormats.getChallengeDateDefaultOneDayFromNow()).andReturn("nextDay");
 		String message = "Jag, nickname (address),  tycker att du, challengeeName, är insult1!\n"
 				+ "Försvara din ära! Möt mig i pingis nextDay.\n"
 				+ "Annars kommer hela världen att veta att du är insult2\n" + "\n" + "Med vänliga hälsningar\n"
 				+ "nickname";
 		view.setupChallengeInputDialog("challengeeName", "insult1", "Utmaning från Vinnarstegen", message);
 		view.openChallengeInputDialog();
-		replay(view, eventBus, insultFactory);
+		replay(view, eventBus, insultFactory, dateTimeFormats);
 	}
 
 	private void simulateOpenDialogClick() {
