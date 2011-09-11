@@ -1,6 +1,5 @@
 package stegen.client.gui.score;
 
-
 import com.google.gwt.cell.client.*;
 import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.safehtml.shared.*;

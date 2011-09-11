@@ -33,7 +33,8 @@ public class MailBuilder {
 
 	public MailBuilder to(EmailAddressDto email, String nickname) {
 		try {
-			mailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email.address, nickname, DEFAULT_ENCODING));
+			mailMessage.addRecipient(Message.RecipientType.TO, new InternetAddress(email.address, nickname,
+					DEFAULT_ENCODING));
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (MessagingException e) {
