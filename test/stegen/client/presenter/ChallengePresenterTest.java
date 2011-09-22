@@ -26,6 +26,8 @@ public class ChallengePresenterTest {
 		setupInitializationExpects();
 
 		presenter.go();
+
+		verify(view, eventBus, insultFactory);
 	}
 
 	@Test
@@ -36,6 +38,8 @@ public class ChallengePresenterTest {
 		setupOpenDialogExpects();
 
 		simulateOpenDialogClick();
+
+		verify(view, eventBus, insultFactory);
 	}
 
 	@Test
@@ -49,6 +53,8 @@ public class ChallengePresenterTest {
 		setupSendOkMessageExpects();
 
 		simulateSendMessage();
+
+		verify(view, eventBus, insultFactory);
 	}
 
 	private void setupPresenter() {
@@ -63,6 +69,7 @@ public class ChallengePresenterTest {
 	private void setupInitializationExpects() {
 		view.addClickOpenChallengeInputHandler(presenter.openChallengeInputhandler);
 		view.addClickSendChallengeHandler(presenter.clickSendChallengeHandler);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		replay(view, eventBus, insultFactory);
 	}
 

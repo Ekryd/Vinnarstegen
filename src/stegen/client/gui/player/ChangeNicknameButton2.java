@@ -1,11 +1,13 @@
 package stegen.client.gui.player;
 
+import stegen.client.gui.dialog.*;
+
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
 public class ChangeNicknameButton2 implements IsWidget {
 	private final Button baseWidget = new Button("Ändra alias");
-	private final ChangeNicknameDialog2 dialog = new ChangeNicknameDialog2();
+	private final InputDialogBox2 dialog = new InputDialogBox2();
 
 	public ChangeNicknameButton2() {
 		initLayout();
@@ -45,7 +47,7 @@ public class ChangeNicknameButton2 implements IsWidget {
 	}
 
 	public void setPlayerName(String name) {
-		dialog.setPlayerName(name);
+		dialog.setLabelText("Ändra från " + name + " till");
 	}
 
 }

@@ -13,7 +13,7 @@ public interface PlayerService extends RemoteService {
 
 	void sendMessage(PlayerDto player, String message);
 
-	PlayerDto changeNickname(PlayerDto player, String nickname);
+	String changeNickname(PlayerDto player, String nickname);
 
 	String getNickname(EmailAddressDto player);
 

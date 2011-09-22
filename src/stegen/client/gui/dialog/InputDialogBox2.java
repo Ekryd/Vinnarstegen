@@ -38,7 +38,7 @@ public class InputDialogBox2 implements IsWidget {
 		verticalPanel.add(buttonPanel);
 
 		baseWidget.setWidget(verticalPanel);
-
+		messageBox.setMaxLength(100);
 	}
 
 	@Override

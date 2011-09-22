@@ -54,7 +54,7 @@ public class RegisteredUserPresenterTest {
 		view.setUserName("nickname");
 		replay(view);
 
-		presenter.eventCommandChangeNicknameHandler.onSuccess(new PlayerDto(null, "nickname"));
+		presenter.eventCommandChangeNicknameHandler.onSuccess("nickname");
 
 		verify(view);
 	}

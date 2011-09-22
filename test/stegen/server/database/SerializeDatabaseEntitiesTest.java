@@ -32,10 +32,10 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializeChangeNickname() {
-		PlayerCommand command = new ChangeNickname(player, "nicknameNew");
+		PlayerCommand command = new ChangeNickname(player.email, "nicknameNew");
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
-				"{\"email\":{\"address\":\"address\"},\"newNickname\":\"nicknameNew\",\"oldNickname\":\"nickname\"}",
+				"{\"email\":{\"address\":\"address\"},\"newNickname\":\"nicknameNew\",\"oldNickname\":\"address\"}",
 				actual);
 	}
 

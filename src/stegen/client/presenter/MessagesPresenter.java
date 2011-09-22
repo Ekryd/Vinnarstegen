@@ -24,6 +24,7 @@ public class MessagesPresenter implements Presenter {
 	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 	private MessagePrefix currentMessagePrefix;
+	private String nickname;
 
 	public interface Display {
 
@@ -47,6 +48,7 @@ public class MessagesPresenter implements Presenter {
 		this.loginData = loginData;
 		this.messagePrefixGenerator = messagePrefixGenerator;
 		this.eventBus = eventBus;
+		this.nickname = loginData.player.nickname;
 	}
 
 	@Override
@@ -83,7 +85,7 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
-				view.setMessageInputTitle(loginData.player.nickname + " " + currentMessagePrefix.actionText);
+				view.setMessageInputTitle(nickname + " " + currentMessagePrefix.actionText);
 			}
 		};
 	}
@@ -96,8 +98,7 @@ public class MessagesPresenter implements Presenter {
 				String messageContent = view.getMessageInputContent();
 				boolean emptyMessageContent = messageContent.trim().isEmpty();
 				if (!emptyMessageContent) {
-					String completeMessage = loginData.player.nickname + " " + currentMessagePrefix.actionText + " "
-							+ messageContent;
+					String completeMessage = nickname + " " + currentMessagePrefix.actionText + " " + messageContent;
 					eventBus.sendMessage(loginData.player, completeMessage);
 				}
 
@@ -146,7 +147,8 @@ public class MessagesPresenter implements Presenter {
 		return new CommandChangeNicknameCallback() {
 
 			@Override
-			public void onSuccessImpl(PlayerDto result) {
+			public void onSuccessImpl(String newNickname) {
+				nickname = newNickname;
 				loadMessages();
 			}
 

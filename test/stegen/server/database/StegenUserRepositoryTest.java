@@ -70,11 +70,27 @@ public class StegenUserRepositoryTest {
 	}
 
 	@Test
+	public void testUpdateNicknameInDbWithLooongName() {
+		repository.createDefaultNickname(EMAIL);
+		repository.updateNickname(EMAIL, "tomat");
+		repository.clearCache();
+		Assert.assertEquals("tomat", repository.getNickname(EMAIL));
+	}
+
+	@Test
 	public void testGetOrCreateNicknameExist() {
 		repository.createDefaultNickname(EMAIL);
 		repository.updateNickname(EMAIL, "tomat");
 		String nickname = repository.getOrCreateNickname(EMAIL);
 		Assert.assertEquals("tomat", nickname);
+	}
+
+	@Test
+	public void testGetOrCreateNicknameLooong() {
+		repository.createDefaultNickname(EMAIL);
+		repository.updateNickname(EMAIL, "tomatochgurkaiensallad");
+		String nickname = repository.getOrCreateNickname(EMAIL);
+		Assert.assertEquals("tomatochgurkaiensall", nickname);
 	}
 
 }

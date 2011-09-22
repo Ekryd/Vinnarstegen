@@ -19,9 +19,14 @@ public class ScoreCellTable2 implements IsWidget {
 	private final ChallengeDialog2 challengeDialog = new ChallengeDialog2();
 
 	public ScoreCellTable2() {
+		initLayout();
 		initTextColumns();
 		initButtonColumns();
 		addDataProvider();
+	}
+
+	private void initLayout() {
+		baseWidget.setVisibleRange(0, 25);
 	}
 
 	private void initTextColumns() {

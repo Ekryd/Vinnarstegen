@@ -16,10 +16,11 @@ public class ChangeNickname implements PlayerCommand {
 		this.oldNickname = null;
 	}
 
-	public ChangeNickname(PlayerDto player, String nickname) {
-		this.email = player.email;
+	public ChangeNickname(EmailAddressDto email, String nickname) {
+		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		this.email = email;
 		this.newNickname = nickname;
-		this.oldNickname = player.nickname;
+		this.oldNickname = stegenUserRepository.getOrCreateNickname(email);
 	}
 
 	@Override

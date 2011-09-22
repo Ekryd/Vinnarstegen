@@ -7,6 +7,7 @@ import stegen.server.memcache.*;
 import stegen.shared.*;
 
 public class StegenUserRepository {
+	private static final int MAX_NICKNAME_LENGTH = 20;
 	private static StegenUserRepository instance = new StegenUserRepository();
 	private NicknameCache cache;
 
@@ -29,7 +30,13 @@ public class StegenUserRepository {
 		if (!hasNickname(email)) {
 			createDefaultNickname(email);
 		}
-		return getNickname(email);
+		String nickname = getNickname(email);
+		String trucatedNickname = truncateString(nickname);
+		return trucatedNickname;
+	}
+
+	private String truncateString(String nickname) {
+		return nickname.substring(0, Math.min(nickname.length(), MAX_NICKNAME_LENGTH));
 	}
 
 	public PlayerDto createPlayerDto(String emailString) {

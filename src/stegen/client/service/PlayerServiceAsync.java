@@ -12,7 +12,7 @@ public interface PlayerServiceAsync {
 
 	void sendMessage(PlayerDto player, String message, AsyncCallback<Void> callback);
 
-	void changeNickname(PlayerDto player, String nickname, AsyncCallback<PlayerDto> callback);
+	void changeNickname(PlayerDto player, String nickname, AsyncCallback<String> nicknameCallback);
 
 	void getNickname(EmailAddressDto player, AsyncCallback<String> callback);
 

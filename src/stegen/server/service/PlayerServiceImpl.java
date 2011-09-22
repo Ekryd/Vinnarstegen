@@ -43,16 +43,11 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	}
 
 	@Override
-	public PlayerDto changeNickname(PlayerDto player, String nickname) {
-		PlayerCommand command = new ChangeNickname(player, nickname);
+	public String changeNickname(PlayerDto player, String nickname) {
+		PlayerCommand command = new ChangeNickname(player.email, nickname);
 		command.execute();
 		saveCommand(command, player.email);
-		return updatePlayerNickname(player, nickname);
-	}
-
-	private PlayerDto updatePlayerNickname(PlayerDto player, String nickname) {
-		player.nickname = nickname;
-		return player;
+		return getNickname(player.email);
 	}
 
 	private void saveCommand(PlayerCommand command, EmailAddressDto email) {
@@ -61,7 +56,7 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	}
 
 	@Override
-	public String getNickname(EmailAddressDto player) {
-		return StegenUserRepository.get().getOrCreateNickname(player);
+	public String getNickname(EmailAddressDto address) {
+		return StegenUserRepository.get().getOrCreateNickname(address);
 	}
 }

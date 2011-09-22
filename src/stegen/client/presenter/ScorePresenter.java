@@ -129,7 +129,7 @@ public class ScorePresenter implements Presenter {
 		return new CommandChangeNicknameCallback() {
 
 			@Override
-			public void onSuccessImpl(PlayerDto result) {
+			public void onSuccessImpl(String newNickname) {
 				loadScores();
 			}
 

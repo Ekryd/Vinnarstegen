@@ -54,8 +54,8 @@ public class RegisteredUserPresenter implements Presenter {
 		return new CommandChangeNicknameCallback() {
 
 			@Override
-			public void onSuccessImpl(PlayerDto result) {
-				view.setUserName(result.nickname);
+			public void onSuccessImpl(String newNickname) {
+				view.setUserName(newNickname);
 			}
 		};
 	}

@@ -9,7 +9,7 @@ import org.junit.*;
 
 public class SerializeDtoTest {
 	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
-	private ChallengeMessageDto challengeMessage = new ChallengeMessageDto(loginData.player, loginData.player,
+	private ChallengeMessageDto challengeMessage = new ChallengeMessageDto(loginData.player.email, loginData.player,
 			"insult", "body", "subject");
 	private EmailAddressDto emailAddress = loginData.player.email;
 	private GameResultDto gameResult = GameResultDto.createEmptyGameResult();

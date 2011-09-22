@@ -134,6 +134,7 @@ public class WinGameInputPresenterTest {
 	private void setupInitializationExpects() {
 		view.addClickOpenWinGameInputHandler(presenter.openWinGameInputhandler);
 		view.addClickWinGameHandler(presenter.clickWinGameHandler);
+		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
 		replay(view, eventBus);
 	}
 

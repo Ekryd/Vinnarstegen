@@ -8,8 +8,8 @@ public class RefreshPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 
-	ClickHandler clickRefreshHandler = createClickRefreshHandler();
-	Runnable timerCommand = createTimerCommand();
+	final ClickHandler clickRefreshHandler = createClickRefreshHandler();
+	final Runnable timerCommand = createTimerCommand();
 
 	public interface Display {
 		void addClickRefreshHandler(ClickHandler clickHandler);

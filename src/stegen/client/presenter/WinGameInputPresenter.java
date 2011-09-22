@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.event.callback.*;
 import stegen.client.gui.gameresult.*;
 import stegen.client.gui.gameresult.WinGameFieldUpdater.ButtonType;
 import stegen.client.gui.score.*;
@@ -14,9 +15,11 @@ public class WinGameInputPresenter implements Presenter {
 	private final EventBus eventBus;
 	private ButtonType clickedWonOrLostButton;
 	private PlayerDto otherPlayer;
+	private String nickname;
 
-	WinGameFieldUpdater openWinGameInputhandler = createOpenWinGameInputhandler();
-	ClickHandler clickWinGameHandler = createClickWinGameHandler();
+	final WinGameFieldUpdater openWinGameInputhandler = createOpenWinGameInputhandler();
+	final ClickHandler clickWinGameHandler = createClickWinGameHandler();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
 		void addClickOpenWinGameInputHandler(WinGameFieldUpdater fieldUpdater);
@@ -35,16 +38,22 @@ public class WinGameInputPresenter implements Presenter {
 		this.view = scoreView;
 		this.loginData = loginData;
 		this.eventBus = eventBus;
+		this.nickname = loginData.player.nickname;
 	}
 
 	@Override
 	public void go() {
 		initView();
+		initEvents();
 	}
 
 	private void initView() {
 		view.addClickOpenWinGameInputHandler(openWinGameInputhandler);
 		view.addClickWinGameHandler(clickWinGameHandler);
+	}
+
+	private void initEvents() {
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private WinGameFieldUpdater createOpenWinGameInputhandler() {
@@ -55,9 +64,9 @@ public class WinGameInputPresenter implements Presenter {
 				clickedWonOrLostButton = buttonType;
 				otherPlayer = row.player;
 				if (clickedWonOrLostButton == ButtonType.WIN) {
-					view.setupWinGameInputDialog(loginData.player.nickname, otherPlayer.nickname);
+					view.setupWinGameInputDialog(nickname, otherPlayer.nickname);
 				} else {
-					view.setupWinGameInputDialog(otherPlayer.nickname, loginData.player.nickname);
+					view.setupWinGameInputDialog(otherPlayer.nickname, nickname);
 				}
 				view.openWinGameInputDialog();
 			}
@@ -105,4 +114,14 @@ public class WinGameInputPresenter implements Presenter {
 		return returnValue;
 	}
 
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
+
+			@Override
+			public void onSuccessImpl(String newNickname) {
+				nickname = newNickname;
+			}
+
+		};
+	}
 }

@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.event.callback.*;
 import stegen.client.gui.score.*;
 import stegen.client.service.*;
 import stegen.shared.*;
@@ -14,9 +15,11 @@ public class ChallengePresenter implements Presenter {
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
 	private final DateTimeFormats dateTimeFormats;
+	private String nickname;
 
-	FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
-	ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
+	final FieldUpdater<ScoreTableRow, String> openChallengeInputhandler = createOpenChallengeInputhandler();
+	final ClickHandler clickSendChallengeHandler = createClickSendChallengeHandler();
+	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	ChallengeMessage message;
 
@@ -38,16 +41,22 @@ public class ChallengePresenter implements Presenter {
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
 		this.dateTimeFormats = dateTimeFormats;
+		this.nickname = loginData.player.nickname;
 	}
 
 	@Override
 	public void go() {
 		initView();
+		initEvents();
 	}
 
 	private void initView() {
 		view.addClickOpenChallengeInputHandler(openChallengeInputhandler);
 		view.addClickSendChallengeHandler(clickSendChallengeHandler);
+	}
+
+	private void initEvents() {
+		eventBus.addHandler(eventCommandChangeNicknameCallback);
 	}
 
 	private FieldUpdater<ScoreTableRow, String> createOpenChallengeInputhandler() {
@@ -57,8 +66,9 @@ public class ChallengePresenter implements Presenter {
 			public void update(int index, ScoreTableRow row, String value) {
 				PlayerDto challenger = loginData.player;
 				PlayerDto challengee = row.player;
-				message = new ChallengeMessage(challenger, challengee, insultFactory.createCompleteInsult(),
-						insultFactory.createCompleteInsult(), dateTimeFormats.getChallengeDateDefaultOneDayFromNow());
+				message = new ChallengeMessage(challenger.email, nickname, challengee,
+						insultFactory.createCompleteInsult(), insultFactory.createCompleteInsult(),
+						dateTimeFormats.getChallengeDateDefaultOneDayFromNow());
 				view.setupChallengeInputDialog(row.player.nickname, message.getInsult(), message.getSubject(),
 						message.getMessage());
 				view.openChallengeInputDialog();
@@ -73,6 +83,17 @@ public class ChallengePresenter implements Presenter {
 			public void onClick(ClickEvent event) {
 				eventBus.challengePlayer(message.createDto());
 			}
+		};
+	}
+
+	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
+		return new CommandChangeNicknameCallback() {
+
+			@Override
+			public void onSuccessImpl(String newNickname) {
+				nickname = newNickname;
+			}
+
 		};
 	}
 }
