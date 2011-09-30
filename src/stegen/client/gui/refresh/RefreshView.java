@@ -8,7 +8,7 @@ import com.google.gwt.user.client.*;
 
 public class RefreshView implements Display {
 	private static final int ONE_MINUTE = 60 * 1000;
-	private final RefreshButton2 refreshButton = new RefreshButton2();
+	private final RefreshButton refreshButton = new RefreshButton();
 	private Timer timer;
 
 	public RefreshView() {

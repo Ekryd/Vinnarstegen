@@ -3,14 +3,14 @@ package stegen.client.gui.register;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class RegisterPanel2 implements IsWidget {
+public class RegisterPanel implements IsWidget {
 
 	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final Button registeraButton = new Button("Registrera");
 	private final Label registerLabel = new Label("Du måste skriva in den magiska koden för att registrera dig.");
 	private final TextBox kodField = new TextBox();;
 
-	public RegisterPanel2() {
+	public RegisterPanel() {
 		initLayout();
 	}
 

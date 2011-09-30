@@ -5,11 +5,11 @@ import stegen.client.gui.dialog.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class ChangeNicknameButton2 implements IsWidget {
+public class ChangeNicknameButton implements IsWidget {
 	private final Button baseWidget = new Button("Ändra alias");
-	private final InputDialogBox2 dialog = new InputDialogBox2();
+	private final InputDialogBox dialog = new InputDialogBox();
 
-	public ChangeNicknameButton2() {
+	public ChangeNicknameButton() {
 		initLayout();
 		addHandler();
 	}

@@ -9,16 +9,16 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class ScoreCellTable2 implements IsWidget {
+public class ScoreCellTable implements IsWidget {
 	private final CellTable<ScoreTableRow> baseWidget = new CellTable<ScoreTableRow>();
 	private final ListDataProvider<ScoreTableRow> dataProvider = new ListDataProvider<ScoreTableRow>();;
-	private final Column<ScoreTableRow, String> winColumn = new ButtonColumn2("Jag vann mot");
-	private final Column<ScoreTableRow, String> loseColumn = new ButtonColumn2("Jag förlorade mot");
-	private final Column<ScoreTableRow, String> challengeColumn = new ButtonColumn2("Utmana!");
-	private final WinGameDialogBox2 gameResultDialogBox = new WinGameDialogBox2();
-	private final ChallengeDialog2 challengeDialog = new ChallengeDialog2();
+	private final Column<ScoreTableRow, String> winColumn = new ButtonColumn("Jag vann mot");
+	private final Column<ScoreTableRow, String> loseColumn = new ButtonColumn("Jag förlorade mot");
+	private final Column<ScoreTableRow, String> challengeColumn = new ButtonColumn("Utmana!");
+	private final WinGameDialogBox gameResultDialogBox = new WinGameDialogBox();
+	private final ChallengeDialog challengeDialog = new ChallengeDialog();
 
-	public ScoreCellTable2() {
+	public ScoreCellTable() {
 		initLayout();
 		initTextColumns();
 		initButtonColumns();
@@ -87,7 +87,7 @@ public class ScoreCellTable2 implements IsWidget {
 		return challengeColumn;
 	}
 
-	public ChallengeDialog2 getChallengeDialog() {
+	public ChallengeDialog getChallengeDialog() {
 		return challengeDialog;
 	}
 
@@ -107,7 +107,7 @@ public class ScoreCellTable2 implements IsWidget {
 		return loseColumn;
 	}
 
-	public WinGameDialogBox2 getWinGameDialog() {
+	public WinGameDialogBox getWinGameDialog() {
 		return gameResultDialogBox;
 	}
 

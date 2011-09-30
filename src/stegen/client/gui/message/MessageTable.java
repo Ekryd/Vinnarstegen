@@ -9,12 +9,12 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class MessageTable2 implements IsWidget {
+public class MessageTable implements IsWidget {
 	private final CellTable<MessageTableRow> baseWidget = new CellTable<MessageTableRow>();
 	private final ListDataProvider<MessageTableRow> dataProvider = new ListDataProvider<MessageTableRow>();
 	private final DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
-	public MessageTable2() {
+	public MessageTable() {
 		init();
 		initProvider();
 	}

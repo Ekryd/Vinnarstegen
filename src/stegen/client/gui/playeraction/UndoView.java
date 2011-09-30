@@ -6,9 +6,9 @@ import com.google.gwt.event.dom.client.*;
 
 public class UndoView implements Display {
 
-	private final UndoButton2 undoButton;
+	private final UndoButton undoButton;
 
-	public UndoView(UndoButton2 undoButton) {
+	public UndoView(UndoButton undoButton) {
 		this.undoButton = undoButton;
 	}
 

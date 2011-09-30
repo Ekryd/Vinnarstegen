@@ -6,9 +6,9 @@ import stegen.client.presenter.GameResultsPresenter.Display;
 
 public class GameResultsView implements Display {
 
-	private final GameResultPanel2 gameResultPanel;
+	private final GameResultPanel gameResultPanel;
 
-	public GameResultsView(GameResultPanel2 gameResultPanel) {
+	public GameResultsView(GameResultPanel gameResultPanel) {
 		this.gameResultPanel = gameResultPanel;
 	}
 

@@ -3,12 +3,12 @@ package stegen.client.gui.gameresult;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class SetScoreDropdown2 implements IsWidget {
+public class SetScoreDropdown implements IsWidget {
 	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final ListBox listBox = new ListBox(false);
 	private Label playersLabel;
 
-	public SetScoreDropdown2() {
+	public SetScoreDropdown() {
 		initLayout();
 	}
 

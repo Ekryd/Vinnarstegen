@@ -32,6 +32,8 @@ public class ChallengePresenter implements Presenter {
 				String challengeMessage);
 
 		void openChallengeInputDialog();
+
+		String getUserModifiedMessage();
 	}
 
 	public ChallengePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus,
@@ -81,6 +83,8 @@ public class ChallengePresenter implements Presenter {
 
 			@Override
 			public void onClick(ClickEvent event) {
+				String changedMessageBody = view.getUserModifiedMessage();
+				message.setMessage(changedMessageBody);
 				eventBus.challengePlayer(message.createDto());
 			}
 		};

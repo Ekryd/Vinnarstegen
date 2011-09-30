@@ -12,8 +12,8 @@ public class ChallengeMessage {
 	private final String insult;
 	private final String alternativeInsult;
 
-	public ChallengeMessage(EmailAddressDto challengerEmail, String challengerNickname, PlayerDto challengee, String insult,
-			String alternativeInsult, String challengeDateTime) {
+	public ChallengeMessage(EmailAddressDto challengerEmail, String challengerNickname, PlayerDto challengee,
+			String insult, String alternativeInsult, String challengeDateTime) {
 		this.challengerEmail = challengerEmail;
 		this.challengerNickname = challengerNickname;
 		this.challengee = challengee;
@@ -25,7 +25,8 @@ public class ChallengeMessage {
 
 	private void createDefaultMessage() {
 		StringBuilder messageBuilder = new StringBuilder();
-		messageBuilder.append("Jag, ").append(challengerNickname).append(" (").append(challengerEmail.address).append("), ");
+		messageBuilder.append("Jag, ").append(challengerNickname).append(" (").append(challengerEmail.address)
+				.append("), ");
 		messageBuilder.append(" tycker att du, ").append(challengee.nickname).append(", är ").append(insult)
 				.append("!\n");
 		messageBuilder.append("Försvara din ära! Möt mig i pingis ").append(challengeDateTime).append(".\n");
@@ -50,6 +51,10 @@ public class ChallengeMessage {
 
 	public String getInsult() {
 		return insult;
+	}
+
+	public void setMessage(String changedMessageBody) {
+		message = changedMessageBody;
 	}
 
 }

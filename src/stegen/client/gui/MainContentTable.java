@@ -11,10 +11,10 @@ public class MainContentTable implements IsWidget {
 	private static final double BAR_HEIGHT = 2.5;
 	private static final Unit BAR_UNIT = Unit.EM;
 	private final TabLayoutPanel baseWidget = new TabLayoutPanel(BAR_HEIGHT, BAR_UNIT);
-	private final ListScorePanel2 scorePanel = new ListScorePanel2();
-	private final GameResultPanel2 gameResultPanel = new GameResultPanel2();
-	private final LoginStatusTable2 loginStatusTable = new LoginStatusTable2();
-	private final PlayerMiscCommandTable2 playerMiscCommandTable = new PlayerMiscCommandTable2();
+	private final ListScorePanel scorePanel = new ListScorePanel();
+	private final GameResultPanel gameResultPanel = new GameResultPanel();
+	private final LoginStatusTable loginStatusTable = new LoginStatusTable();
+	private final PlayerMiscCommandTable playerMiscCommandTable = new PlayerMiscCommandTable();
 
 	public MainContentTable() {
 		initLayout();
@@ -35,19 +35,19 @@ public class MainContentTable implements IsWidget {
 		return baseWidget;
 	}
 
-	public ListScorePanel2 getScorePanel() {
+	public ListScorePanel getScorePanel() {
 		return scorePanel;
 	}
 
-	public GameResultPanel2 getGameResultPanel() {
+	public GameResultPanel getGameResultPanel() {
 		return gameResultPanel;
 	}
 
-	public LoginStatusTable2 getLoginStatusesPanel() {
+	public LoginStatusTable getLoginStatusesPanel() {
 		return loginStatusTable;
 	}
 
-	public PlayerMiscCommandTable2 getPlayerMiscCommandsPanel() {
+	public PlayerMiscCommandTable getPlayerMiscCommandsPanel() {
 		return playerMiscCommandTable;
 	}
 

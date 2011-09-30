@@ -5,13 +5,13 @@ import stegen.client.gui.common.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class WinGameDialogBox2 implements IsWidget {
+public class WinGameDialogBox implements IsWidget {
 	private final DialogBox baseWidget = new DialogBox();
 	private final Label scoreLabel = new Label();
-	private final CancelOrOkButtonPanel2 buttonPanel = new CancelOrOkButtonPanel2();
-	private final SetScoreDropdown2 setScoreDropdown = new SetScoreDropdown2();
+	private final CancelOrOkButtonPanel buttonPanel = new CancelOrOkButtonPanel();
+	private final SetScoreDropdown setScoreDropdown = new SetScoreDropdown();
 
-	public WinGameDialogBox2() {
+	public WinGameDialogBox() {
 		initLayout();
 		initSetScoreDropdownEvents();
 	}

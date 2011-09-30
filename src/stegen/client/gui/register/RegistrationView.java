@@ -7,7 +7,7 @@ import com.google.gwt.event.dom.client.*;
 
 public class RegistrationView implements Display {
 
-	private final RegisterPanel2 registerPanel = new RegisterPanel2();
+	private final RegisterPanel registerPanel = new RegisterPanel();
 
 	public RegistrationView() {
 		MAIN_AREA.clearPanel();

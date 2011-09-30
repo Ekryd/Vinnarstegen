@@ -9,12 +9,12 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class GameResultTable2 implements IsWidget {
+public class GameResultTable implements IsWidget {
 	private final CellTable<GameResultsRow> baseWidget = new CellTable<GameResultsRow>();
 	private final ListDataProvider<GameResultsRow> undoListDataProvider = new ListDataProvider<GameResultsRow>();
 	private DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
-	public GameResultTable2() {
+	public GameResultTable() {
 		initLayout();
 		initProvider();
 	}

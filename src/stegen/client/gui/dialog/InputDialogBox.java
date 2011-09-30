@@ -5,14 +5,14 @@ import stegen.client.gui.common.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class InputDialogBox2 implements IsWidget {
+public class InputDialogBox implements IsWidget {
 
 	private final DialogBox baseWidget = new DialogBox();
 	private final TextBox messageBox = new TextBox();
 	private final Label messageLabel = new Label("");
-	private final CancelOrOkButtonPanel2 buttonPanel = new CancelOrOkButtonPanel2();
+	private final CancelOrOkButtonPanel buttonPanel = new CancelOrOkButtonPanel();
 
-	public InputDialogBox2() {
+	public InputDialogBox() {
 		createButtonEvents();
 		initLayout();
 	}

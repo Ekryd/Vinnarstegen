@@ -4,12 +4,12 @@ import java.util.*;
 
 import com.google.gwt.user.client.ui.*;
 
-public class GameResultPanel2 implements IsWidget {
+public class GameResultPanel implements IsWidget {
 	private final VerticalPanel baseWidget = new VerticalPanel();
-	private final UndoButton2 undoButton = new UndoButton2();
-	private final GameResultTable2 table = new GameResultTable2();
+	private final UndoButton undoButton = new UndoButton();
+	private final GameResultTable table = new GameResultTable();
 
-	public GameResultPanel2() {
+	public GameResultPanel() {
 		initLayout();
 	}
 
@@ -27,7 +27,7 @@ public class GameResultPanel2 implements IsWidget {
 		table.changeList(result);
 	}
 
-	public UndoButton2 getUndoButton() {
+	public UndoButton getUndoButton() {
 		return undoButton;
 	}
 

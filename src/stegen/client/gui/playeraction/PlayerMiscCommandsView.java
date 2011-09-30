@@ -6,9 +6,9 @@ import stegen.client.presenter.PlayerMiscCommandsPresenter.Display;
 
 public class PlayerMiscCommandsView implements Display {
 
-	private final PlayerMiscCommandTable2 table;
+	private final PlayerMiscCommandTable table;
 
-	public PlayerMiscCommandsView(PlayerMiscCommandTable2 table) {
+	public PlayerMiscCommandsView(PlayerMiscCommandTable table) {
 		this.table = table;
 	}
 

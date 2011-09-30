@@ -9,14 +9,14 @@ import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class ListScorePanel2 implements IsWidget {
+public class ListScorePanel implements IsWidget {
 
 	private final ScrollPanel baseWidget = new ScrollPanel();
 	private final VerticalPanel panel = new VerticalPanel();
-	private final CleanScoresButton2 cleanScoresButton = new CleanScoresButton2();
-	private final ScoreCellTable2 scoreCellTable = new ScoreCellTable2();
+	private final CleanScoresButton cleanScoresButton = new CleanScoresButton();
+	private final ScoreCellTable scoreCellTable = new ScoreCellTable();
 
-	public ListScorePanel2() {
+	public ListScorePanel() {
 		initLayout();
 	}
 
@@ -43,7 +43,7 @@ public class ListScorePanel2 implements IsWidget {
 		return scoreCellTable.getChallengeColumn();
 	}
 
-	public ChallengeDialog2 getChallengeDialog() {
+	public ChallengeDialog getChallengeDialog() {
 		return scoreCellTable.getChallengeDialog();
 	}
 
@@ -55,7 +55,7 @@ public class ListScorePanel2 implements IsWidget {
 		return scoreCellTable.getLoserColumn();
 	}
 
-	public WinGameDialogBox2 getWinGameDialog() {
+	public WinGameDialogBox getWinGameDialog() {
 		return scoreCellTable.getWinGameDialog();
 	}
 

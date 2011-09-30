@@ -20,8 +20,8 @@ public class CompositeMainView implements Display {
 	public CompositeMainView() {
 		MAIN_AREA.clearPanel();
 		MAIN_AREA.addToPanel(mainContentTable);
-		ListScorePanel2 scorePanel = mainContentTable.getScorePanel();
-		GameResultPanel2 gameResultPanel = mainContentTable.getGameResultPanel();
+		ListScorePanel scorePanel = mainContentTable.getScorePanel();
+		GameResultPanel gameResultPanel = mainContentTable.getGameResultPanel();
 		scoreView = new ScoreView(scorePanel);
 		challengeView = new ChallengeInputView(scorePanel.getChallengeButtonColumn(), scorePanel.getChallengeDialog());
 		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),

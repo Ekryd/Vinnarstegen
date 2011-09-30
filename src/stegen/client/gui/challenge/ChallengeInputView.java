@@ -10,9 +10,9 @@ import com.google.gwt.user.cellview.client.*;
 public class ChallengeInputView implements Display {
 
 	private final Column<ScoreTableRow, String> challengeButtonColumn;
-	private final ChallengeDialog2 challengeDialog;
+	private final ChallengeDialog challengeDialog;
 
-	public ChallengeInputView(Column<ScoreTableRow, String> challengeButtonColumn, ChallengeDialog2 challengeDialog) {
+	public ChallengeInputView(Column<ScoreTableRow, String> challengeButtonColumn, ChallengeDialog challengeDialog) {
 		this.challengeButtonColumn = challengeButtonColumn;
 		this.challengeDialog = challengeDialog;
 	}
@@ -38,6 +38,11 @@ public class ChallengeInputView implements Display {
 	@Override
 	public void openChallengeInputDialog() {
 		challengeDialog.show();
+	}
+
+	@Override
+	public String getUserModifiedMessage() {
+		return challengeDialog.getUserModifiedMessage();
 	}
 
 }

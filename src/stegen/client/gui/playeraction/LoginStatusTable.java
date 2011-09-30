@@ -6,12 +6,12 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class LoginStatusTable2 implements IsWidget {
+public class LoginStatusTable implements IsWidget {
 	private final CellTable<LoginStatusRow> baseWidget = new CellTable<LoginStatusRow>();
 
 	private final ListDataProvider<LoginStatusRow> undoListDataProvider = new ListDataProvider<LoginStatusRow>();
 
-	public LoginStatusTable2() {
+	public LoginStatusTable() {
 		init();
 		initProvider();
 	}

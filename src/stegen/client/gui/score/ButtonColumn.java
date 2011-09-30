@@ -5,10 +5,10 @@ import com.google.gwt.cell.client.Cell.Context;
 import com.google.gwt.safehtml.shared.*;
 import com.google.gwt.user.cellview.client.*;
 
-public class ButtonColumn2 extends Column<ScoreTableRow, String> {
+public class ButtonColumn extends Column<ScoreTableRow, String> {
 	private final String buttonText;
 
-	public ButtonColumn2(String buttonText) {
+	public ButtonColumn(String buttonText) {
 		super(new ButtonCell());
 		this.buttonText = buttonText;
 	}

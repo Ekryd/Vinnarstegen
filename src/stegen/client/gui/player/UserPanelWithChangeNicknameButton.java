@@ -2,9 +2,9 @@ package stegen.client.gui.player;
 
 import com.google.gwt.event.dom.client.*;
 
-public class UserPanelWithChangeNicknameButton extends UserPanel2 {
+public class UserPanelWithChangeNicknameButton extends UserPanel {
 
-	private final ChangeNicknameButton2 changeNicknameButton = new ChangeNicknameButton2();
+	private final ChangeNicknameButton changeNicknameButton = new ChangeNicknameButton();
 
 	public UserPanelWithChangeNicknameButton() {
 		initLayout();

@@ -5,11 +5,11 @@ import stegen.client.gui.dialog.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class MessageButton2 implements IsWidget {
+public class MessageButton implements IsWidget {
 	private final Button baseWidget = new Button();
-	private InputDialogBox2 messageDialog = new InputDialogBox2();
+	private InputDialogBox messageDialog = new InputDialogBox();
 
-	public MessageButton2() {
+	public MessageButton() {
 		initLayout();
 		addHandler();
 	}
@@ -25,6 +25,7 @@ public class MessageButton2 implements IsWidget {
 			public void onClick(ClickEvent event) {
 				int left = baseWidget.getAbsoluteLeft() + 10;
 				int top = baseWidget.getAbsoluteTop() + 10;
+				messageDialog.resetInputText();
 				messageDialog.setPopupPosition(left, top);
 
 				messageDialog.showDialog();

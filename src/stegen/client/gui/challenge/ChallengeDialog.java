@@ -5,15 +5,15 @@ import stegen.client.gui.common.*;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class ChallengeDialog2 implements IsWidget {
+public class ChallengeDialog implements IsWidget {
 
 	private final DialogBox baseWidget = new DialogBox();
 	private final Label insultLabel = new Label();
 	private final Label subjectLabel = new Label();
 	private final TextArea messageBody = new TextArea();
-	private final CancelOrOkButtonPanel2 buttonPanel = new CancelOrOkButtonPanel2();
+	private final CancelOrOkButtonPanel buttonPanel = new CancelOrOkButtonPanel();
 
-	public ChallengeDialog2() {
+	public ChallengeDialog() {
 		initLayout();
 	}
 
@@ -55,5 +55,9 @@ public class ChallengeDialog2 implements IsWidget {
 
 	public void show() {
 		baseWidget.center();
+	}
+
+	public String getUserModifiedMessage() {
+		return messageBody.getText();
 	}
 }

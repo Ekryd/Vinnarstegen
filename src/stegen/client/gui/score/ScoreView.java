@@ -8,9 +8,9 @@ import com.google.gwt.event.dom.client.*;
 
 public class ScoreView implements Display {
 
-	private final ListScorePanel2 scorePanel;
+	private final ListScorePanel scorePanel;
 
-	public ScoreView(ListScorePanel2 scorePanel) {
+	public ScoreView(ListScorePanel scorePanel) {
 		this.scorePanel = scorePanel;
 	}
 

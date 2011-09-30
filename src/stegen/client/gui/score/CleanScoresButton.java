@@ -3,12 +3,12 @@ package stegen.client.gui.score;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class CleanScoresButton2 implements IsWidget {
+public class CleanScoresButton implements IsWidget {
 
 	private final Button baseWidget = new Button("Rensa alla poäng");
 	private CleanScoresOpenDialogHandler openDialogHandler = new CleanScoresOpenDialogHandler();
 
-	public CleanScoresButton2() {
+	public CleanScoresButton() {
 		initLayout();
 		initHandler();
 	}

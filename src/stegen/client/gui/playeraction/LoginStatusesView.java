@@ -6,9 +6,9 @@ import stegen.client.presenter.LoginStatusesPresenter.Display;
 
 public class LoginStatusesView implements Display {
 
-	private final LoginStatusTable2 loginStatusTable;
+	private final LoginStatusTable loginStatusTable;
 
-	public LoginStatusesView(LoginStatusTable2 loginStatusTable) {
+	public LoginStatusesView(LoginStatusTable loginStatusTable) {
 		this.loginStatusTable = loginStatusTable;
 	}
 

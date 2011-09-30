@@ -5,7 +5,7 @@ import stegen.client.presenter.NonregisteredUserPresenter.Display;
 
 public class NonregisteredUserView implements Display {
 
-	private final UserPanel2 userPanel = new UserPanel2();
+	private final UserPanel userPanel = new UserPanel();
 
 	public NonregisteredUserView() {
 		USER_AREA.clearPanel();

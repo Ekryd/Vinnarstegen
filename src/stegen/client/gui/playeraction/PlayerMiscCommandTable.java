@@ -6,11 +6,11 @@ import com.google.gwt.user.cellview.client.*;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.*;
 
-public class PlayerMiscCommandTable2 implements IsWidget {
+public class PlayerMiscCommandTable implements IsWidget {
 	private final CellTable<PlayerMiscCommandRow> baseWidget = new CellTable<PlayerMiscCommandRow>();
 	private final ListDataProvider<PlayerMiscCommandRow> undoListDataProvider = new ListDataProvider<PlayerMiscCommandRow>();
 
-	public PlayerMiscCommandTable2() {
+	public PlayerMiscCommandTable() {
 		init();
 		initProvider();
 	}

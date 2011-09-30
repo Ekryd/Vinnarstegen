@@ -3,12 +3,12 @@ package stegen.client.gui.common;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class CancelOrOkButtonPanel2 implements IsWidget {
+public class CancelOrOkButtonPanel implements IsWidget {
 	private final HorizontalPanel baseWidget = new HorizontalPanel();
 	private final Button closeButton = new Button("Avbryt");
 	private final Button okButton = new Button("Ok");
 
-	public CancelOrOkButtonPanel2() {
+	public CancelOrOkButtonPanel() {
 		initLayout();
 	}
 

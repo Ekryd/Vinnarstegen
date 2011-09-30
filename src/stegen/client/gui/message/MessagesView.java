@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.*;
 public class MessagesView implements Display {
 
 	private final VerticalPanel panel = new VerticalPanel();
-	private final MessageButton2 messageButton = new MessageButton2();
-	private final MessageTable2 messageTable = new MessageTable2();
+	private final MessageButton messageButton = new MessageButton();
+	private final MessageTable messageTable = new MessageTable();
 
 	public MessagesView() {
 		initLayout();

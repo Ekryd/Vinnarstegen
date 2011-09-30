@@ -11,10 +11,10 @@ public class WinGameInputView implements Display {
 
 	private final Column<ScoreTableRow, String> winnerButtonColumn;
 	private final Column<ScoreTableRow, String> loserButtonColumn;
-	private final WinGameDialogBox2 winGameDialog;
+	private final WinGameDialogBox winGameDialog;
 
 	public WinGameInputView(Column<ScoreTableRow, String> winnerButtonColumn,
-			Column<ScoreTableRow, String> loserButtonColumn, WinGameDialogBox2 winGameDialog) {
+			Column<ScoreTableRow, String> loserButtonColumn, WinGameDialogBox winGameDialog) {
 		this.winnerButtonColumn = winnerButtonColumn;
 		this.loserButtonColumn = loserButtonColumn;
 		this.winGameDialog = winGameDialog;

@@ -3,10 +3,10 @@ package stegen.client.gui.refresh;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class RefreshButton2 implements IsWidget {
+public class RefreshButton implements IsWidget {
 	private final Button baseWidget = new Button("Refresh!");
 
-	public RefreshButton2() {
+	public RefreshButton() {
 		initLayout();
 	}
 
