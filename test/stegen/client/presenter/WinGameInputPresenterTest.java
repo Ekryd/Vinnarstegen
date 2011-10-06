@@ -93,6 +93,8 @@ public class WinGameInputPresenterTest {
 		setupPresenter();
 		presenter.go();
 
+		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+
 		setupOpenDialogExpectsLostGame();
 
 		simulateOpenDialogClickLostGame();
@@ -115,6 +117,9 @@ public class WinGameInputPresenterTest {
 	public void testLostGame() {
 		setupPresenter();
 		presenter.go();
+
+		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+
 		setupOpenDialogExpectsLostGame();
 
 		simulateOpenDialogClickLostGame();
@@ -147,7 +152,7 @@ public class WinGameInputPresenterTest {
 
 	private void setupOpenDialogExpectsLostGame() {
 		reset(view, eventBus);
-		view.setupWinGameInputDialog(otherPlayer.nickname, loginData.player.nickname);
+		view.setupWinGameInputDialog(otherPlayer.nickname, "nick2");
 		view.openWinGameInputDialog();
 		replay(view, eventBus);
 	}

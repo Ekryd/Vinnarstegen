@@ -35,6 +35,8 @@ public class ChallengePresenterTest {
 		setupPresenter();
 		presenter.go();
 
+		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+
 		setupOpenDialogExpects();
 
 		simulateOpenDialogClick();
@@ -47,6 +49,8 @@ public class ChallengePresenterTest {
 		setupPresenter();
 		presenter.go();
 		setupOpenDialogExpects();
+
+		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
 
 		simulateOpenDialogClick();
 
@@ -78,10 +82,10 @@ public class ChallengePresenterTest {
 		expect(insultFactory.createCompleteInsult()).andReturn("insult1");
 		expect(insultFactory.createCompleteInsult()).andReturn("insult2");
 		expect(dateTimeFormats.getChallengeDateDefaultOneDayFromNow()).andReturn("nextDay");
-		String message = "Jag, nickname (address),  tycker att du, challengeeName, är insult1!\n"
+		String message = "Jag, nick2 (address),  tycker att du, challengeeName, är insult1!\n"
 				+ "Försvara din ära! Möt mig i pingis nextDay.\n"
 				+ "Annars kommer hela världen att veta att du är insult2\n" + "\n" + "Med vänliga hälsningar\n"
-				+ "nickname";
+				+ "nick2";
 		view.setupChallengeInputDialog("challengeeName", "insult1", "Utmaning från Vinnarstegen", message);
 		view.openChallengeInputDialog();
 		replay(view, eventBus, insultFactory, dateTimeFormats);
@@ -95,6 +99,7 @@ public class ChallengePresenterTest {
 
 	private void setupSendOkMessageExpects() {
 		reset(view, eventBus, insultFactory);
+		expect(view.getUserModifiedMessage()).andReturn("Modified message");
 		eventBus.challengePlayer(anyObject(ChallengeMessageDto.class));
 		replay(view, eventBus, insultFactory);
 	}

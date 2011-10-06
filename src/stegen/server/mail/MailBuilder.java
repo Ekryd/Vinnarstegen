@@ -11,7 +11,7 @@ import stegen.shared.*;
 public class MailBuilder {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
-	private final MimeMessage mailMessage;
+	final MimeMessage mailMessage;
 
 	public MailBuilder() {
 		Properties props = new Properties();
