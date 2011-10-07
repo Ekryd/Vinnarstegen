@@ -26,10 +26,9 @@ public class SendMessage implements PlayerCommand {
 
 	private void sendMailToAdmin() {
 		String msgBody = email.address + " " + message;
-		EmailAddressDto admin = new EmailAddressDto("bjorn.ekryd@gmail.com");
 
 		MailBuilder mailBuilder = new MailBuilder();
-		mailBuilder.from(email, "Vinnarstegen").to(admin).subject("Vinnarstegen ropar").messageBody(msgBody).send();
+		mailBuilder.from(email, "Vinnarstegen").toAdmin().subject("Vinnarstegen ropar").messageBody(msgBody).send();
 	}
 
 	@Override

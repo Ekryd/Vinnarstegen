@@ -31,12 +31,26 @@ public class Challenge implements PlayerCommand {
 
 	@Override
 	public void execute() {
+		sendEmailToChallengee();
+		sendEmailToAdmin();
+	}
+
+	private void sendEmailToChallengee() {
 		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
 		String challengerNickname = stegenUserRepository.getOrCreateNickname(challenger);
 		String challengeeNickname = stegenUserRepository.getOrCreateNickname(challengee);
 		MailBuilder mailBuilder = new MailBuilder();
 		mailBuilder.from(challenger, challengerNickname).to(challengee, challengeeNickname).subject(subject)
 				.messageBody(messageBody).send();
+	}
+
+	private void sendEmailToAdmin() {
+		String msgBody = String.format("Utmanaren skriver till %s, rubrik: %s \n%s", challengee.address, subject,
+				messageBody);
+
+		MailBuilder mailBuilder = new MailBuilder();
+		mailBuilder.from(challenger, "Vinnarstegen").toAdmin().subject("Vinnarstegen utmanar").messageBody(msgBody)
+				.send();
 	}
 
 	@Override
