@@ -3,6 +3,7 @@ package stegen.client.gui;
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.gui.challenge.*;
 import stegen.client.gui.gameresult.*;
+import stegen.client.gui.message.*;
 import stegen.client.gui.playeraction.*;
 import stegen.client.gui.score.*;
 import stegen.client.presenter.CompositeMainPresenter.Display;
@@ -10,6 +11,7 @@ import stegen.client.presenter.CompositeMainPresenter.Display;
 public class CompositeMainView implements Display {
 	private final MainContentTable mainContentTable = new MainContentTable();
 	private final ScoreView scoreView;
+	private final MessagesView messagesView;
 	private final ChallengeInputView challengeView;
 	private final WinGameInputView gameInputView;
 	private final GameResultsView gameResultsView;
@@ -23,6 +25,7 @@ public class CompositeMainView implements Display {
 		ListScorePanel scorePanel = mainContentTable.getScorePanel();
 		GameResultPanel gameResultPanel = mainContentTable.getGameResultPanel();
 		scoreView = new ScoreView(scorePanel);
+		messagesView = new MessagesView(mainContentTable.getMessagePanel());
 		challengeView = new ChallengeInputView(scorePanel.getChallengeButtonColumn(), scorePanel.getChallengeDialog());
 		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),
 				scorePanel.getWinGameDialog());
@@ -65,6 +68,11 @@ public class CompositeMainView implements Display {
 	@Override
 	public stegen.client.presenter.PlayerMiscCommandsPresenter.Display getPlayerMiscCommandView() {
 		return playerMiscCommandView;
+	}
+
+	@Override
+	public stegen.client.presenter.MessagesPresenter.Display getMessageView() {
+		return messagesView;
 	}
 
 }

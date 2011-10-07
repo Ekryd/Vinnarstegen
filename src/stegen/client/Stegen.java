@@ -6,6 +6,8 @@ import com.google.gwt.core.client.*;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
+ * 
+ * @author Björn Ekryd
  */
 public class Stegen implements EntryPoint {
 	private PlayerCommandServiceAsync playerCommandService;

@@ -1,5 +1,6 @@
 package stegen.client.gui;
 
+import stegen.client.gui.message.*;
 import stegen.client.gui.playeraction.*;
 import stegen.client.gui.score.*;
 
@@ -15,6 +16,7 @@ public class MainContentTable implements IsWidget {
 	private final GameResultPanel gameResultPanel = new GameResultPanel();
 	private final LoginStatusTable loginStatusTable = new LoginStatusTable();
 	private final PlayerMiscCommandTable playerMiscCommandTable = new PlayerMiscCommandTable();
+	private final MessagePanel messagePanel = new MessagePanel();
 
 	public MainContentTable() {
 		initLayout();
@@ -23,10 +25,11 @@ public class MainContentTable implements IsWidget {
 	private void initLayout() {
 		baseWidget.setAnimationDuration(1000);
 		baseWidget.add(scorePanel, "Poängställning");
+		baseWidget.add(messagePanel, "Meddelanden");
 		baseWidget.add(gameResultPanel, "Matcher");
 		baseWidget.add(loginStatusTable, "Inloggning");
 		baseWidget.add(playerMiscCommandTable, "Övrigt");
-		baseWidget.setHeight("400px");
+		baseWidget.setHeight("1000px");
 		baseWidget.selectTab(0);
 	}
 
@@ -37,6 +40,10 @@ public class MainContentTable implements IsWidget {
 
 	public ListScorePanel getScorePanel() {
 		return scorePanel;
+	}
+
+	public MessagePanel getMessagePanel() {
+		return messagePanel;
 	}
 
 	public GameResultPanel getGameResultPanel() {

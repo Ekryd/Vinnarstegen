@@ -38,6 +38,8 @@ public class CompositeMainPresenterTest {
 
 	private void setupInitializationExpects() {
 		expect(view.getScoreView()).andReturn(createStrictMock(stegen.client.presenter.ScorePresenter.Display.class));
+		expect(view.getMessageView()).andReturn(
+				createStrictMock(stegen.client.presenter.MessagesPresenter.Display.class));
 		expect(view.getChallengeInputView()).andReturn(
 				createStrictMock(stegen.client.presenter.ChallengePresenter.Display.class));
 		expect(view.getWinGameInputView()).andReturn(

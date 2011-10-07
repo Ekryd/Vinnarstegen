@@ -4,6 +4,9 @@ import java.util.*;
 
 import net.sf.jsr107cache.*;
 
+/**
+ * @author Björn Ekryd
+ */
 public class NicknameCache {
 
 	private final Cache cache;

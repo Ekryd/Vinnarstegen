@@ -2,6 +2,9 @@ package stegen.server.command;
 
 import java.io.*;
 
+/**
+ * @author Björn Ekryd
+ */
 public interface PlayerCommand extends Serializable {
 	void execute();
 

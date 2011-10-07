@@ -6,6 +6,9 @@ import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
 
+/**
+ * @author Björn Ekryd
+ */
 public class EventBusImpl implements EventBus {
 
 	private final PlayerCommandServiceAsync playerCommandService;

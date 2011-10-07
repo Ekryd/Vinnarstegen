@@ -7,6 +7,9 @@ import stegen.shared.*;
 
 import com.google.gwt.user.server.rpc.*;
 
+/**
+ * @author Björn Ekryd
+ */
 public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
 	private static final long serialVersionUID = 1134570288972922306L;

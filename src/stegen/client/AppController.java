@@ -4,14 +4,12 @@ import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.*;
 import stegen.client.gui.login.*;
-import stegen.client.gui.message.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.refresh.*;
 import stegen.client.gui.register.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
 import stegen.client.service.insult.*;
-import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class AppController {
@@ -82,7 +80,6 @@ public class AppController {
 	private void createLoggedInPresenters(LoginDataDto loginData) {
 		new LogoutPresenter(new LogoutView(), loginData).go();
 		new RegisteredUserPresenter(new RegisteredUserView(), loginData, eventBus).go();
-		new MessagesPresenter(new MessagesView(), loginData, new MessagePrefixGeneratorImpl(), eventBus).go();
 		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl(),
 				new DateTimeFormatsImpl()).go();
 		new RefreshPresenter(new RefreshView(), eventBus).go();

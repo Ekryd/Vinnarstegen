@@ -11,6 +11,9 @@ import stegen.shared.*;
 
 import com.google.gwt.user.server.rpc.*;
 
+/**
+ * @author Björn Ekryd
+ */
 public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreService {
 	private static final long serialVersionUID = 5777230422402242088L;
 
