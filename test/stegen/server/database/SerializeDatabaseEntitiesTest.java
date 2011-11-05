@@ -16,13 +16,16 @@ public class SerializeDatabaseEntitiesTest {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalTaskQueueTestConfig(),
 			new LocalDatastoreServiceTestConfig());
 	private final Serializer serializer = new Serializer();
+	private CommandInstanceFactory databaseTestObjectFactory;
 
 	@Before
 	public void setUp() {
 		helper.setUp();
-		CommandInstanceFactory.registerPlayer(player.email).getCommand().execute();
-		CommandInstanceFactory.registerPlayer(player2.email).getCommand().execute();
-		CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email, player.email).getCommand().execute();
+		databaseTestObjectFactory = new CommandInstanceFactory();
+		databaseTestObjectFactory.addRegisterPlayer(player.email).getCommand().execute();
+		databaseTestObjectFactory.addRegisterPlayer(player2.email).getCommand().execute();
+		databaseTestObjectFactory.addPlayerWonOverPlayer(player.email, player2.email, player.email).getCommand()
+				.execute();
 	}
 
 	@After
@@ -69,7 +72,7 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializeClearAllScores() {
-		CommandInstance command = CommandInstanceFactory.clearAllScores(player.email);
+		CommandInstance command = databaseTestObjectFactory.addClearAllScores(player.email);
 		Assert.assertEquals(
 				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":4},{\"playerEmail\":{\"address\":\"address2\"},\"score\":1}],\"changedBy\":{\"address\":\"address\"}}",
 				command.getCommandSerialized());
@@ -78,7 +81,7 @@ public class SerializeDatabaseEntitiesTest {
 	@Test
 	public void deserializeCleanAllScores() throws Exception {
 		PlayerRepository playerRepository = PlayerRepository.get();
-		CommandInstance command = CommandInstanceFactory.clearAllScores(player.email);
+		CommandInstance command = databaseTestObjectFactory.addClearAllScores(player.email);
 		command.getCommand().execute();
 		Assert.assertEquals(0, playerRepository.getPlayer(email).getScore());
 
@@ -151,8 +154,8 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializeUndoPlayerCommand() {
-		CommandInstance playerWonOverPlayer = CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email,
-				player.email);
+		CommandInstance playerWonOverPlayer = databaseTestObjectFactory.addPlayerWonOverPlayer(player.email,
+				player2.email, player.email);
 		playerWonOverPlayer.getCommand().execute();
 		CommandInstanceRepository.get().create(playerWonOverPlayer);
 		PlayerCommand command = new UndoPlayerCommand(player.email);
@@ -165,8 +168,8 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void deserializeUndoPlayerCommand() {
-		CommandInstance playerWonOverPlayer = CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email,
-				player.email);
+		CommandInstance playerWonOverPlayer = databaseTestObjectFactory.addPlayerWonOverPlayer(player.email,
+				player2.email, player.email);
 		playerWonOverPlayer.getCommand().execute();
 		CommandInstanceRepository.get().create(playerWonOverPlayer);
 		PlayerCommand command = new UndoPlayerCommand(player.email);

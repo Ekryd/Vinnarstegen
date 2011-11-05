@@ -6,42 +6,72 @@ import stegen.shared.*;
 public class CommandInstanceFactory {
 	private static final EmailAddressDto email = new EmailAddressDto("address");
 	private static final PlayerDto player = new PlayerDto(email, "nickname");
+	private final PlayerRepository playerRepository = PlayerRepository.get();
+	private final CommandInstanceRepository commandInstanceRepository = CommandInstanceRepository.get();
 
-	public static CommandInstance getUserIsNotLoggedInCommand() {
+	public CommandInstanceFactory() {
+
+	}
+
+	public Player createPlayer() {
+		Player player = Player.createPlayer(email);
+		playerRepository.create(player);
+		return player;
+	}
+
+	public CommandInstance addUserIsNotLoggedInCommand() {
 		LoginDataDto loginData = LoginDataDto.userIsNotLoggedIn("signInUrl");
 		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
-		EmailAddressDto email = new EmailAddressDto("address");
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance getUserIsNotRegistered() {
+	public CommandInstance addUserIsNotRegistered() {
 		LoginDataDto loginData = LoginDataDto.userIsNotRegistered(player, "logoutUrl");
 		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance getUserIsLoggedInAndRegistered() {
+	public CommandInstance addUserIsLoggedInAndRegistered() {
 		LoginDataDto loginData = LoginDataDto.userIsLoggedInAndRegistered(player, "logoutUrl");
 		CheckLoginStatus command = CheckLoginStatus.createForTest("requestUri", loginData);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance clearAllScores(EmailAddressDto playerEmail) {
-		PlayerCommand command = new ClearAllScores(playerEmail);
-		CommandInstance commandInstanceToStore = new CommandInstance(command, playerEmail);
+	public CommandInstance addClearAllScores() {
+		PlayerCommand command = new ClearAllScores(email);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance registerPlayer(EmailAddressDto playerEmail) {
-		PlayerCommand command = new RegisterPlayer(playerEmail);
-		CommandInstance commandInstanceToStore = new CommandInstance(command, playerEmail);
+	public CommandInstance addClearAllScores(EmailAddressDto emailAddress) {
+		PlayerCommand command = new ClearAllScores(emailAddress);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, emailAddress);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance playerWonOverPlayer(EmailAddressDto winnerEmail, EmailAddressDto loserEmail,
+	public CommandInstance addRegisterPlayer() {
+		PlayerCommand command = new RegisterPlayer(email);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
+		commandInstanceRepository.create(commandInstanceToStore);
+		return commandInstanceToStore;
+	}
+
+	public CommandInstance addRegisterPlayer(EmailAddressDto emailAddress) {
+		PlayerCommand command = new RegisterPlayer(emailAddress);
+		CommandInstance commandInstanceToStore = new CommandInstance(command, emailAddress);
+		commandInstanceRepository.create(commandInstanceToStore);
+		return commandInstanceToStore;
+	}
+
+	public CommandInstance addPlayerWonOverPlayer(EmailAddressDto winnerEmail, EmailAddressDto loserEmail,
 			EmailAddressDto changedBy) {
 		GameResultDto result = GameResultDto.createEmptyGameResult();
 		result.setScores[0].gameWinnerScore = 11;
@@ -54,12 +84,21 @@ public class CommandInstanceFactory {
 		result.setScores[3].gameLoserScore = 5;
 		PlayerCommand command = new PlayerWonOverPlayer(winnerEmail, loserEmail, result, changedBy);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, changedBy);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 
-	public static CommandInstance sendMessage(String message) {
+	public CommandInstance addSendMessage(String message) {
 		SendMessage sendMessage = new SendMessage(player.email, message);
 		CommandInstance commandInstanceToStore = new CommandInstance(sendMessage, player.email);
+		commandInstanceRepository.create(commandInstanceToStore);
+		return commandInstanceToStore;
+	}
+
+	public CommandInstance addChangeNickname() {
+		ChangeNickname changeNickname = new ChangeNickname(email, "nickname");
+		CommandInstance commandInstanceToStore = new CommandInstance(changeNickname, player.email);
+		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}
 }
