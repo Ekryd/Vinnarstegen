@@ -36,8 +36,8 @@ public class CommandInstanceTest {
 	public void deserializeUserLoggedIn() {
 		EmailAddressDto playerEmail1 = new EmailAddressDto("winner");
 		EmailAddressDto playerEmail2 = new EmailAddressDto("loser");
-		databaseTestObjectFactory.addRegisterPlayer(playerEmail1).getCommand().execute();
-		databaseTestObjectFactory.addRegisterPlayer(playerEmail2).getCommand().execute();
+		databaseTestObjectFactory.createPlayer(playerEmail1);
+		databaseTestObjectFactory.createPlayer(playerEmail2);
 		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1).getCommand()
 				.execute();
 		CommandInstance command = databaseTestObjectFactory.addClearAllScores(playerEmail1);

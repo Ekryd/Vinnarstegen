@@ -19,6 +19,12 @@ public class CommandInstanceFactory {
 		return player;
 	}
 
+	public Player createPlayer(EmailAddressDto emailAddress) {
+		Player player = Player.createPlayer(emailAddress);
+		playerRepository.create(player);
+		return player;
+	}
+
 	public CommandInstance addUserIsNotLoggedInCommand() {
 		LoginDataDto loginData = LoginDataDto.userIsNotLoggedIn("signInUrl");
 		PlayerCommand command = CheckLoginStatus.createForTest("requestUri", loginData);
@@ -60,13 +66,6 @@ public class CommandInstanceFactory {
 	public CommandInstance addRegisterPlayer() {
 		PlayerCommand command = new RegisterPlayer(email);
 		CommandInstance commandInstanceToStore = new CommandInstance(command, email);
-		commandInstanceRepository.create(commandInstanceToStore);
-		return commandInstanceToStore;
-	}
-
-	public CommandInstance addRegisterPlayer(EmailAddressDto emailAddress) {
-		PlayerCommand command = new RegisterPlayer(emailAddress);
-		CommandInstance commandInstanceToStore = new CommandInstance(command, emailAddress);
 		commandInstanceRepository.create(commandInstanceToStore);
 		return commandInstanceToStore;
 	}

@@ -22,8 +22,8 @@ public class SerializeDatabaseEntitiesTest {
 	public void setUp() {
 		helper.setUp();
 		databaseTestObjectFactory = new CommandInstanceFactory();
-		databaseTestObjectFactory.addRegisterPlayer(player.email).getCommand().execute();
-		databaseTestObjectFactory.addRegisterPlayer(player2.email).getCommand().execute();
+		databaseTestObjectFactory.createPlayer(player.email);
+		databaseTestObjectFactory.createPlayer(player2.email);
 		databaseTestObjectFactory.addPlayerWonOverPlayer(player.email, player2.email, player.email).getCommand()
 				.execute();
 	}

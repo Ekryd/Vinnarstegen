@@ -42,6 +42,7 @@ public class PlayerCommandServiceImplTest {
 
 		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getMiscPlayerCommandStack(10);
 		assertEquals(1, commandStack.size());
+		assertEquals("address bytte alias från address till nickname", commandStack.get(0).description);
 	}
 
 	@Test
@@ -51,21 +52,70 @@ public class PlayerCommandServiceImplTest {
 	}
 
 	@Test
-	public void testGetGameResultCommandStack() {
+	public void testGetSendMessageCommandStackNotEmpty() {
+		databaseTestObjectFactory.createPlayer();
+		databaseTestObjectFactory.addSendMessage("message");
+
+		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getSendMessageCommandStack(10);
+		assertEquals(1, commandStack.size());
+		assertEquals("message", commandStack.get(0).description);
+	}
+
+	@Test
+	public void testGetGameResultCommandStackEmpty() {
 		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getGameResultCommandStack(10);
 		assertEquals(0, commandStack.size());
 	}
 
 	@Test
-	public void testGetLoginStatusCommandStack() {
+	public void testGetGameResultCommandStackNotEmpty() {
+		EmailAddressDto playerEmail1 = new EmailAddressDto("winner");
+		EmailAddressDto playerEmail2 = new EmailAddressDto("loser");
+		databaseTestObjectFactory.createPlayer(playerEmail1);
+		databaseTestObjectFactory.createPlayer(playerEmail2);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1);
+
+		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getGameResultCommandStack(10);
+		assertEquals(1, commandStack.size());
+		assertEquals("winner vann över loser och ökade sina poäng från 0 till 4. Förloraren fick 1 poäng",
+				commandStack.get(0).description);
+	}
+
+	@Test
+	public void testGetLoginStatusCommandStackEmpty() {
 		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getLoginStatusCommandStack(10);
 		assertEquals(0, commandStack.size());
 	}
 
 	@Test
-	public void testGetUndoCommand() {
+	public void testGetLoginStatusCommandStackNotEmpty() {
+		databaseTestObjectFactory.createPlayer();
+		databaseTestObjectFactory.addUserIsLoggedInAndRegistered();
+
+		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getLoginStatusCommandStack(10);
+		assertEquals(1, commandStack.size());
+		assertEquals("Loggade just in i applikationen", commandStack.get(0).description);
+	}
+
+	@Test
+	public void testGetUndoCommandEmpty() {
 		PlayerCommandDto undoCommand = playerCommandServiceImpl.getUndoCommand();
 		assertEquals(null, undoCommand);
+	}
+
+	@Test
+	public void testGetUndoCommandNotEmpty() {
+		EmailAddressDto playerEmail1 = new EmailAddressDto("winner");
+		EmailAddressDto playerEmail2 = new EmailAddressDto("loser");
+		databaseTestObjectFactory.createPlayer(playerEmail1);
+		databaseTestObjectFactory.createPlayer(playerEmail2);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1);
+
+		PlayerCommandDto undoCommand = playerCommandServiceImpl.getUndoCommand();
+		assertNotNull(null, undoCommand);
+		assertEquals("winner vann över loser och ökade sina poäng från 0 till 4. Förloraren fick 1 poäng",
+				undoCommand.description);
 	}
 
 }
