@@ -11,8 +11,7 @@ import com.google.gwt.user.client.ui.*;
 
 public class ListScorePanel implements IsWidget {
 
-	private final ScrollPanel baseWidget = new ScrollPanel();
-	private final VerticalPanel panel = new VerticalPanel();
+	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final CleanScoresButton cleanScoresButton = new CleanScoresButton();
 	private final ScoreCellTable scoreCellTable = new ScoreCellTable();
 
@@ -21,9 +20,10 @@ public class ListScorePanel implements IsWidget {
 	}
 
 	private void initLayout() {
-		baseWidget.add(panel);
-		panel.add(scoreCellTable);
-		panel.add(cleanScoresButton);
+		// Stops FireFox from expanding the table
+		baseWidget.setHeight("1px");
+		baseWidget.add(scoreCellTable);
+		baseWidget.add(cleanScoresButton);
 	}
 
 	@Override

@@ -16,6 +16,8 @@ public class MessagePanel implements IsWidget {
 	}
 
 	private void initLayout() {
+		// Stops FireFox from expanding the table
+		baseWidget.setHeight("1px");
 		baseWidget.add(messageTable);
 		baseWidget.add(messageButton);
 	}

@@ -27,10 +27,20 @@ public class MainContentTable implements IsWidget {
 		baseWidget.add(scorePanel, "Poängställning");
 		baseWidget.add(messagePanel, "Meddelanden");
 		baseWidget.add(gameResultPanel, "Matcher");
-		baseWidget.add(loginStatusTable, "Inloggning");
-		baseWidget.add(playerMiscCommandTable, "Övrigt");
+		baseWidget.add(wrapInVerticalPanel(loginStatusTable), "Inloggning");
+		baseWidget.add(wrapInVerticalPanel(playerMiscCommandTable), "Övrigt");
 		baseWidget.setHeight("1000px");
 		baseWidget.selectTab(0);
+	}
+
+	/**
+	 * This is donw to prevent ugly GUI layout in FireFox. The rows height where
+	 * expanded to fill the whole page
+	 */
+	private VerticalPanel wrapInVerticalPanel(IsWidget table) {
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(table);
+		return panel;
 	}
 
 	@Override
