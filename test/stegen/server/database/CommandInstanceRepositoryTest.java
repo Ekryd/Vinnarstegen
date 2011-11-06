@@ -32,12 +32,6 @@ public class CommandInstanceRepositoryTest {
 	}
 
 	@Test
-	public void testGetLatestUndoableDescription() {
-		CommandInstance latestUndoable = CommandInstanceRepository.get().getLatestUndoable();
-		Assert.assertNotNull(latestUndoable);
-	}
-
-	@Test
 	public void testCreateAndDelete() {
 		CommandInstanceRepository commandInstanceRepository = CommandInstanceRepository.get();
 		commandInstanceRepository.create(databaseTestObjectFactory.addClearAllScores());

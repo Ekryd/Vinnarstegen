@@ -67,7 +67,7 @@ public class PlayerMiscCommandsPresenterTest {
 
 		eventBus.updatePlayerMiscCommandList();
 		replay(eventBus, view);
-		presenter.eventCommandRefreshCallback.onSuccess(null);
+		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
 		verify(eventBus, view);
 		reset(eventBus, view);
 

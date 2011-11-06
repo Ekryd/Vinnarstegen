@@ -80,7 +80,7 @@ public class CommandInstance {
 		return commandInJsonFormat.getValue();
 	}
 
-	PlayerCommand getCommand() {
+	public PlayerCommand getCommand() {
 		return serializer.deserialize(commandInJsonFormat.getValue(), getClassName());
 	}
 

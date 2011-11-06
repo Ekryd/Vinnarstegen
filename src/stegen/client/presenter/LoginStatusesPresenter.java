@@ -11,7 +11,7 @@ public class LoginStatusesPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdateLoginStatusListCallback eventUpdateLoginStatusListCallback = creatUpdateLoginStatusListCallback();
-	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 
 	public interface Display {
@@ -53,12 +53,14 @@ public class LoginStatusesPresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createCommandRefreshCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createCommandRefreshCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadLoginStatuses();
+			public void onSuccessImpl(RefreshType result) {
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadLoginStatuses();
+				}
 			}
 		};
 	}

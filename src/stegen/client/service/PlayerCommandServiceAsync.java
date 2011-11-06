@@ -20,4 +20,6 @@ public interface PlayerCommandServiceAsync {
 
 	void getMiscPlayerCommandStack(int maxDepth, AsyncCallback<List<PlayerCommandDto>> callback);
 
+	void getLatestCommandId(AsyncCallback<Long> callback);
+
 }

@@ -11,7 +11,7 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdatePlayerMiscCommandListCallback eventUpdatePlayerMiscCommandListCallback = creatUpdatePlayerMiscCommandListCallback();
-	final CommandRefreshCallback eventCommandRefreshCallback = createRefreshCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createRefreshCallback();
 	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
 	final CommandChallengeCallback eventCommandChallengeCallback = createCommandChallengeCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
@@ -57,12 +57,14 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createRefreshCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createRefreshCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadPlayerMiscCommands();
+			public void onSuccessImpl(RefreshType result) {
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadPlayerMiscCommands();
+				}
 			}
 		};
 	}

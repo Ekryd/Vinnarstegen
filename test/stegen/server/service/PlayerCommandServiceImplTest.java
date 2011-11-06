@@ -118,4 +118,23 @@ public class PlayerCommandServiceImplTest {
 				undoCommand.description);
 	}
 
+	@Test
+	public void testGetLatestCommandIdEmpty() {
+		long latestCommandId = playerCommandServiceImpl.getLatestCommandId();
+		assertEquals(0, latestCommandId);
+	}
+
+	@Test
+	public void testGetLatestCommandIdNotEmpty() {
+		EmailAddressDto playerEmail1 = new EmailAddressDto("winner");
+		EmailAddressDto playerEmail2 = new EmailAddressDto("loser");
+		databaseTestObjectFactory.createPlayer(playerEmail1);
+		databaseTestObjectFactory.createPlayer(playerEmail2);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(playerEmail1, playerEmail2, playerEmail1);
+
+		long latestCommandId = playerCommandServiceImpl.getLatestCommandId();
+		assertEquals(true, latestCommandId != 0);
+	}
+
 }

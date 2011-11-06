@@ -16,7 +16,7 @@ public class ScorePresenter implements Presenter {
 	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
 	final UpdatePlayerScoreListCallback eventChangedScoresCallback = createUpdatePlayerScoreListCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
-	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
 	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
 	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
@@ -95,12 +95,14 @@ public class ScorePresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createCommandRefreshCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createCommandRefreshCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadScores();
+			public void onSuccessImpl(RefreshType result) {
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadScores();
+				}
 			}
 		};
 	}

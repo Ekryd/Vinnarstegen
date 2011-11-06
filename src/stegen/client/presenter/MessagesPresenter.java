@@ -21,7 +21,7 @@ public class MessagesPresenter implements Presenter {
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
 	final UpdateSendMessageListCallback eventUpdateSendMessageListCallback = createUpdateSendMessageListCallback();
 	final CommandSendMessageCallback eventCommandSendMessageCallback = createCommandSendMessageCallback();
-	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
 	private MessagePrefix currentMessagePrefix;
 	private String nickname;
@@ -132,13 +132,15 @@ public class MessagesPresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createCommandRefreshMessagesCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createCommandRefreshMessagesCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadMessages();
+			public void onSuccessImpl(RefreshType result) {
 				changeMessagePrefixOnButton();
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadMessages();
+				}
 			}
 		};
 	}
