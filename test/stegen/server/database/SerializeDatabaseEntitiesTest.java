@@ -96,17 +96,7 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializePlayerWonOverPlayer() {
-		GameResultDto result = GameResultDto.createEmptyGameResult();
-		result.setScores[0].gameWinnerScore = 11;
-		result.setScores[0].gameLoserScore = 5;
-		result.setScores[1].gameWinnerScore = 1;
-		result.setScores[1].gameLoserScore = 5;
-		result.setScores[2].gameWinnerScore = 11;
-		result.setScores[2].gameLoserScore = 5;
-		result.setScores[3].gameWinnerScore = 1;
-		result.setScores[3].gameLoserScore = 5;
-		result.setScores[4].gameWinnerScore = 11;
-		result.setScores[4].gameLoserScore = 5;
+		GameResultDto result = LoginDataDtoFactory.createGameResult41();
 		PlayerCommand command = new PlayerWonOverPlayer(player.email, player2.email, result, player.email);
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(

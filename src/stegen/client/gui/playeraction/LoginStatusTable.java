@@ -12,11 +12,12 @@ public class LoginStatusTable implements IsWidget {
 	private final ListDataProvider<LoginStatusRow> undoListDataProvider = new ListDataProvider<LoginStatusRow>();
 
 	public LoginStatusTable() {
-		init();
+		initColumns();
+		initLayoutColumns();
 		initProvider();
 	}
 
-	private void init() {
+	private void initColumns() {
 		baseWidget.addColumn(new TextColumn<LoginStatusRow>() {
 
 			@Override
@@ -32,6 +33,10 @@ public class LoginStatusTable implements IsWidget {
 			}
 		}, "Händelse");
 
+	}
+
+	private void initLayoutColumns() {
+		baseWidget.addColumnStyleName(0, "playerColumn");
 	}
 
 	private void initProvider() {

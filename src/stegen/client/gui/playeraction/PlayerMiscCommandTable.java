@@ -11,11 +11,12 @@ public class PlayerMiscCommandTable implements IsWidget {
 	private final ListDataProvider<PlayerMiscCommandRow> undoListDataProvider = new ListDataProvider<PlayerMiscCommandRow>();
 
 	public PlayerMiscCommandTable() {
-		init();
+		initColumns();
+		initLayoutColumns();
 		initProvider();
 	}
 
-	private void init() {
+	private void initColumns() {
 		baseWidget.addColumn(new TextColumn<PlayerMiscCommandRow>() {
 
 			@Override
@@ -31,6 +32,10 @@ public class PlayerMiscCommandTable implements IsWidget {
 			}
 		}, "Senaste händelse");
 
+	}
+
+	private void initLayoutColumns() {
+		baseWidget.addColumnStyleName(0, "playerColumn");
 	}
 
 	private void initProvider() {
