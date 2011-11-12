@@ -15,7 +15,6 @@ public class CommandInstanceRepository {
 		return instance;
 	}
 
-	@SuppressWarnings("unchecked")
 	public CommandInstance getLatestUndoable() {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
@@ -24,14 +23,33 @@ public class CommandInstanceRepository {
 			query.setFilter("undoable == undoableParam");
 			query.setOrdering("dateTime desc");
 			query.declareParameters("boolean undoableParam");
-			List<CommandInstance> commands = (List<CommandInstance>) query.execute(true);
-			if (commands.size() == 0) {
-				return CommandInstance.NOT_FOUND;
-			} else {
-				return commands.get(0);
-			}
+
+			return getSingleCommandInstance(query);
 		} finally {
 			pm.close();
+		}
+	}
+
+	public CommandInstance getLatestCommand() {
+		PersistenceManager pm = Pmf.getPersistenceManager();
+		try {
+			Query query = pm.newQuery(CommandInstance.class);
+			query.setRange(0, 1);
+			query.setOrdering("dateTime desc");
+
+			return getSingleCommandInstance(query);
+		} finally {
+			pm.close();
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private CommandInstance getSingleCommandInstance(Query query) {
+		List<CommandInstance> commands = (List<CommandInstance>) query.execute(true);
+		if (commands.size() == 0) {
+			return CommandInstance.NOT_FOUND;
+		} else {
+			return commands.get(0);
 		}
 	}
 
@@ -90,16 +108,16 @@ public class CommandInstanceRepository {
 			Class<? extends PlayerCommand>... filterByCommandType) {
 		query.setFilter("commandTypes.contains(this.commandClassName)");
 		query.declareParameters("java.util.List commandTypes");
-		return (List<CommandInstance>) query.execute(convertTypes(filterByCommandType));
+		return (List<CommandInstance>) query.execute(convertCommandsToClassNames(filterByCommandType));
 	}
 
 	private void preventLazyLoadException(List<CommandInstance> commands) {
 		commands.size();
 	}
 
-	private List<String> convertTypes(Class<? extends PlayerCommand>[] filterByCommandType) {
+	private List<String> convertCommandsToClassNames(Class<? extends PlayerCommand>[] platerCommands) {
 		List<String> returnValue = new ArrayList<String>();
-		for (Class<? extends PlayerCommand> clazz : filterByCommandType) {
+		for (Class<? extends PlayerCommand> clazz : platerCommands) {
 			returnValue.add(clazz.getName());
 		}
 		return returnValue;

@@ -53,7 +53,7 @@ public class UndoPresenterTest {
 
 		eventBus.updateUndoCommand();
 		replay(view, eventBus);
-		presenter.eventCommandRefreshCallback.onSuccessImpl(null);
+		presenter.eventCommandRefreshCallback.onSuccessImpl(RefreshType.CHANGES_ON_SERVER_SIDE);
 		verify(view, eventBus);
 		reset(view, eventBus);
 

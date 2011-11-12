@@ -14,9 +14,12 @@ public interface PlayerCommandService extends RemoteService {
 
 	PlayerCommandDto getUndoCommand();
 
+	long getLatestCommandId();
+
 	List<PlayerCommandDto> getSendMessageCommandStack(int maxDepth);
 
 	List<PlayerCommandDto> getLoginStatusCommandStack(int maxDepth);
 
 	List<PlayerCommandDto> getGameResultCommandStack(int maxDepth);
+
 }

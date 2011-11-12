@@ -20,7 +20,6 @@ public class MailBuilderTest {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(config);
 
 	private static final EmailAddressDto email = new EmailAddressDto("address");
-	private static final EmailAddressDto emptyEmail = new EmailAddressDto("@");
 	private static final String nickname = "nickname";
 	private MailBuilder mailBuilder;
 

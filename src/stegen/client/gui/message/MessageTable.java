@@ -15,11 +15,12 @@ public class MessageTable implements IsWidget {
 	private final DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
 	public MessageTable() {
-		init();
+		initColumns();
+		initLayoutColumns();
 		initProvider();
 	}
 
-	private void init() {
+	private void initColumns() {
 		baseWidget.addColumn(new TextColumn<MessageTableRow>() {
 
 			@Override
@@ -42,6 +43,11 @@ public class MessageTable implements IsWidget {
 			}
 		}, "Meddelande");
 
+	}
+
+	private void initLayoutColumns() {
+		baseWidget.addColumnStyleName(0, "playerColumn");
+		baseWidget.addColumnStyleName(1, "dateColumn");
 	}
 
 	private void initProvider() {

@@ -1,12 +1,17 @@
 package stegen.client.gui;
 
-import stegen.client.gui.message.*;
-import stegen.client.gui.playeraction.*;
+import stegen.client.gui.message.MessagePanel;
+import stegen.client.gui.playeraction.GameResultPanel;
+import stegen.client.gui.playeraction.LoginStatusTable;
+import stegen.client.gui.playeraction.PlayerMiscCommandTable;
 import stegen.client.gui.rules.RulesPanel;
-import stegen.client.gui.score.*;
+import stegen.client.gui.score.ListScorePanel;
 
 import com.google.gwt.dom.client.Style.Unit;
-import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.IsWidget;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 
 public class MainContentTable implements IsWidget {
 
@@ -19,9 +24,6 @@ public class MainContentTable implements IsWidget {
 	private final PlayerMiscCommandTable playerMiscCommandTable = new PlayerMiscCommandTable();
 	private final MessagePanel messagePanel = new MessagePanel();
 	private final RulesPanel rulesPanel = new RulesPanel();
-	
-
-
 
 	public MainContentTable() {
 		initLayout();
@@ -32,12 +34,21 @@ public class MainContentTable implements IsWidget {
 		baseWidget.add(scorePanel, "Poängställning");
 		baseWidget.add(messagePanel, "Meddelanden");
 		baseWidget.add(gameResultPanel, "Matcher");
-		baseWidget.add(loginStatusTable, "Inloggning");
-		baseWidget.add(playerMiscCommandTable, "Övrigt");
+		baseWidget.add(wrapInVerticalPanel(loginStatusTable), "Inloggning");
+		baseWidget.add(wrapInVerticalPanel(playerMiscCommandTable), "Övrigt");
 		baseWidget.add(rulesPanel, "Regler");
 		baseWidget.setHeight("1000px");
 		baseWidget.selectTab(0);
-		
+	}
+
+	/**
+	 * This is donw to prevent ugly GUI layout in FireFox. The rows height where
+	 * expanded to fill the whole page
+	 */
+	private VerticalPanel wrapInVerticalPanel(IsWidget table) {
+		VerticalPanel panel = new VerticalPanel();
+		panel.add(table);
+		return panel;
 	}
 
 	@Override
@@ -64,10 +75,5 @@ public class MainContentTable implements IsWidget {
 	public PlayerMiscCommandTable getPlayerMiscCommandsPanel() {
 		return playerMiscCommandTable;
 	}
-	
-	public RulesPanel getRules() {
-		return rulesPanel;
-	}	
-	
 
 }

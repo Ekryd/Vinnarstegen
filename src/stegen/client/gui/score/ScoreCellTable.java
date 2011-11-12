@@ -22,6 +22,7 @@ public class ScoreCellTable implements IsWidget {
 		initLayout();
 		initTextColumns();
 		initButtonColumns();
+		initLayoutColumns();
 		addDataProvider();
 	}
 
@@ -72,6 +73,12 @@ public class ScoreCellTable implements IsWidget {
 		baseWidget.addColumn(winColumn);
 		baseWidget.addColumn(loseColumn);
 		baseWidget.addColumn(challengeColumn);
+	}
+
+	private void initLayoutColumns() {
+		baseWidget.addColumnStyleName(0, "playerColumn");
+		baseWidget.addColumnStyleName(3, "dateColumn");
+		baseWidget.addColumnStyleName(4, "playerColumn");
 	}
 
 	private void addDataProvider() {

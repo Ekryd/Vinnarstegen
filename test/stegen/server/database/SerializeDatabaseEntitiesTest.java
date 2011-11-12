@@ -16,13 +16,16 @@ public class SerializeDatabaseEntitiesTest {
 	private final LocalServiceTestHelper helper = new LocalServiceTestHelper(new LocalTaskQueueTestConfig(),
 			new LocalDatastoreServiceTestConfig());
 	private final Serializer serializer = new Serializer();
+	private CommandInstanceFactory databaseTestObjectFactory;
 
 	@Before
 	public void setUp() {
 		helper.setUp();
-		CommandInstanceFactory.registerPlayer(player.email).getCommand().execute();
-		CommandInstanceFactory.registerPlayer(player2.email).getCommand().execute();
-		CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email, player.email).getCommand().execute();
+		databaseTestObjectFactory = new CommandInstanceFactory();
+		databaseTestObjectFactory.createPlayer(player.email);
+		databaseTestObjectFactory.createPlayer(player2.email);
+		databaseTestObjectFactory.addPlayerWonOverPlayer(player.email, player2.email, player.email).getCommand()
+				.execute();
 	}
 
 	@After
@@ -69,7 +72,7 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializeClearAllScores() {
-		CommandInstance command = CommandInstanceFactory.clearAllScores(player.email);
+		CommandInstance command = databaseTestObjectFactory.addClearAllScores(player.email);
 		Assert.assertEquals(
 				"{\"oldScores\":[{\"playerEmail\":{\"address\":\"address\"},\"score\":4},{\"playerEmail\":{\"address\":\"address2\"},\"score\":1}],\"changedBy\":{\"address\":\"address\"}}",
 				command.getCommandSerialized());
@@ -78,7 +81,7 @@ public class SerializeDatabaseEntitiesTest {
 	@Test
 	public void deserializeCleanAllScores() throws Exception {
 		PlayerRepository playerRepository = PlayerRepository.get();
-		CommandInstance command = CommandInstanceFactory.clearAllScores(player.email);
+		CommandInstance command = databaseTestObjectFactory.addClearAllScores(player.email);
 		command.getCommand().execute();
 		Assert.assertEquals(0, playerRepository.getPlayer(email).getScore());
 
@@ -93,17 +96,7 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializePlayerWonOverPlayer() {
-		GameResultDto result = GameResultDto.createEmptyGameResult();
-		result.setScores[0].gameWinnerScore = 11;
-		result.setScores[0].gameLoserScore = 5;
-		result.setScores[1].gameWinnerScore = 1;
-		result.setScores[1].gameLoserScore = 5;
-		result.setScores[2].gameWinnerScore = 11;
-		result.setScores[2].gameLoserScore = 5;
-		result.setScores[3].gameWinnerScore = 1;
-		result.setScores[3].gameLoserScore = 5;
-		result.setScores[4].gameWinnerScore = 11;
-		result.setScores[4].gameLoserScore = 5;
+		GameResultDto result = LoginDataDtoFactory.createGameResult41();
 		PlayerCommand command = new PlayerWonOverPlayer(player.email, player2.email, result, player.email);
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
@@ -151,8 +144,8 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void serializeUndoPlayerCommand() {
-		CommandInstance playerWonOverPlayer = CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email,
-				player.email);
+		CommandInstance playerWonOverPlayer = databaseTestObjectFactory.addPlayerWonOverPlayer(player.email,
+				player2.email, player.email);
 		playerWonOverPlayer.getCommand().execute();
 		CommandInstanceRepository.get().create(playerWonOverPlayer);
 		PlayerCommand command = new UndoPlayerCommand(player.email);
@@ -165,8 +158,8 @@ public class SerializeDatabaseEntitiesTest {
 
 	@Test
 	public void deserializeUndoPlayerCommand() {
-		CommandInstance playerWonOverPlayer = CommandInstanceFactory.playerWonOverPlayer(player.email, player2.email,
-				player.email);
+		CommandInstance playerWonOverPlayer = databaseTestObjectFactory.addPlayerWonOverPlayer(player.email,
+				player2.email, player.email);
 		playerWonOverPlayer.getCommand().execute();
 		CommandInstanceRepository.get().create(playerWonOverPlayer);
 		PlayerCommand command = new UndoPlayerCommand(player.email);

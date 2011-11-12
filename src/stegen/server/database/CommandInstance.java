@@ -66,19 +66,21 @@ public class CommandInstance {
 	}
 
 	private static CommandInstance getNotFoundInstance() {
-		return new CommandInstance() {
+		CommandInstance commandInstance = new CommandInstance() {
 			@Override
 			public PlayerCommandDto createPlayerCommandDto() {
 				return null;
 			}
 		};
+		commandInstance.id = 0L;
+		return commandInstance;
 	}
 
 	String getCommandSerialized() {
 		return commandInJsonFormat.getValue();
 	}
 
-	PlayerCommand getCommand() {
+	public PlayerCommand getCommand() {
 		return serializer.deserialize(commandInJsonFormat.getValue(), getClassName());
 	}
 

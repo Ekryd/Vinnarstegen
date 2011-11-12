@@ -53,6 +53,11 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		return latestUndoable.createPlayerCommandDto();
 	}
 
+	@Override
+	public long getLatestCommandId() {
+		return CommandInstanceRepository.get().getLatestCommand().getId();
+	}
+
 	private List<PlayerCommandDto> convertList(List<CommandInstance> commands, int maxDepth) {
 		List<PlayerCommandDto> returnValue = new ArrayList<PlayerCommandDto>();
 		int index = 0;

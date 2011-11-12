@@ -1,5 +1,8 @@
 package stegen.server.service;
 
+import static org.junit.Assert.*;
+import static stegen.shared.LoginDataDtoFactory.*;
+
 import java.util.*;
 
 import org.junit.*;
@@ -35,4 +38,31 @@ public class ScoreServiceImplTest {
 		Assert.assertEquals(20, playerScoreList.size());
 	}
 
+	@Test
+	public void testGetPlayerScoreListSorting() {
+		playerServiceImpl.registerPlayer(new EmailAddressDto("address1"));
+		playerServiceImpl.registerPlayer(new EmailAddressDto("address2"));
+		playerServiceImpl.registerPlayer(new EmailAddressDto("address3"));
+
+		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
+		assertEquals(3, playerScoreList.size());
+		assertEquals("address3", playerScoreList.get(0).player.email.address);
+		assertEquals("address2", playerScoreList.get(1).player.email.address);
+		assertEquals("address1", playerScoreList.get(2).player.email.address);
+
+		GameResultDto result = createGameResult30();
+		PlayerDto player1 = createPlayerDto("address1");
+		PlayerDto player2 = createPlayerDto("address2");
+		PlayerDto player3 = createPlayerDto("address3");
+		scoreServiceImpl.playerWonOverPlayer(player1, player3, result, player3);
+		scoreServiceImpl.playerWonOverPlayer(player2, player3, result, player3);
+
+		playerScoreList = scoreServiceImpl.getPlayerScoreList();
+		assertEquals(3, playerScoreList.size());
+		assertEquals(playerScoreList.get(0).score, playerScoreList.get(1).score);
+
+		// Latest change first
+		assertEquals("address2", playerScoreList.get(0).player.email.address);
+		assertEquals("address1", playerScoreList.get(1).player.email.address);
+	}
 }

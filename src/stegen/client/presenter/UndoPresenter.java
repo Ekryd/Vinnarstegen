@@ -12,7 +12,7 @@ public class UndoPresenter implements Presenter {
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
 	final ClickHandler clickUndoInputHandler = createClickUndoHandler();
-	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
 	final CommandUndoCallback eventCommandUndoCommandCallback = createCommandUndoCallback();
 	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
 	final CommandClearScoresCallback eventCommandClearAllScoresCallback = createCommandClearScoresCallback();
@@ -72,12 +72,14 @@ public class UndoPresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createCommandRefreshCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createCommandRefreshCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadUndoButton();
+			public void onSuccessImpl(RefreshType result) {
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadUndoButton();
+				}
 			}
 		};
 	}

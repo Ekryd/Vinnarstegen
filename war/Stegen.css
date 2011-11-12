@@ -95,6 +95,14 @@ button {
 	border-radius: 5px;
 }
 
+col.playerColumn {
+	width: 190px;
+}
+
+col.dateColumn {
+	width: 140px;
+}
+
 /** Most GWT widgets already have a style name defined */
 .dialogVPanel {
 	margin: 5px;

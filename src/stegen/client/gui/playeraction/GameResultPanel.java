@@ -14,6 +14,8 @@ public class GameResultPanel implements IsWidget {
 	}
 
 	private void initLayout() {
+		// Stops FireFox from expanding the table
+		baseWidget.setHeight("1px");
 		baseWidget.add(table);
 		baseWidget.add(undoButton);
 	}

@@ -134,11 +134,12 @@ public class EventBusImplTest {
 
 	@Test
 	public void testRefresh() {
-		CommandRefreshCallback callback = createMockBuilder(CommandRefreshCallback.class).withConstructor()
-				.createMock();
+		UpdateRefreshCallback callback = createMockBuilder(UpdateRefreshCallback.class).withConstructor().createMock();
 		eventBus.addHandler(callback);
 
-		callback.onSuccess(null);
+		new RefreshServiceStub(playerCommandService).alwaysReturnServerChange();
+
+		callback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
 		replay(callback);
 		replay(playerCommandService, playerService, scoreService);
 

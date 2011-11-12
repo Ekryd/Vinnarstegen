@@ -37,7 +37,7 @@ public class PlayerRepository {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(Player.class);
-			query.setOrdering("score desc");
+			query.setOrdering("score desc, changed desc");
 			List<Player> players = executeAndCastToList(query);
 			for (Player player : players) {
 				doForEachPlayer.exec(player);

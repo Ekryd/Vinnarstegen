@@ -14,6 +14,7 @@ public class EventBusImpl implements EventBus {
 	private final PlayerCommandServiceAsync playerCommandService;
 	private final ScoreServiceAsync scoreService;
 	private final PlayerServiceAsync playerService;
+	private final RefreshService refreshService;
 	private final CallbackRepository callbacks;
 
 	public static EventBus create(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
@@ -27,6 +28,7 @@ public class EventBusImpl implements EventBus {
 		this.scoreService = scoreService;
 		this.playerService = playerService;
 		this.callbacks = callbacks;
+		this.refreshService = new RefreshService(playerCommandService);
 	}
 
 	@Override
@@ -102,8 +104,8 @@ public class EventBusImpl implements EventBus {
 
 	@Override
 	public void refresh() {
-		CommandRefreshCallback callbackCommand = callbacks.get(CommandRefreshCallback.class);
-		createEmptyCallbackIfNull(callbackCommand).onSuccess(null);
+		UpdateRefreshCallback callback = callbacks.get(UpdateRefreshCallback.class);
+		refreshService.refresh(createEmptyCallbackIfNull(callback));
 	}
 
 	@Override

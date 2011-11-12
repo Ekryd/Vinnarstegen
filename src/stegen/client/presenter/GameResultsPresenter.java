@@ -11,7 +11,7 @@ public class GameResultsPresenter implements Presenter {
 	private final Display view;
 	private final EventBus eventBus;
 	final UpdateGameResultListCallback eventUpdateGameResultListCallback = createUpdateGameResultListCallback();
-	final CommandRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
+	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
 	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
 	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
 	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
@@ -60,12 +60,14 @@ public class GameResultsPresenter implements Presenter {
 		};
 	}
 
-	private CommandRefreshCallback createCommandRefreshCallback() {
-		return new CommandRefreshCallback() {
+	private UpdateRefreshCallback createCommandRefreshCallback() {
+		return new UpdateRefreshCallback() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				loadGameResults();
+			public void onSuccessImpl(RefreshType result) {
+				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadGameResults();
+				}
 			}
 		};
 	}

@@ -15,11 +15,12 @@ public class GameResultTable implements IsWidget {
 	private DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
 	public GameResultTable() {
-		initLayout();
+		initColumns();
+		initLayoutColumns();
 		initProvider();
 	}
 
-	private void initLayout() {
+	private void initColumns() {
 		baseWidget.addColumn(new TextColumn<GameResultsRow>() {
 
 			@Override
@@ -42,6 +43,11 @@ public class GameResultTable implements IsWidget {
 			}
 		}, "Match");
 
+	}
+
+	private void initLayoutColumns() {
+		baseWidget.addColumnStyleName(0, "playerColumn");
+		baseWidget.addColumnStyleName(1, "dateColumn");
 	}
 
 	private void initProvider() {
