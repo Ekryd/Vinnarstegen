@@ -1,4 +1,4 @@
-package stegen.client.gui.rules;
+package stegen.client.gui.rules;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
@@ -39,7 +39,7 @@ public class Rules implements IsWidget {
 				"Pelle får 32 + 1 = 33p <br/>"+
 				" <br/>"+
 				"Det lönar sig alltså att spela många matcher och att vinna stort. <br/>"+
-				"Till detta gäller att man endast får utmana någon som ligger 3 steg upp. <br/>"+
+				"Till detta gäller att man endast får utmana någon som ligger 3 max steg upp. <br/>"+
 				"Man får endast tacka nej till en utmaning 1 gång. Vid ett andra nekande räknas matchen förlorad med 3-0. <br/>");
 		
 	}
@@ -49,18 +49,3 @@ public class Rules implements IsWidget {
 	}
 
 }
-classpath för junit
-	- C:\ws\StockWatcher\war\WEB-INF\classes
-	- C:\Program Files\eclipse\plugins\com.google.gwt.eclipse.sdkbundle_2.4.0.relr36v201110112027\gwt-2.4.0\gwt-user.jar
-	- C:\Program Files\eclipse\plugins\com.google.gwt.eclipse.sdkbundle_2.4.0.relr36v201110112027\gwt-2.4.0\gwt-dev.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\appengine-api-1.0-sdk-1.5.5.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\appengine-api-labs-1.5.5.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\appengine-jsr107cache-1.5.5.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\datanucleus-appengine-1.0.9.final.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\datanucleus-core-1.1.5.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\datanucleus-jpa-1.1.5.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\geronimo-jpa_3.0_spec-1.1.1.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\geronimo-jta_1.1_spec-1.1.1.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\gwt-servlet.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\jdo2-api-2.3-eb.jar
-	- C:\ws\StockWatcher\war\WEB-INF\lib\jsr107cache-1.1.jar
