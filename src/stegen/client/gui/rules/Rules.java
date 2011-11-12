@@ -1,4 +1,4 @@
-package stegen.client.gui.playeraction;
+package stegen.client.gui.rules;
 
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.IsWidget;
