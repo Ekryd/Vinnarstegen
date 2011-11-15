@@ -28,7 +28,7 @@ public class Stegen implements EntryPoint {
 		scoreService = GWT.create(ScoreService.class);
 		playerService = GWT.create(PlayerService.class);
 	}
-
+//askias kommentar
 	private void initApplicationController() {
 		appController = new AppController(playerCommandService, scoreService, playerService);
 	}
