@@ -1,15 +1,22 @@
 package stegen.client.gui.rules;
 
 import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.user.client.ui.Widget;
 
-public class Rules implements IsWidget {
+public class RulesPanel implements IsWidget {
 
-	private final HTML baseWidget;
+	private final HTML rules = new HTML();
+	private final HorizontalPanel baseWidget = new HorizontalPanel();
 	
-	public Rules() {
-		baseWidget = new HTML(
+	public RulesPanel() {
+		initLayout();
+		
+	}
+	
+	private void initLayout() {
+		rules.setHTML(
 				"Vi spelar matcher om bäst av fem set (först till tre).<br/>"+
 				"Varje set ger en poäng, alltså spelar vi om fem poäng i varje match.<br/>"+
 				"<br/>"+
@@ -39,10 +46,14 @@ public class Rules implements IsWidget {
 				"Pelle får 32 + 1 = 33p <br/>"+
 				" <br/>"+
 				"Det lönar sig alltså att spela många matcher och att vinna stort. <br/>"+
-				"Till detta gäller att man endast får utmana någon som ligger 3 max steg upp. <br/>"+
+				"Till detta gäller att man endast får utmana någon som ligger 3 steg upp. <br/>"+
 				"Man får endast tacka nej till en utmaning 1 gång. Vid ett andra nekande räknas matchen förlorad med 3-0. <br/>");
 		
+		
+		baseWidget.add(rules);
 	}
+
+
 	@Override
 	public Widget asWidget() {
 		return baseWidget;

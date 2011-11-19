@@ -2,6 +2,7 @@ package stegen.client.gui;
 
 import stegen.client.gui.message.*;
 import stegen.client.gui.playeraction.*;
+import stegen.client.gui.rules.*;
 import stegen.client.gui.score.*;
 
 import com.google.gwt.dom.client.Style.Unit;
@@ -17,6 +18,7 @@ public class MainContentTable implements IsWidget {
 	private final LoginStatusTable loginStatusTable = new LoginStatusTable();
 	private final PlayerMiscCommandTable playerMiscCommandTable = new PlayerMiscCommandTable();
 	private final MessagePanel messagePanel = new MessagePanel();
+	private final RulesPanel rulesPanel = new RulesPanel();
 
 	public MainContentTable() {
 		initLayout();
@@ -29,6 +31,7 @@ public class MainContentTable implements IsWidget {
 		baseWidget.add(gameResultPanel, "Matcher");
 		baseWidget.add(wrapInVerticalPanel(loginStatusTable), "Inloggning");
 		baseWidget.add(wrapInVerticalPanel(playerMiscCommandTable), "Övrigt");
+		baseWidget.add(rulesPanel, "Regler");
 		baseWidget.setHeight("1000px");
 		baseWidget.selectTab(0);
 	}
@@ -66,6 +69,10 @@ public class MainContentTable implements IsWidget {
 
 	public PlayerMiscCommandTable getPlayerMiscCommandsPanel() {
 		return playerMiscCommandTable;
+	}
+
+	public RulesPanel getRulesPanel() {
+		return rulesPanel;
 	}
 
 }
