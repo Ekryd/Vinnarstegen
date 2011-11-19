@@ -39,9 +39,11 @@ public class ScoreServiceImplTest {
 	}
 
 	@Test
-	public void testGetPlayerScoreListSorting() {
+	public void testGetPlayerScoreListSorting() throws InterruptedException {
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address1"));
+		Thread.sleep(50);
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address2"));
+		Thread.sleep(50);
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address3"));
 
 		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
