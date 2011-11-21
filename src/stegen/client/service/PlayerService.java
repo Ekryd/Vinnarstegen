@@ -16,5 +16,7 @@ public interface PlayerService extends RemoteService {
 	String changeNickname(PlayerDto player, String nickname);
 
 	String getNickname(EmailAddressDto player);
+	
+	boolean isNUP(String registrationCode);
 
 }

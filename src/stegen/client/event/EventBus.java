@@ -37,5 +37,7 @@ public interface EventBus {
 	void updateLoginStatusList();
 
 	void updatePlayerMiscCommandList();
+	
+	void isNUP(String nup);
 
 }

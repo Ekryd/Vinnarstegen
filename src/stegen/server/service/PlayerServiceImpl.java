@@ -8,7 +8,7 @@ import stegen.shared.*;
 import com.google.gwt.user.server.rpc.*;
 
 /**
- * @author Björn Ekryd
+ * @author Björn Ekryd and Askia Linder
  */
 public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
@@ -59,5 +59,13 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	@Override
 	public String getNickname(EmailAddressDto address) {
 		return StegenUserRepository.get().getOrCreateNickname(address);
+	}
+
+	
+	@Override
+	public boolean isNUP(String registrationCode) {
+		// TODO dont hardcode the password, fetch it from property or db
+		final String NEW_USER_PASSWORD="Waldner";		
+		return NEW_USER_PASSWORD.equals(registrationCode);
 	}
 }

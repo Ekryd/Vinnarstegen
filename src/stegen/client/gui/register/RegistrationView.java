@@ -28,4 +28,11 @@ public class RegistrationView implements Display {
 	public void showRegistrationFail() {
 		registerPanel.showRegistrationFail();
 	}
+
+	@Override
+	public void addKeyPressHandler(KeyPressHandler keyPressHandler) {
+		registerPanel.addKeyPressHandler(keyPressHandler);		
+	}
+	
+	
 }

@@ -7,7 +7,7 @@ public class RegisterPanel implements IsWidget {
 
 	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final Button registeraButton = new Button("Registrera");
-	private final Label registerLabel = new Label("Du måste skriva in den magiska koden för att registrera dig.");
+	private final Label registerLabel = new Label("Du måste ange 'New User Password' för att registrera dig.");
 	private final TextBox kodField = new TextBox();;
 
 	public RegisterPanel() {
@@ -37,11 +37,16 @@ public class RegisterPanel implements IsWidget {
 	}
 
 	public void showRegistrationFail() {
-		registerLabel.setText("Nej, det där gick inte bra. Skriv in den magiska koden för att registrera dig.");
+		registerLabel.setText("Fel 'New User Password', pröva igen.");
 	}
 
 	public void addClickRegistrationHandler(ClickHandler clickHandler) {
 		registeraButton.addClickHandler(clickHandler);
+	}
+	
+	public void addKeyPressHandler(KeyPressHandler keyPressHandler){
+		kodField.addKeyPressHandler(keyPressHandler);
+		
 	}
 
 }
