@@ -47,25 +47,25 @@ public class RegisterationPresenterTest {
 		simulateRegistrationClick();
 	}
 
-	@Test
-	public void testRegistrationSucceed() {
-		setupPresenter();
-		presenter.go();
 
-		passcode = "SuckoPust";
-		setupRegistrationSucceedExpectations();
-
-		simulateRegistrationClick();
-	}
 
 	@Test
 	public void testRegisterPlayerCallback() {
 		setupPresenter();
-
+		eventBus.registerPlayer(loginData.player.email);
 		eventBus.getUserLoginStatus("hostPageBaseURL");
 		replay(view, eventBus);
 
-		presenter.eventCommandRegisterPlayerHandler.onSuccess(null);
+		presenter.eventNUP.onSuccess(true);
+	}
+	
+	@Test
+	public void testNoSuccessPlayerCallback() {
+		setupPresenter();
+		view.showRegistrationFail();
+		replay(view, eventBus);
+
+		presenter.eventNUP.onSuccess(false);
 	}
 
 	private void setupPresenter() {
@@ -74,27 +74,24 @@ public class RegisterationPresenterTest {
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
-		eventBus.addHandler(presenter.eventCommandRegisterPlayerHandler);
+		view.addClickRegistrationHandler(presenter.checkNUPHandler);
+		view.addKeyPressHandler(presenter.nupKeyhandler);
+		
+		eventBus.addHandler(presenter.eventNUP);
 		replay(view, eventBus);
 	}
 
 	private void setupRegistrationFailExpectations() {
 		reset(view, eventBus);
 		expect(view.getRegistrationCode()).andReturn(passcode);
-		view.showRegistrationFail();
+		eventBus.isNUP(passcode);		
 		replay(view, eventBus);
 	}
 
-	private void setupRegistrationSucceedExpectations() {
-		reset(view, eventBus);
-		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.registerPlayer(loginData.player.email);
-		replay(view, eventBus);
-	}
+	
 
 	private void simulateRegistrationClick() {
-		presenter.checkRegistrationOkHandler.onClick(null);
+		presenter.checkNUPHandler.onClick(null);
 	}
 
 }

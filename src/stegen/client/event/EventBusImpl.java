@@ -7,7 +7,7 @@ import stegen.shared.*;
 import com.google.gwt.user.client.rpc.*;
 
 /**
- * @author Björn Ekryd
+ * @author Björn Ekryd and Askia Linder
  */
 public class EventBusImpl implements EventBus {
 
@@ -137,6 +137,13 @@ public class EventBusImpl implements EventBus {
 			return callback;
 		}
 		return new EmptyCallback<T>();
+	}
+
+	@Override
+	public void isNUP(String nup) {
+		CommandIsNUPCallback callbackCommand = callbacks.get(CommandIsNUPCallback.class);
+		playerService.isNUP(nup, createEmptyCallbackIfNull(callbackCommand));
+		
 	}
 
 }

@@ -39,9 +39,11 @@ public class ScoreServiceImplTest {
 	}
 
 	@Test
-	public void testGetPlayerScoreListSorting() {
+	public void testGetPlayerScoreListSorting() throws InterruptedException {
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address1"));
+		Thread.sleep(50);
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address2"));
+		Thread.sleep(50);
 		playerServiceImpl.registerPlayer(new EmailAddressDto("address3"));
 
 		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
@@ -64,5 +66,17 @@ public class ScoreServiceImplTest {
 		// Latest change first
 		assertEquals("address2", playerScoreList.get(0).player.email.address);
 		assertEquals("address1", playerScoreList.get(1).player.email.address);
+	}
+	
+	@Test
+	public void testCorrectNUP(){
+		final String NUP = "Waldner";
+		assertTrue("password incorrect: "+NUP, playerServiceImpl.isNUP(NUP));
+	}
+	
+	@Test
+	public void testInCorrectNUP(){
+		final String NUP = "waldner";
+		assertFalse("password incorrect: "+NUP, playerServiceImpl.isNUP(NUP));
 	}
 }

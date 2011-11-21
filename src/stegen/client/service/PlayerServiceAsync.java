@@ -16,4 +16,6 @@ public interface PlayerServiceAsync {
 
 	void getNickname(EmailAddressDto player, AsyncCallback<String> callback);
 
+	void isNUP(String registrationCode, AsyncCallback<Boolean> callback);
+
 }
