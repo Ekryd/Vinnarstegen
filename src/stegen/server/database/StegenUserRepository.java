@@ -135,11 +135,7 @@ public class StegenUserRepository {
 	}
 
 	public void clearCache() {
-		try {
-			cache.clear();
-		} catch (CacheException e) {
-			e.printStackTrace();
-		}
+		cache.clear();
 	}
 
 }
