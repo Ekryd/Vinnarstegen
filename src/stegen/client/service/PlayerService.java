@@ -17,4 +17,6 @@ public interface PlayerService extends RemoteService {
 
 	String getNickname(EmailAddressDto player);
 
+	void removePlayer(EmailAddressDto email);
+
 }

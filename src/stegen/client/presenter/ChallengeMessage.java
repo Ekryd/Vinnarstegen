@@ -38,7 +38,7 @@ public class ChallengeMessage {
 	}
 
 	public ChallengeMessageDto createDto() {
-		return new ChallengeMessageDto(challengerEmail, challengee, insult, message, SUBJECT);
+		return new ChallengeMessageDto(challengerEmail, challengee.email, insult, message, SUBJECT);
 	}
 
 	public String getMessage() {

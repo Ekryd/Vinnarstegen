@@ -6,7 +6,7 @@ public class ChallengeMessageDto implements Serializable {
 	private static final long serialVersionUID = 2612413882389891300L;
 
 	public EmailAddressDto challengerEmail;
-	public PlayerDto challengee;
+	public EmailAddressDto challengeeEmail;
 	public String insult;
 	public String body;
 	public String subject;
@@ -14,10 +14,10 @@ public class ChallengeMessageDto implements Serializable {
 	/** For Serialization */
 	protected ChallengeMessageDto() {}
 
-	public ChallengeMessageDto(EmailAddressDto challengerEmail, PlayerDto challengee, String insult, String body,
-			String subject) {
+	public ChallengeMessageDto(EmailAddressDto challengerEmail, EmailAddressDto challengeeEmail, String insult,
+			String body, String subject) {
 		this.challengerEmail = challengerEmail;
-		this.challengee = challengee;
+		this.challengeeEmail = challengeeEmail;
 		this.insult = insult;
 		this.body = body;
 		this.subject = subject;

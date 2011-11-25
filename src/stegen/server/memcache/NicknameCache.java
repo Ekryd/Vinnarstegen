@@ -9,7 +9,7 @@ import net.sf.jsr107cache.*;
  */
 public class NicknameCache {
 
-	private final Cache cache;
+	private Cache cache;
 
 	public NicknameCache() throws CacheException {
 		this.cache = createCache();
@@ -20,8 +20,9 @@ public class NicknameCache {
 		return cacheFactory.createCache(Collections.emptyMap());
 	}
 
-	public void clear() {
+	public void clear() throws CacheException {
 		cache.clear();
+		this.cache = createCache();
 	}
 
 	public boolean containsKey(String emailAddress) {

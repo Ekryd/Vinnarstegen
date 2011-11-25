@@ -43,7 +43,8 @@ public class CheckLoginStatus implements PlayerCommand {
 	}
 
 	private boolean isUserRegistered(UserService userService) {
-		return PlayerRepository.get().isUserRegistered(userService.getCurrentUser().getEmail());
+		String address = userService.getCurrentUser().getEmail();
+		return PlayerRepository.get().isUserRegistered(new EmailAddressDto(address));
 	}
 
 	private LoginDataDto userIsLoggedInAndRegistered(UserService userService) {

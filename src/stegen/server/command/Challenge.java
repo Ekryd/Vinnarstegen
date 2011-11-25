@@ -24,7 +24,7 @@ public class Challenge implements PlayerCommand {
 	public Challenge(ChallengeMessageDto message) {
 		this.insult = message.insult;
 		this.challenger = message.challengerEmail;
-		this.challengee = message.challengee.email;
+		this.challengee = message.challengeeEmail;
 		this.messageBody = message.body;
 		this.subject = message.subject;
 	}

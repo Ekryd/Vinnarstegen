@@ -37,6 +37,13 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	}
 
 	@Override
+	public void removePlayer(EmailAddressDto email) {
+		PlayerCommand command = new RemovePlayer(email);
+		command.execute();
+		saveCommand(command, email);
+	}
+
+	@Override
 	public void sendMessage(PlayerDto player, String message) {
 		PlayerCommand command = new SendMessage(player.email, message);
 		command.execute();

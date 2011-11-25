@@ -19,14 +19,14 @@ public class PlayerRepository {
 		void exec(Player player);
 	}
 
-	public boolean isUserRegistered(Object email) {
+	public boolean isUserRegistered(EmailAddressDto email) {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			Query query = pm.newQuery(Player.class, "select emailString");
 			query.setFilter("emailString == emailParam");
 			query.declareParameters("String emailParam");
 			@SuppressWarnings("unchecked")
-			List<String> emails = (List<String>) query.execute(email);
+			List<String> emails = (List<String>) query.execute(email.address);
 			return !emails.isEmpty();
 		} finally {
 			pm.close();
@@ -75,6 +75,16 @@ public class PlayerRepository {
 		PersistenceManager pm = Pmf.getPersistenceManager();
 		try {
 			pm.makePersistent(player);
+		} finally {
+			pm.close();
+		}
+	}
+
+	public void removePlayer(EmailAddressDto emailOfPlayerToRemove) {
+		PersistenceManager pm = Pmf.getPersistenceManager();
+		try {
+			Player player = pm.getObjectById(Player.class, emailOfPlayerToRemove.address);
+			pm.deletePersistent(player);
 		} finally {
 			pm.close();
 		}
