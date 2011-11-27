@@ -197,4 +197,20 @@ public class SerializeDatabaseEntitiesTest {
 				deserialize.getDescription());
 	}
 
+	@Test
+	public void serializeRemovePlayerCommand() {
+		databaseTestObjectFactory.addChangeNickname().getCommand().execute();
+		PlayerCommand command = new RemovePlayer(player.email);
+		command.execute();
+		String actual = serializer.deepSerialize(command);
+		Assert.assertEquals("{\"email\":{\"address\":\"address\"},\"nickname\":\"nickname\"}", actual);
+	}
+
+	@Test
+	public void deserializeRemovePlayerCommand() {
+		PlayerCommand deserialize = serializer.deserialize(
+				"{\"email\":{\"address\":\"address\"},\"nickname\":\"nickname\"}", RemovePlayer.class);
+		Assert.assertEquals("Tog bort spelare nickname, med email address", deserialize.getDescription());
+	}
+
 }

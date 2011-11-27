@@ -7,17 +7,17 @@ import stegen.shared.*;
 public class RemovePlayer implements PlayerCommand {
 	private static final long serialVersionUID = -3955114274841770714L;
 	private final EmailAddressDto email;
-	private final String alias;
+	private final String nickname;
 
 	/** Only for serialization */
 	protected RemovePlayer() {
 		this.email = null;
-		this.alias = null;
+		this.nickname = null;
 	}
 
 	public RemovePlayer(EmailAddressDto email) {
 		this.email = email;
-		this.alias = NicknameService.get().getNickname(email);
+		this.nickname = NicknameService.get().getNickname(email);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class RemovePlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		return String.format("Tog bort spelare %s, med email %s", alias, email.address);
+		return String.format("Tog bort spelare %s, med email %s", nickname, email.address);
 	}
 
 	@Override
