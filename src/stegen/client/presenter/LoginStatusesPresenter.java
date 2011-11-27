@@ -46,7 +46,8 @@ public class LoginStatusesPresenter implements Presenter {
 			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
 				List<LoginStatusRow> content = new ArrayList<LoginStatusRow>();
 				for (PlayerCommandDto playerCommandDto : gameResults) {
-					content.add(new LoginStatusRow(playerCommandDto.player.nickname, playerCommandDto.description));
+					content.add(new LoginStatusRow(playerCommandDto.player.nickname,
+							playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changeLoginStatusList(content);
 			}

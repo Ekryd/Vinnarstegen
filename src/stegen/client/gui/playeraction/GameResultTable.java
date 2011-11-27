@@ -12,7 +12,7 @@ import com.google.gwt.view.client.*;
 public class GameResultTable implements IsWidget {
 	private final CellTable<GameResultsRow> baseWidget = new CellTable<GameResultsRow>();
 	private final ListDataProvider<GameResultsRow> undoListDataProvider = new ListDataProvider<GameResultsRow>();
-	private DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
+	private final DateTimeFormats dateTimeFormats = new DateTimeFormatsImpl();
 
 	public GameResultTable() {
 		initColumns();

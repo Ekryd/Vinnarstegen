@@ -50,7 +50,8 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
 				List<PlayerMiscCommandRow> content = new ArrayList<PlayerMiscCommandRow>();
 				for (PlayerCommandDto playerCommandDto : gameResults) {
-					content.add(new PlayerMiscCommandRow(playerCommandDto.player.nickname, playerCommandDto.description));
+					content.add(new PlayerMiscCommandRow(playerCommandDto.player.nickname,
+							playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changePlayerMiscCommandList(content);
 			}
