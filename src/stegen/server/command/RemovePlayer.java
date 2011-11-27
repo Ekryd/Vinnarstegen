@@ -1,6 +1,7 @@
 package stegen.server.command;
 
 import stegen.server.database.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 public class RemovePlayer implements PlayerCommand {
@@ -16,12 +17,13 @@ public class RemovePlayer implements PlayerCommand {
 
 	public RemovePlayer(EmailAddressDto email) {
 		this.email = email;
-		this.alias = StegenUserRepository.get().getOrCreateNickname(email);
+		this.alias = NicknameService.get().getNickname(email);
 	}
 
 	@Override
 	public void execute() {
 		PlayerRepository.get().removePlayer(email);
+		NicknameService.get().removePlayer(email);
 	}
 
 	@Override
@@ -36,7 +38,7 @@ public class RemovePlayer implements PlayerCommand {
 
 	@Override
 	public boolean isUndoable() {
-		return true;
+		return false;
 	}
 
 }

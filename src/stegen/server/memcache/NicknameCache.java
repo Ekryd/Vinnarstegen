@@ -11,13 +11,18 @@ public class NicknameCache {
 
 	private final Cache cache;
 
-	public NicknameCache() throws CacheException {
+	public NicknameCache() {
 		this.cache = createCache();
 	}
 
-	private Cache createCache() throws CacheException {
-		CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
-		return cacheFactory.createCache(Collections.emptyMap());
+	private Cache createCache() {
+		try {
+			CacheFactory cacheFactory = CacheManager.getInstance().getCacheFactory();
+			return cacheFactory.createCache(Collections.emptyMap());
+		} catch (CacheException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Cannot create Cache", e);
+		}
 	}
 
 	public void clear() {
@@ -34,6 +39,10 @@ public class NicknameCache {
 
 	public String put(String emailAddress, String nickname) {
 		return (String) cache.put(emailAddress, nickname);
+	}
+
+	public void remove(String emailAddress) {
+		cache.remove(emailAddress);
 	}
 
 }

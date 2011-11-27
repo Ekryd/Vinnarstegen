@@ -1,7 +1,7 @@
 package stegen.server.command;
 
-import stegen.server.database.*;
 import stegen.server.mail.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 public class Challenge implements PlayerCommand {
@@ -36,9 +36,9 @@ public class Challenge implements PlayerCommand {
 	}
 
 	private void sendEmailToChallengee() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		String challengerNickname = stegenUserRepository.getOrCreateNickname(challenger);
-		String challengeeNickname = stegenUserRepository.getOrCreateNickname(challengee);
+		NicknameService nicknameService = NicknameService.get();
+		String challengerNickname = nicknameService.getNickname(challenger);
+		String challengeeNickname = nicknameService.getNickname(challengee);
 		MailBuilder mailBuilder = new MailBuilder();
 		mailBuilder.from(challenger, challengerNickname).to(challengee, challengeeNickname).subject(subject)
 				.messageBody(messageBody).send();
@@ -60,9 +60,9 @@ public class Challenge implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		String challengerNickname = stegenUserRepository.getOrCreateNickname(challenger);
-		String challengeeNickname = stegenUserRepository.getOrCreateNickname(challengee);
+		NicknameService nicknameService = NicknameService.get();
+		String challengerNickname = nicknameService.getNickname(challenger);
+		String challengeeNickname = nicknameService.getNickname(challengee);
 		return String.format("%s kallade %s för %s och utmanade därmed honom till duell", challengerNickname,
 				challengeeNickname, insult);
 	}

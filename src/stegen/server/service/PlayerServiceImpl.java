@@ -65,6 +65,6 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 
 	@Override
 	public String getNickname(EmailAddressDto address) {
-		return StegenUserRepository.get().getOrCreateNickname(address);
+		return NicknameService.get().getNickname(address);
 	}
 }

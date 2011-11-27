@@ -1,6 +1,7 @@
 package stegen.server.command;
 
 import stegen.server.database.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 public class RegisterPlayer implements PlayerCommand {
@@ -29,8 +30,7 @@ public class RegisterPlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		return "Registrerade " + stegenUserRepository.getOrCreateNickname(email);
+		return "Registrerade " + NicknameService.get().getNickname(email);
 	}
 
 	@Override

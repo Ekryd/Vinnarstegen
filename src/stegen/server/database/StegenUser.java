@@ -26,10 +26,6 @@ public class StegenUser {
 		return new StegenUser(email.address, email.address);
 	}
 
-	public void updateNickname(String nickname) {
-		this.nickname = nickname;
-	}
-
 	public String getNickname() {
 		return nickname;
 	}

@@ -5,6 +5,7 @@ import java.util.*;
 import javax.jdo.annotations.*;
 
 import stegen.server.command.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 import com.google.appengine.api.datastore.*;
@@ -48,8 +49,7 @@ public class CommandInstance {
 	}
 
 	public PlayerCommandDto createPlayerCommandDto() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		return new PlayerCommandDto(stegenUserRepository.createPlayerDto(emailString), dateTime, getCommand()
+		return new PlayerCommandDto(NicknameService.get().createPlayerDto(emailString), dateTime, getCommand()
 				.getDescription());
 	}
 

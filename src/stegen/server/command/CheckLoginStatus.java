@@ -1,6 +1,7 @@
 package stegen.server.command;
 
 import stegen.server.database.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 import com.google.appengine.api.users.*;
@@ -49,8 +50,7 @@ public class CheckLoginStatus implements PlayerCommand {
 
 	private LoginDataDto userIsLoggedInAndRegistered(UserService userService) {
 		User currentUser = userService.getCurrentUser();
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		return LoginDataDto.userIsLoggedInAndRegistered(stegenUserRepository.createPlayerDto(currentUser.getEmail()),
+		return LoginDataDto.userIsLoggedInAndRegistered(NicknameService.get().createPlayerDto(currentUser.getEmail()),
 				userService.createLogoutURL(requestUri));
 	}
 

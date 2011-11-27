@@ -2,6 +2,7 @@ package stegen.server.command;
 
 import stegen.server.command.score.*;
 import stegen.server.database.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 public class PlayerWonOverPlayer implements PlayerCommand {
@@ -77,11 +78,10 @@ public class PlayerWonOverPlayer implements PlayerCommand {
 
 	@Override
 	public String getDescription() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
+		NicknameService nicknameService = NicknameService.get();
 		return String.format("%s vann över %s och ökade sina poäng från %s till %s. Förloraren fick %s poäng",
-				stegenUserRepository.getOrCreateNickname(winnerEmail),
-				stegenUserRepository.getOrCreateNickname(loserEmail), scores.oldWinnerScore, scores.newWinnerScore,
-				scores.newLoserScore - scores.oldLoserScore);
+				nicknameService.getNickname(winnerEmail), nicknameService.getNickname(loserEmail),
+				scores.oldWinnerScore, scores.newWinnerScore, scores.newLoserScore - scores.oldLoserScore);
 	}
 
 	@Override

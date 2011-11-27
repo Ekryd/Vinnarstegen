@@ -1,6 +1,6 @@
 package stegen.server.command;
 
-import stegen.server.database.*;
+import stegen.server.service.*;
 import stegen.shared.*;
 
 public class ChangeNickname implements PlayerCommand {
@@ -17,16 +17,14 @@ public class ChangeNickname implements PlayerCommand {
 	}
 
 	public ChangeNickname(EmailAddressDto email, String nickname) {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
 		this.email = email;
 		this.newNickname = nickname;
-		this.oldNickname = stegenUserRepository.getOrCreateNickname(email);
+		this.oldNickname = NicknameService.get().getNickname(email);
 	}
 
 	@Override
 	public void execute() {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		stegenUserRepository.updateNickname(email, newNickname);
+		NicknameService.get().updateNickname(email, newNickname);
 	}
 
 	@Override

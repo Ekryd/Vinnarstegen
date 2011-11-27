@@ -8,7 +8,6 @@ import java.util.*;
 import org.junit.*;
 import org.junit.rules.*;
 
-import stegen.server.database.*;
 import stegen.shared.*;
 
 import com.google.appengine.tools.development.testing.*;
@@ -39,10 +38,22 @@ public class RemovedPlayerTest {
 	private void createAndRemovePlayer() {
 		playerServiceImpl.registerPlayer(anotherPlayer.email);
 		playerServiceImpl.registerPlayer(player.email);
+
+		scoreServiceImpl.playerWonOverPlayer(player, anotherPlayer, LoginDataDtoFactory.createGameResult30(), player);
+		playerCommandServiceImpl.undoPlayerCommand(player);
+		playerServiceImpl.sendMessage(player, "message");
+		scoreServiceImpl.playerWonOverPlayer(player, anotherPlayer, LoginDataDtoFactory.createGameResult41(), player);
+		scoreServiceImpl.clearAllScores(player);
+		playerServiceImpl.getUserLoginStatus("requestUri");
 		playerServiceImpl.changeNickname(player, nickname);
 		scoreServiceImpl.challengePlayer(getChallengeMessage());
+
+		removePlayerAndTimeoutCache();
+	}
+
+	private void removePlayerAndTimeoutCache() {
 		playerServiceImpl.removePlayer(player.email);
-		StegenUserRepository.get().clearCache();
+		NicknameService.get().clearCache();
 	}
 
 	private ChallengeMessageDto getChallengeMessage() {
@@ -79,7 +90,7 @@ public class RemovedPlayerTest {
 
 	@Test
 	public void shouldKeepTheirAlias() {
-		String nickname = StegenUserRepository.get().getOrCreateNickname(player.email);
+		String nickname = NicknameService.get().getNickname(player.email);
 		assertThat(nickname, is(nickname));
 	}
 
@@ -88,59 +99,101 @@ public class RemovedPlayerTest {
 		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(2);
 		assertThat(commands, hasSize(2));
 		collector.checkThat(commands.get(1).description,
-				is("alias kallade address2 för insult och utmanade därmed honom till duell"));
+				is("address kallade address2 för insult och utmanade därmed honom till duell"));
 		collector.checkThat(commands.get(1).performedDateTime, notNullValue());
 		collector.checkThat(commands.get(1).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInChangedNicknames() {
-		// TODO
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(3);
+		assertThat(commands, hasSize(3));
+		collector.checkThat(commands.get(2).description, is("address bytte alias från address till alias"));
+		collector.checkThat(commands.get(2).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(2).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInLoginStatuses() {
-		// TODO
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getLoginStatusCommandStack(1);
+		assertThat(commands, hasSize(1));
+		collector.checkThat(commands.get(0).description, is("Loggade just in i applikationen"));
+		collector.checkThat(commands.get(0).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(0).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInClearAllScores() {
-		// TODO
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getGameResultCommandStack(1);
+		assertThat(commands, hasSize(1));
+		collector.checkThat(commands.get(0).description, is("Rensade alla poäng"));
+		collector.checkThat(commands.get(0).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(0).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInPlayerWonOverPlayer() {
-		// TODO
-	}
-
-	@Test
-	public void shouldBeVisibleInRegisterPlayer() {
-		// TODO
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getGameResultCommandStack(2);
+		assertThat(commands, hasSize(2));
+		collector.checkThat(commands.get(1).description,
+				is("address vann över address2 och ökade sina poäng från 0 till 3. Förloraren fick 2 poäng"));
+		collector.checkThat(commands.get(1).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(1).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInRemovePlayer() {
-		// TODO
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(1);
+		assertThat(commands, hasSize(1));
+		collector.checkThat(commands.get(0).description, is("Tog bort spelare alias, med email address"));
+		collector.checkThat(commands.get(0).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(0).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInSendMessage() {
-		// TODO
+		int stackSize = 1;
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getSendMessageCommandStack(stackSize);
+		assertThat(commands, hasSize(stackSize));
+		collector.checkThat(commands.get(stackSize - 1).description, is("message"));
+		collector.checkThat(commands.get(stackSize - 1).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(stackSize - 1).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleInUndoCommand() {
-		// TODO
+		int stackSize = 4;
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(stackSize);
+		assertThat(commands, hasSize(stackSize));
+		collector.checkThat(commands.get(stackSize - 1).description,
+				is("Ångrade address vann över address2 och ökade sina poäng från 0 till 5. Förloraren fick 0 poäng"));
+		collector.checkThat(commands.get(stackSize - 1).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(stackSize - 1).player.email.address, is(player.email.address));
 	}
 
 	@Test
 	public void shouldBeVisibleAsChangedByInPlayerScoreList() {
-		// TODO
+		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
+		assertThat(playerScoreList, hasSize(1));
+		assertThat(playerScoreList.get(0).changedBy.email.address, is(player.email.address));
 	}
 
 	@Test
-	public void shouldBeUndoable() {
-		// TODO
+	public void shouldBeVisibleInRegisterPlayer() {
+		int stackSize = 5;
+		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(stackSize);
+		assertThat(commands, hasSize(stackSize));
+		collector.checkThat(commands.get(stackSize - 1).description, is("Registrerade address"));
+		collector.checkThat(commands.get(stackSize - 1).performedDateTime, notNullValue());
+		collector.checkThat(commands.get(stackSize - 1).player.email.address, is(player.email.address));
+	}
+
+	@Test
+	public void shouldNotBeUndoable() {
+		PlayerCommandDto undoCommand = playerCommandServiceImpl.getUndoCommand();
+		collector.checkThat(undoCommand.description, is("Rensade alla poäng"));
+		collector.checkThat(undoCommand.performedDateTime, notNullValue());
+		collector.checkThat(undoCommand.player.email.address, is(player.email.address));
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.*;
 
 import javax.jdo.annotations.*;
 
+import stegen.server.service.*;
 import stegen.shared.*;
 
 @PersistenceCapable
@@ -47,14 +48,9 @@ public class Player {
 	}
 
 	public PlayerScoreDto createDto(SimpleDateFormat dateFormat) {
-		StegenUserRepository stegenUserRepository = StegenUserRepository.get();
-		return new PlayerScoreDto(stegenUserRepository.createPlayerDto(emailString), score,
-				stegenUserRepository.createPlayerDto(changedByEmailString), dateFormat.format(changed));
-	}
-
-	public void clearScore(EmailAddressDto changedBy) {
-		score = 0;
-		setChangedBy(changedBy);
+		NicknameService nicknameService = NicknameService.get();
+		return new PlayerScoreDto(nicknameService.createPlayerDto(emailString), score,
+				nicknameService.createPlayerDto(changedByEmailString), dateFormat.format(changed));
 	}
 
 	public void changeScore(int newScore, EmailAddressDto changedBy) {
