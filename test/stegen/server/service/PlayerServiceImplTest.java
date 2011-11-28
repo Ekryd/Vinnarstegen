@@ -34,5 +34,17 @@ public class PlayerServiceImplTest {
 		String newNickname = playerServiceImpl.changeNickname(loginData.player, "tomatochgurkaiensallad");
 		assertEquals("tomatochgurkaiensall", newNickname);
 	}
+	
+	@Test
+	public void testCorrectNewUserPasswordOk(){
+		final String newUserPasswordNewUserPassword = "Waldner";
+		assertTrue("password incorrect: "+newUserPasswordNewUserPassword, playerServiceImpl.isNewUserPasswordOk(newUserPasswordNewUserPassword));
+	}
+	
+	@Test
+	public void testInCorrectNewUserPasswordOk(){
+		final String newUserPassword = "waldner";
+		assertFalse("password incorrect: "+newUserPassword, playerServiceImpl.isNewUserPasswordOk(newUserPassword));
+	}
 
 }

@@ -17,6 +17,8 @@ public interface PlayerService extends RemoteService {
 
 	String getNickname(EmailAddressDto player);
 	
-	boolean isNUP(String registrationCode);
+	boolean isNewUserPasswordOk(String registrationCode);
+
+	void removePlayer(EmailAddressDto email);
 
 }

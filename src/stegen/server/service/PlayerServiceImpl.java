@@ -1,5 +1,7 @@
 package stegen.server.service;
 
+import java.io.*;
+
 import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;
@@ -37,6 +39,13 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	}
 
 	@Override
+	public void removePlayer(EmailAddressDto email) {
+		PlayerCommand command = new RemovePlayer(email);
+		command.execute();
+		saveCommand(command, email);
+	}
+
+	@Override
 	public void sendMessage(PlayerDto player, String message) {
 		PlayerCommand command = new SendMessage(player.email, message);
 		command.execute();
@@ -58,12 +67,12 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 
 	@Override
 	public String getNickname(EmailAddressDto address) {
-		return StegenUserRepository.get().getOrCreateNickname(address);
+		return NicknameService.get().getNickname(address);
 	}
 
 	
 	@Override
-	public boolean isNUP(String registrationCode) {
+	public boolean isNewUserPasswordOk(String registrationCode) {
 		// TODO dont hardcode the password, fetch it from property or db
 		final String NEW_USER_PASSWORD="Waldner";		
 		return NEW_USER_PASSWORD.equals(registrationCode);

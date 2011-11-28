@@ -8,6 +8,8 @@ import stegen.client.event.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
 import stegen.shared.*;
 
+import com.google.gwt.event.dom.client.*;
+
 public class RegisterationPresenterTest {
 
 	private RegistrationPresenter presenter;
@@ -15,6 +17,7 @@ public class RegisterationPresenterTest {
 	private Display view;
 	private String passcode;
 	private LoginDataDto loginData;
+	
 
 	@Before
 	public void before() {
@@ -47,6 +50,16 @@ public class RegisterationPresenterTest {
 		simulateRegistrationClick();
 	}
 
+	@Test
+	public void testRegistrationKeyPress() {
+		setupPresenter();
+		presenter.go();
+
+		passcode = "WrongPasscode";
+		setupEnterPressExpectations();
+
+		simulateEnterPress();
+	}
 
 
 	@Test
@@ -56,7 +69,7 @@ public class RegisterationPresenterTest {
 		eventBus.getUserLoginStatus("hostPageBaseURL");
 		replay(view, eventBus);
 
-		presenter.eventNUP.onSuccess(true);
+		presenter.eventNewUserPassword.onSuccess(true);
 	}
 	
 	@Test
@@ -65,7 +78,7 @@ public class RegisterationPresenterTest {
 		view.showRegistrationFail();
 		replay(view, eventBus);
 
-		presenter.eventNUP.onSuccess(false);
+		presenter.eventNewUserPassword.onSuccess(false);
 	}
 
 	private void setupPresenter() {
@@ -74,24 +87,46 @@ public class RegisterationPresenterTest {
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickRegistrationHandler(presenter.checkNUPHandler);
-		view.addKeyPressHandler(presenter.nupKeyhandler);
+		view.addClickRegistrationHandler((ClickHandler)presenter.checkNewUserPasswordHandler);
+		view.addKeyPressHandler((KeyPressHandler)presenter.checkNewUserPasswordHandler);
 		
-		eventBus.addHandler(presenter.eventNUP);
+		eventBus.addHandler(presenter.eventNewUserPassword);
 		replay(view, eventBus);
 	}
 
 	private void setupRegistrationFailExpectations() {
 		reset(view, eventBus);
 		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.isNUP(passcode);		
+		eventBus.isNewUserPasswordOk(passcode);		
+		replay(view, eventBus);
+	}
+	
+	private void setupEnterPressExpectations() {
+		reset(view, eventBus);		
+		expect(view.getRegistrationCode()).andReturn(passcode);
+		eventBus.isNewUserPasswordOk(passcode);		
 		replay(view, eventBus);
 	}
 
 	
 
 	private void simulateRegistrationClick() {
-		presenter.checkNUPHandler.onClick(null);
+		((ClickHandler)presenter.checkNewUserPasswordHandler).onClick(null);
 	}
+	
+	private void simulateEnterPress() {
+		
+		((KeyPressHandler)presenter.checkNewUserPasswordHandler).onKeyPress(new KeyPressEvent() {
+			@Override
+			public char getCharCode() {
+			return KeyCodes.KEY_ENTER;
+			}
+			});
+	}
+	
+	
+
+	
+
 
 }

@@ -68,15 +68,5 @@ public class ScoreServiceImplTest {
 		assertEquals("address1", playerScoreList.get(1).player.email.address);
 	}
 	
-	@Test
-	public void testCorrectNUP(){
-		final String NUP = "Waldner";
-		assertTrue("password incorrect: "+NUP, playerServiceImpl.isNUP(NUP));
-	}
 	
-	@Test
-	public void testInCorrectNUP(){
-		final String NUP = "waldner";
-		assertFalse("password incorrect: "+NUP, playerServiceImpl.isNUP(NUP));
-	}
 }

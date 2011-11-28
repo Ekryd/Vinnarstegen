@@ -7,7 +7,7 @@ public class RegisterPanel implements IsWidget {
 
 	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final Button registeraButton = new Button("Registrera");
-	private final Label registerLabel = new Label("Du måste ange 'New User Password' för att registrera dig.");
+	private final Label registerLabel = new Label("Du måste ange 'Stegen-lösenordet' för att registrera dig.");
 	private final TextBox kodField = new TextBox();;
 
 	public RegisterPanel() {
@@ -37,7 +37,7 @@ public class RegisterPanel implements IsWidget {
 	}
 
 	public void showRegistrationFail() {
-		registerLabel.setText("Fel 'New User Password', pröva igen.");
+		registerLabel.setText("Fel 'Stegen-lösenordet', pröva igen.");
 	}
 
 	public void addClickRegistrationHandler(ClickHandler clickHandler) {
@@ -46,7 +46,6 @@ public class RegisterPanel implements IsWidget {
 	
 	public void addKeyPressHandler(KeyPressHandler keyPressHandler){
 		kodField.addKeyPressHandler(keyPressHandler);
-		
 	}
 
 }

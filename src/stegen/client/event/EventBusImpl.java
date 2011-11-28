@@ -47,6 +47,8 @@ public class EventBusImpl implements EventBus {
 		UpdateLoginStatusCallback callback = callbacks.get(UpdateLoginStatusCallback.class);
 		playerService.getUserLoginStatus(hostPageBaseURL, createEmptyCallbackIfNull(callback));
 	}
+	
+	
 
 	@Override
 	public void changeNickname(final PlayerDto player, final String nickname) {
@@ -58,6 +60,12 @@ public class EventBusImpl implements EventBus {
 	public void registerPlayer(EmailAddressDto email) {
 		CommandRegisterPlayerCallback callbackCommand = callbacks.get(CommandRegisterPlayerCallback.class);
 		playerService.registerPlayer(email, createEmptyCallbackIfNull(callbackCommand));
+	}
+	
+	@Override
+	public void isNewUserPasswordOk(String newUserPassword) {
+		UpdateIsNewUserPasswordOkCallback callbackCommand = callbacks.get(UpdateIsNewUserPasswordOkCallback.class);
+		playerService.isNewUserPasswordOk(newUserPassword, createEmptyCallbackIfNull(callbackCommand));		
 	}
 
 	@Override
@@ -139,11 +147,7 @@ public class EventBusImpl implements EventBus {
 		return new EmptyCallback<T>();
 	}
 
-	@Override
-	public void isNUP(String nup) {
-		CommandIsNUPCallback callbackCommand = callbacks.get(CommandIsNUPCallback.class);
-		playerService.isNUP(nup, createEmptyCallbackIfNull(callbackCommand));
-		
-	}
+	
 
+	
 }
