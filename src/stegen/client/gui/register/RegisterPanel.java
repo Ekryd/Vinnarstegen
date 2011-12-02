@@ -16,15 +16,11 @@ public class RegisterPanel implements IsWidget {
 
 	private void initLayout() {
 		registeraButton.setStylePrimaryName("button");
-
-		kodField.setText("<kod>");
-
 		// Focus the cursor on the name field when the app loads
-		kodField.setFocus(true);
-		kodField.selectAll();
 		baseWidget.add(registerLabel);
 		baseWidget.add(kodField);
 		baseWidget.add(registeraButton);
+		kodField.setFocus(true);		
 	}
 
 	@Override
@@ -37,7 +33,7 @@ public class RegisterPanel implements IsWidget {
 	}
 
 	public void showRegistrationFail() {
-		registerLabel.setText("Fel 'Stegen-lösenordet', pröva igen.");
+		registerLabel.setText("Fel 'Stegen-lösenord', pröva igen.");
 	}
 
 	public void addClickRegistrationHandler(ClickHandler clickHandler) {
@@ -47,5 +43,4 @@ public class RegisterPanel implements IsWidget {
 	public void addKeyPressHandler(KeyPressHandler keyPressHandler){
 		kodField.addKeyPressHandler(keyPressHandler);
 	}
-
 }

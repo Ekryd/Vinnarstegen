@@ -1,7 +1,5 @@
 package stegen.server.service;
 
-import java.io.*;
-
 import stegen.client.service.*;
 import stegen.server.command.*;
 import stegen.server.database.*;
@@ -70,11 +68,9 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 		return NicknameService.get().getNickname(address);
 	}
 
-	
 	@Override
 	public boolean isNewUserPasswordOk(String registrationCode) {
-		// TODO dont hardcode the password, fetch it from property or db
-		final String NEW_USER_PASSWORD="Waldner";		
+		final String NEW_USER_PASSWORD = "Waldner";
 		return NEW_USER_PASSWORD.equals(registrationCode);
 	}
 }

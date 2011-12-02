@@ -19,4 +19,6 @@ public interface PlayerServiceAsync {
 	void isNewUserPasswordOk(String registrationCode, AsyncCallback<Boolean> callback);
 
 	void removePlayer(EmailAddressDto email, AsyncCallback<Void> callback);
+
+
 }

@@ -8,5 +8,4 @@ public abstract class UpdateIsNewUserPasswordOkCallback extends EventCallback<Bo
 	public final Class<UpdateIsNewUserPasswordOkCallback> getCallbackClass() {
 		return UpdateIsNewUserPasswordOkCallback.class;
 	}
-
 }

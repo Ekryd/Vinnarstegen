@@ -17,7 +17,6 @@ public class RegisterationPresenterTest {
 	private Display view;
 	private String passcode;
 	private LoginDataDto loginData;
-	
 
 	@Before
 	public void before() {
@@ -51,14 +50,25 @@ public class RegisterationPresenterTest {
 	}
 
 	@Test
-	public void testRegistrationKeyPress() {
+	public void shouldShowWrongPasswordAfterEnterPress() {
 		setupPresenter();
 		presenter.go();
 
 		passcode = "WrongPasscode";
-		setupEnterPressExpectations();
+		setupRegistrationFailExpectations();
 
 		simulateEnterPress();
+	}
+	
+	@Test
+	public void shouldDoNothingBecauseNoEnterPress() {
+		setupPresenter();
+		presenter.go();
+
+		passcode = "WrongPasscode";
+		setupNoExpectations();
+
+		simulateNoEnterPress();
 	}
 
 
@@ -87,9 +97,7 @@ public class RegisterationPresenterTest {
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickRegistrationHandler((ClickHandler)presenter.checkNewUserPasswordHandler);
-		view.addKeyPressHandler((KeyPressHandler)presenter.checkNewUserPasswordHandler);
-		
+		view.addRegistrationEventHandler(presenter.checkNewUserPasswordHandler);
 		eventBus.addHandler(presenter.eventNewUserPassword);
 		replay(view, eventBus);
 	}
@@ -101,32 +109,31 @@ public class RegisterationPresenterTest {
 		replay(view, eventBus);
 	}
 	
-	private void setupEnterPressExpectations() {
-		reset(view, eventBus);		
-		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.isNewUserPasswordOk(passcode);		
+	private void setupNoExpectations() {
+		reset(view, eventBus);
 		replay(view, eventBus);
 	}
-
 	
-
 	private void simulateRegistrationClick() {
-		((ClickHandler)presenter.checkNewUserPasswordHandler).onClick(null);
+		presenter.checkNewUserPasswordHandler.onClick(null);
 	}
 	
 	private void simulateEnterPress() {
-		
-		((KeyPressHandler)presenter.checkNewUserPasswordHandler).onKeyPress(new KeyPressEvent() {
+		presenter.checkNewUserPasswordHandler.onKeyPress(new KeyPressEvent() {
 			@Override
 			public char getCharCode() {
-			return KeyCodes.KEY_ENTER;
-			}
+				return KeyCodes.KEY_ENTER;
+				}
 			});
 	}
 	
-	
-
-	
-
+	private void simulateNoEnterPress() {
+		presenter.checkNewUserPasswordHandler.onKeyPress(new KeyPressEvent() {
+			@Override
+			public char getCharCode() {
+				return KeyCodes.KEY_TAB;
+				}
+			});
+	}
 
 }

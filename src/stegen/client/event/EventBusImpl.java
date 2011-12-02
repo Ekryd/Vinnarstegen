@@ -47,8 +47,6 @@ public class EventBusImpl implements EventBus {
 		UpdateLoginStatusCallback callback = callbacks.get(UpdateLoginStatusCallback.class);
 		playerService.getUserLoginStatus(hostPageBaseURL, createEmptyCallbackIfNull(callback));
 	}
-	
-	
 
 	@Override
 	public void changeNickname(final PlayerDto player, final String nickname) {
@@ -147,7 +145,4 @@ public class EventBusImpl implements EventBus {
 		return new EmptyCallback<T>();
 	}
 
-	
-
-	
 }
