@@ -27,7 +27,7 @@ public class MainContentTable implements IsWidget {
 	private void initLayout() {
 		baseWidget.setAnimationDuration(1000);
 		baseWidget.add(scorePanel, "Poängställning");
-		baseWidget.add(messagePanel, "Meddelanden");
+		baseWidget.add(messagePanel, "Klotterplank");
 		baseWidget.add(gameResultPanel, "Matcher");
 		baseWidget.add(wrapInVerticalPanel(loginStatusTable), "Inloggning");
 		baseWidget.add(wrapInVerticalPanel(playerMiscCommandTable), "Övrigt");

@@ -20,16 +20,6 @@ public class MessagesView implements Display {
 	}
 
 	@Override
-	public void addClickOpenMessageInputHandler(ClickHandler clickHandler) {
-		messagePanel.addClickOpenMessageInputHandler(clickHandler);
-	}
-
-	@Override
-	public void setMessageInputTitle(String inputTitle) {
-		messagePanel.setMessageInputTitle(inputTitle);
-	}
-
-	@Override
 	public void addClickSendMessageHandler(ClickHandler clickHandler) {
 		messagePanel.addClickSendMessageHandler(clickHandler);
 	}

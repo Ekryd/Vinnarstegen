@@ -32,21 +32,10 @@ public class MessagesPresenterTest {
 	}
 
 	@Test
-	public void testOpenInputDialog() {
-		setupPresenter();
-		presenter.go();
-
-		setupOpenDialogExpects();
-
-		simulateOpenDialogClick();
-	}
-
-	@Test
 	public void testSendEmptyMessage() {
 		setupPresenter();
 		presenter.go();
-		simulateOpenDialogClick();
-
+		
 		setupSendEmptyMessageExpects();
 
 		simulateSendMessage();
@@ -56,8 +45,7 @@ public class MessagesPresenterTest {
 	public void testSendOkMessage() {
 		setupPresenter();
 		presenter.go();
-		simulateOpenDialogClick();
-
+		
 		setupSendOkMessageExpects();
 
 		simulateSendMessage();
@@ -122,13 +110,12 @@ public class MessagesPresenterTest {
 		presenter = new MessagesPresenter(view, loginData, messagePrefixGenerator, eventBus);
 
 		MessagePrefix messagePrefix = new MessagePrefix("buttonText", "actionText");
-		expect(messagePrefixGenerator.getRandomizedPrefix()).andReturn(messagePrefix);
+		expect(messagePrefixGenerator.getPrefix()).andReturn(messagePrefix);
 		replay(messagePrefixGenerator);
 	}
 
 	private void setupInitializationExpects() {
 		view.setMessageButtonTitle("buttonText");
-		view.addClickOpenMessageInputHandler(presenter.clickOpenMessageInputHandler);
 		view.addClickSendMessageHandler(presenter.clickSendMessageHandler);
 		eventBus.addHandler(presenter.eventCommandSendMessageCallback);
 		eventBus.addHandler(presenter.eventUpdateSendMessageListCallback);
@@ -138,16 +125,7 @@ public class MessagesPresenterTest {
 		replay(view, eventBus);
 	}
 
-	private void setupOpenDialogExpects() {
-		reset(view, eventBus, messagePrefixGenerator);
-		view.setMessageInputTitle("nickname actionText");
-		replay(view, eventBus, messagePrefixGenerator);
-	}
-
-	private void simulateOpenDialogClick() {
-		presenter.clickOpenMessageInputHandler.onClick(null);
-	}
-
+	
 	private void setupSendEmptyMessageExpects() {
 		reset(view, eventBus, messagePrefixGenerator);
 		expect(view.getMessageInputContent()).andReturn(" ");
@@ -161,7 +139,7 @@ public class MessagesPresenterTest {
 	private void setupSendOkMessageExpects() {
 		reset(view, eventBus, messagePrefixGenerator);
 		expect(view.getMessageInputContent()).andReturn("message");
-		eventBus.sendMessage(loginData.player, "nickname actionText message");
+		eventBus.sendMessage(loginData.player, "message");
 		replay(view, eventBus, messagePrefixGenerator);
 	}
 
