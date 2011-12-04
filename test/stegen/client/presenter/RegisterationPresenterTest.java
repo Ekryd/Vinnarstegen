@@ -8,6 +8,8 @@ import stegen.client.event.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
 import stegen.shared.*;
 
+import com.google.gwt.event.dom.client.*;
+
 public class RegisterationPresenterTest {
 
 	private RegistrationPresenter presenter;
@@ -48,24 +50,45 @@ public class RegisterationPresenterTest {
 	}
 
 	@Test
-	public void testRegistrationSucceed() {
+	public void shouldShowWrongPasswordAfterEnterPress() {
 		setupPresenter();
 		presenter.go();
 
-		passcode = "SuckoPust";
-		setupRegistrationSucceedExpectations();
+		passcode = "WrongPasscode";
+		setupRegistrationFailExpectations();
 
-		simulateRegistrationClick();
+		simulateEnterPress();
 	}
+	
+	@Test
+	public void shouldDoNothingBecauseNoEnterPress() {
+		setupPresenter();
+		presenter.go();
+
+		passcode = "WrongPasscode";
+		setupNoExpectations();
+
+		simulateNoEnterPress();
+	}
+
 
 	@Test
 	public void testRegisterPlayerCallback() {
 		setupPresenter();
-
+		eventBus.registerPlayer(loginData.player.email);
 		eventBus.getUserLoginStatus("hostPageBaseURL");
 		replay(view, eventBus);
 
-		presenter.eventCommandRegisterPlayerHandler.onSuccess(null);
+		presenter.eventNewUserPassword.onSuccess(true);
+	}
+	
+	@Test
+	public void testNoSuccessPlayerCallback() {
+		setupPresenter();
+		view.showRegistrationFail();
+		replay(view, eventBus);
+
+		presenter.eventNewUserPassword.onSuccess(false);
 	}
 
 	private void setupPresenter() {
@@ -74,27 +97,43 @@ public class RegisterationPresenterTest {
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickRegistrationHandler(presenter.checkRegistrationOkHandler);
-		eventBus.addHandler(presenter.eventCommandRegisterPlayerHandler);
+		view.addRegistrationEventHandler(presenter.checkNewUserPasswordHandler);
+		eventBus.addHandler(presenter.eventNewUserPassword);
 		replay(view, eventBus);
 	}
 
 	private void setupRegistrationFailExpectations() {
 		reset(view, eventBus);
 		expect(view.getRegistrationCode()).andReturn(passcode);
-		view.showRegistrationFail();
+		eventBus.isNewUserPasswordOk(passcode);		
 		replay(view, eventBus);
 	}
-
-	private void setupRegistrationSucceedExpectations() {
+	
+	private void setupNoExpectations() {
 		reset(view, eventBus);
-		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.registerPlayer(loginData.player.email);
 		replay(view, eventBus);
 	}
-
+	
 	private void simulateRegistrationClick() {
-		presenter.checkRegistrationOkHandler.onClick(null);
+		presenter.checkNewUserPasswordHandler.onClick(null);
+	}
+	
+	private void simulateEnterPress() {
+		presenter.checkNewUserPasswordHandler.onKeyPress(new KeyPressEvent() {
+			@Override
+			public char getCharCode() {
+				return KeyCodes.KEY_ENTER;
+				}
+			});
+	}
+	
+	private void simulateNoEnterPress() {
+		presenter.checkNewUserPasswordHandler.onKeyPress(new KeyPressEvent() {
+			@Override
+			public char getCharCode() {
+				return KeyCodes.KEY_TAB;
+				}
+			});
 	}
 
 }

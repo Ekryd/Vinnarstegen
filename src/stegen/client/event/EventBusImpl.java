@@ -7,7 +7,7 @@ import stegen.shared.*;
 import com.google.gwt.user.client.rpc.*;
 
 /**
- * @author Björn Ekryd
+ * @author Björn Ekryd and Askia Linder
  */
 public class EventBusImpl implements EventBus {
 
@@ -58,6 +58,12 @@ public class EventBusImpl implements EventBus {
 	public void registerPlayer(EmailAddressDto email) {
 		CommandRegisterPlayerCallback callbackCommand = callbacks.get(CommandRegisterPlayerCallback.class);
 		playerService.registerPlayer(email, createEmptyCallbackIfNull(callbackCommand));
+	}
+	
+	@Override
+	public void isNewUserPasswordOk(String newUserPassword) {
+		UpdateIsNewUserPasswordOkCallback callbackCommand = callbacks.get(UpdateIsNewUserPasswordOkCallback.class);
+		playerService.isNewUserPasswordOk(newUserPassword, createEmptyCallbackIfNull(callbackCommand));		
 	}
 
 	@Override

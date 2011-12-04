@@ -11,16 +11,19 @@ public class RegistrationPresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
-	final ClickHandler checkRegistrationOkHandler = createCheckRegistrationOkHandler();
-	final CommandRegisterPlayerCallback eventCommandRegisterPlayerHandler = createCommandRegisterPlayerCallback();
+	final Display.NewUserPasswordOkKeyPressAndClickHandler checkNewUserPasswordHandler = new NewUserPasswordOkkeyPressAndClickHandler();
+	final UpdateIsNewUserPasswordOkCallback eventNewUserPassword = createCommandIsNewUserPasswordCallback();
 	private final String hostPageBaseURL;
 
 	public interface Display {
-		void addClickRegistrationHandler(ClickHandler clickHandler);
-
 		String getRegistrationCode();
 
 		void showRegistrationFail();
+
+		void addRegistrationEventHandler(NewUserPasswordOkKeyPressAndClickHandler handler);
+
+		interface NewUserPasswordOkKeyPressAndClickHandler extends KeyPressHandler, ClickHandler {
+		}
 	}
 
 	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, EventBus eventBus,
@@ -31,14 +34,20 @@ public class RegistrationPresenter implements Presenter {
 		this.hostPageBaseURL = hostPageBaseURL;
 	}
 
-	private ClickHandler createCheckRegistrationOkHandler() {
-		return new ClickHandler() {
+	@Override
+	public void go() {
+		view.addRegistrationEventHandler(checkNewUserPasswordHandler);
+		eventBus.addHandler(eventNewUserPassword);
+	}
+
+	private UpdateIsNewUserPasswordOkCallback createCommandIsNewUserPasswordCallback() {
+		return new UpdateIsNewUserPasswordOkCallback() {
 
 			@Override
-			public void onClick(ClickEvent event) {
-				String registrationCode = view.getRegistrationCode();
-				if (registrationCode.equals("SuckoPust")) {
+			public void onSuccessImpl(Boolean result) {
+				if (result) {
 					eventBus.registerPlayer(loginData.player.email);
+					eventBus.getUserLoginStatus(hostPageBaseURL);
 				} else {
 					view.showRegistrationFail();
 				}
@@ -46,20 +55,23 @@ public class RegistrationPresenter implements Presenter {
 		};
 	}
 
-	@Override
-	public void go() {
-		view.addClickRegistrationHandler(checkRegistrationOkHandler);
-		eventBus.addHandler(eventCommandRegisterPlayerHandler);
-	}
+	private class NewUserPasswordOkkeyPressAndClickHandler implements Display.NewUserPasswordOkKeyPressAndClickHandler {
 
-	private CommandRegisterPlayerCallback createCommandRegisterPlayerCallback() {
-		return new CommandRegisterPlayerCallback() {
+		@Override
+		public void onClick(ClickEvent event) {
+			checkRegistrationCode();
+		}
 
-			@Override
-			public void onSuccessImpl(Void result) {
-				eventBus.getUserLoginStatus(hostPageBaseURL);
+		@Override
+		public void onKeyPress(KeyPressEvent event) {
+			if (event.getCharCode() == KeyCodes.KEY_ENTER) {
+				checkRegistrationCode();
 			}
-		};
-	}
+		}
 
+		private void checkRegistrationCode() {
+			String registrationCode = view.getRegistrationCode();
+			eventBus.isNewUserPasswordOk(registrationCode);
+		}
+	}
 }

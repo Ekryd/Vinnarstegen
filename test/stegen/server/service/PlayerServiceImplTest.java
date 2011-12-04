@@ -35,4 +35,17 @@ public class PlayerServiceImplTest {
 		assertEquals("tomatochgurkaiensall", newNickname);
 	}
 
+	@Test
+	public void testCorrectNewUserPasswordOk() {
+		final String newUserPasswordNewUserPassword = "Waldner";
+		assertTrue("password incorrect: " + newUserPasswordNewUserPassword,
+				playerServiceImpl.isNewUserPasswordOk(newUserPasswordNewUserPassword));
+	}
+
+	@Test
+	public void testIncorrectNewUserPassword() {
+		final String newUserPassword = "waldner";
+		assertFalse("password incorrect: " + newUserPassword, playerServiceImpl.isNewUserPasswordOk(newUserPassword));
+	}
+
 }

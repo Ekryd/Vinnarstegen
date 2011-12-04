@@ -11,6 +11,8 @@ public interface EventBus {
 	void changeNickname(final PlayerDto player, final String nickname);
 
 	void registerPlayer(EmailAddressDto email);
+	
+	void isNewUserPasswordOk(String newUserPassword);
 
 	void sendMessage(PlayerDto player, String message);
 
@@ -37,5 +39,7 @@ public interface EventBus {
 	void updateLoginStatusList();
 
 	void updatePlayerMiscCommandList();
+	
+	
 
 }

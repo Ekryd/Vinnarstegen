@@ -67,4 +67,6 @@ public class ScoreServiceImplTest {
 		assertEquals("address2", playerScoreList.get(0).player.email.address);
 		assertEquals("address1", playerScoreList.get(1).player.email.address);
 	}
+	
+	
 }

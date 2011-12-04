@@ -3,8 +3,6 @@ package stegen.client.gui.register;
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
 
-import com.google.gwt.event.dom.client.*;
-
 public class RegistrationView implements Display {
 
 	private final RegisterPanel registerPanel = new RegisterPanel();
@@ -15,11 +13,6 @@ public class RegistrationView implements Display {
 	}
 
 	@Override
-	public void addClickRegistrationHandler(ClickHandler clickHandler) {
-		registerPanel.addClickRegistrationHandler(clickHandler);
-	}
-
-	@Override
 	public String getRegistrationCode() {
 		return registerPanel.getRegistrationText();
 	}
@@ -27,5 +20,11 @@ public class RegistrationView implements Display {
 	@Override
 	public void showRegistrationFail() {
 		registerPanel.showRegistrationFail();
+	}
+
+	@Override
+	public void addRegistrationEventHandler(NewUserPasswordOkKeyPressAndClickHandler handler) {
+		registerPanel.addClickRegistrationHandler(handler);
+		registerPanel.addKeyPressHandler(handler);		
 	}
 }

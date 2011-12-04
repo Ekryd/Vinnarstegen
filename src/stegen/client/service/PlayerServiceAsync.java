@@ -16,6 +16,7 @@ public interface PlayerServiceAsync {
 
 	void getNickname(EmailAddressDto player, AsyncCallback<String> callback);
 
-	void removePlayer(EmailAddressDto email, AsyncCallback<Void> callback);
+	void isNewUserPasswordOk(String registrationCode, AsyncCallback<Boolean> callback);
 
+	void removePlayer(EmailAddressDto email, AsyncCallback<Void> callback);
 }

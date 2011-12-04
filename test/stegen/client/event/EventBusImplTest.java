@@ -60,6 +60,18 @@ public class EventBusImplTest {
 	}
 
 	@Test
+	public void testNewUserPasswordOk() {
+		UpdateIsNewUserPasswordOkCallback callback = creteAndAddCallbackToEventBus(UpdateIsNewUserPasswordOkCallback.class);
+		final String NEW_USER_PASSWORD = "Waldner";
+
+		playerService.isNewUserPasswordOk(NEW_USER_PASSWORD, callback);
+
+		replay(playerCommandService, playerService, scoreService);
+
+		eventBus.isNewUserPasswordOk(NEW_USER_PASSWORD);
+	}
+
+	@Test
 	public void testSendMessage() {
 		CommandSendMessageCallback callback = creteAndAddCallbackToEventBus(CommandSendMessageCallback.class);
 
