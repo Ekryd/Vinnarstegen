@@ -103,6 +103,11 @@ col.dateColumn {
 	width: 140px;
 }
 
+.rulesInsets {
+	padding-left: 15px;
+	padding-top: 10px;
+}
+
 /** Most GWT widgets already have a style name defined */
 .dialogVPanel {
 	margin: 5px;
