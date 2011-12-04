@@ -25,6 +25,13 @@ public class MessageTable implements IsWidget {
 
 			@Override
 			public String getValue(MessageTableRow object) {
+				return object.message;
+			}
+		}, "Klotterplank");
+		baseWidget.addColumn(new TextColumn<MessageTableRow>() {
+
+			@Override
+			public String getValue(MessageTableRow object) {
 				return object.playerName;
 			}
 		}, "Utfört av");
@@ -35,19 +42,13 @@ public class MessageTable implements IsWidget {
 				return dateTimeFormats.formatDate(object.messageDate);
 			}
 		}, "Datum");
-		baseWidget.addColumn(new TextColumn<MessageTableRow>() {
 
-			@Override
-			public String getValue(MessageTableRow object) {
-				return object.message;
-			}
-		}, "Meddelande");
 
 	}
 
 	private void initLayoutColumns() {
-		baseWidget.addColumnStyleName(0, "playerColumn");
-		baseWidget.addColumnStyleName(1, "dateColumn");
+		baseWidget.addColumnStyleName(1, "playerColumn");
+		baseWidget.addColumnStyleName(2, "dateColumn");
 	}
 
 	private void initProvider() {

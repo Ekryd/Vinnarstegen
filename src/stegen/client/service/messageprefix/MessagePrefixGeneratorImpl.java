@@ -26,4 +26,9 @@ public class MessagePrefixGeneratorImpl implements MessagePrefixGenerator {
 	public MessagePrefix getRandomizedPrefix() {
 		return availablePrefix[random.nextInt(availablePrefix.length)];
 	}
+
+	@Override
+	public MessagePrefix getPrefix() {
+		return new MessagePrefix("Klottra", "klottrar");
+	}
 }

@@ -31,14 +31,6 @@ public class MessagePanel implements IsWidget {
 		messageButton.setTitle(buttonTitle);
 	}
 
-	public void addClickOpenMessageInputHandler(ClickHandler clickHandler) {
-		messageButton.addClickOpenMessageInputHandler(clickHandler);
-	}
-
-	public void setMessageInputTitle(String inputTitle) {
-		messageButton.setMessageInputTitle(inputTitle);
-	}
-
 	public void addClickSendMessageHandler(ClickHandler clickHandler) {
 		messageButton.addClickSendMessageHandler(clickHandler);
 	}

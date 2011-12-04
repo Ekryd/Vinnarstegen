@@ -42,15 +42,6 @@ public class MessageButton implements IsWidget {
 		baseWidget.setText(buttonTitle);
 	}
 
-	public void addClickOpenMessageInputHandler(ClickHandler clickHandler) {
-		baseWidget.addClickHandler(clickHandler);
-	}
-
-	public void setMessageInputTitle(String inputTitle) {
-		messageDialog.setLabelText(inputTitle);
-
-	}
-
 	public void addClickSendMessageHandler(ClickHandler clickHandler) {
 		messageDialog.addClickOkHandler(clickHandler);
 	}
