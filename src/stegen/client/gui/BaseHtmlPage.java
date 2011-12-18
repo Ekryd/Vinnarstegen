@@ -6,7 +6,8 @@ public enum BaseHtmlPage {
 	MAIN_AREA("mainArea"),
 	LOGOUT_AREA("logoutArea"),
 	USER_AREA("userArea"),
-	REFRESH_AREA("refreshArea");
+	REFRESH_AREA("refreshArea"),
+	VERSION_AREA("versionArea");
 
 	private String areaName;
 
