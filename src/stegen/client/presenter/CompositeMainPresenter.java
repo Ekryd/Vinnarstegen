@@ -2,7 +2,6 @@ package stegen.client.presenter;
 
 import stegen.client.event.*;
 import stegen.client.service.*;
-import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class CompositeMainPresenter implements Presenter {
@@ -49,7 +48,7 @@ public class CompositeMainPresenter implements Presenter {
 
 	private void initPresenterParts() {
 		new ScorePresenter(view.getScoreView(), loginData, eventBus).go();
-		new MessagesPresenter(view.getMessageView(), loginData, new MessagePrefixGeneratorImpl(), eventBus).go();
+		new MessagesPresenter(view.getMessageView(), loginData, eventBus).go();
 		new ChallengePresenter(view.getChallengeInputView(), loginData, eventBus, insultFactory, dateTimeFormats).go();
 		new WinGameInputPresenter(view.getWinGameInputView(), loginData, eventBus).go();
 		new GameResultsPresenter(view.getGameResultsView(), eventBus).go();

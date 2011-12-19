@@ -5,8 +5,6 @@ import java.util.*;
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.message.*;
-import stegen.client.service.*;
-import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -16,57 +14,39 @@ public class MessagesPresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto loginData;
 	private final EventBus eventBus;
-	private final MessagePrefixGenerator messagePrefixGenerator;
-	final ClickHandler clickOpenMessageInputHandler = createClickOpenMessageInputHandler();
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
 	final UpdateSendMessageListCallback eventUpdateSendMessageListCallback = createUpdateSendMessageListCallback();
 	final CommandSendMessageCallback eventCommandSendMessageCallback = createCommandSendMessageCallback();
 	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
 	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
-	private MessagePrefix currentMessagePrefix;
-	private String nickname;
 
 	public interface Display {
 
-		void setMessageButtonTitle(String buttonText);
-
-		void addClickOpenMessageInputHandler(ClickHandler clickHandler);
-
-		void setMessageInputTitle(String string);
-
-		void addClickSendMessageHandler(ClickHandler clickHandler);
+		void addSendMessageHandler(ClickHandler clickHandler);
 
 		String getMessageInputContent();
+		
+		void clearText();
 
 		void changeMessageList(List<MessageTableRow> content);
 
 	}
 
-	public MessagesPresenter(Display messagesView, LoginDataDto loginData,
-			MessagePrefixGenerator messagePrefixGenerator, EventBus eventBus) {
+	public MessagesPresenter(Display messagesView, LoginDataDto loginData,EventBus eventBus) {
 		this.view = messagesView;
 		this.loginData = loginData;
-		this.messagePrefixGenerator = messagePrefixGenerator;
 		this.eventBus = eventBus;
-		this.nickname = loginData.player.nickname;
 	}
 
 	@Override
 	public void go() {
-		changeMessagePrefixOnButton();
 		initView();
 		initEvents();
 		loadMessages();
 	}
 
-	private void changeMessagePrefixOnButton() {
-		this.currentMessagePrefix = messagePrefixGenerator.getRandomizedPrefix();
-		view.setMessageButtonTitle(currentMessagePrefix.buttonText);
-	}
-
 	private void initView() {
-		view.addClickOpenMessageInputHandler(clickOpenMessageInputHandler);
-		view.addClickSendMessageHandler(clickSendMessageHandler);
+		view.addSendMessageHandler(clickSendMessageHandler);
 	}
 
 	private void initEvents() {
@@ -80,16 +60,6 @@ public class MessagesPresenter implements Presenter {
 		eventBus.updateSendMessageList();
 	}
 
-	private ClickHandler createClickOpenMessageInputHandler() {
-		return new ClickHandler() {
-
-			@Override
-			public void onClick(ClickEvent event) {
-				view.setMessageInputTitle(nickname + " " + currentMessagePrefix.actionText);
-			}
-		};
-	}
-
 	private ClickHandler createClickSendMessageHandler() {
 		return new ClickHandler() {
 
@@ -98,10 +68,8 @@ public class MessagesPresenter implements Presenter {
 				String messageContent = view.getMessageInputContent();
 				boolean emptyMessageContent = messageContent.trim().isEmpty();
 				if (!emptyMessageContent) {
-					String completeMessage = nickname + " " + currentMessagePrefix.actionText + " " + messageContent;
-					eventBus.sendMessage(loginData.player, completeMessage);
+					eventBus.sendMessage(loginData.player, messageContent);
 				}
-
 			}
 		};
 	}
@@ -112,7 +80,7 @@ public class MessagesPresenter implements Presenter {
 			@Override
 			public void onSuccessImpl(Void result) {
 				eventBus.updateSendMessageList();
-				changeMessagePrefixOnButton();
+				view.clearText();
 			}
 		};
 	}
@@ -137,7 +105,6 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(RefreshType result) {
-				changeMessagePrefixOnButton();
 				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadMessages();
 				}
@@ -150,7 +117,6 @@ public class MessagesPresenter implements Presenter {
 
 			@Override
 			public void onSuccessImpl(String newNickname) {
-				nickname = newNickname;
 				loadMessages();
 			}
 

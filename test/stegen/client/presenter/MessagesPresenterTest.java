@@ -10,8 +10,6 @@ import org.junit.*;
 import stegen.client.event.*;
 import stegen.client.gui.message.*;
 import stegen.client.presenter.MessagesPresenter.Display;
-import stegen.client.service.*;
-import stegen.client.service.messageprefix.*;
 import stegen.shared.*;
 
 public class MessagesPresenterTest {
@@ -20,7 +18,6 @@ public class MessagesPresenterTest {
 	private LoginDataDto loginData;
 	private EventBus eventBus;
 	private MessagesPresenter presenter;
-	private MessagePrefixGenerator messagePrefixGenerator;
 
 	@Test
 	public void testShowView() {
@@ -31,22 +28,12 @@ public class MessagesPresenterTest {
 		presenter.go();
 	}
 
-	@Test
-	public void testOpenInputDialog() {
-		setupPresenter();
-		presenter.go();
-
-		setupOpenDialogExpects();
-
-		simulateOpenDialogClick();
-	}
-
+	
 	@Test
 	public void testSendEmptyMessage() {
 		setupPresenter();
 		presenter.go();
-		simulateOpenDialogClick();
-
+		
 		setupSendEmptyMessageExpects();
 
 		simulateSendMessage();
@@ -56,8 +43,7 @@ public class MessagesPresenterTest {
 	public void testSendOkMessage() {
 		setupPresenter();
 		presenter.go();
-		simulateOpenDialogClick();
-
+		
 		setupSendOkMessageExpects();
 
 		simulateSendMessage();
@@ -68,11 +54,12 @@ public class MessagesPresenterTest {
 		setupPresenter();
 
 		eventBus.updateSendMessageList();
-		replay(eventBus);
+		view.clearText();
+		replay(eventBus,view);
 
 		presenter.eventCommandSendMessageCallback.onSuccess(null);
 
-		verify(eventBus);
+		verify(eventBus,view);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -106,7 +93,6 @@ public class MessagesPresenterTest {
 	public void testRefreshCallback() {
 		setupPresenter();
 
-		view.setMessageButtonTitle("buttonText");
 		eventBus.updateSendMessageList();
 		replay(eventBus, view);
 		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
@@ -118,18 +104,11 @@ public class MessagesPresenterTest {
 		loginData = LoginDataDtoFactory.createLoginData();
 		view = createStrictMock(Display.class);
 		eventBus = createStrictMock(EventBus.class);
-		messagePrefixGenerator = createStrictMock(MessagePrefixGenerator.class);
-		presenter = new MessagesPresenter(view, loginData, messagePrefixGenerator, eventBus);
-
-		MessagePrefix messagePrefix = new MessagePrefix("buttonText", "actionText");
-		expect(messagePrefixGenerator.getRandomizedPrefix()).andReturn(messagePrefix);
-		replay(messagePrefixGenerator);
+		presenter = new MessagesPresenter(view, loginData, eventBus);
 	}
 
 	private void setupInitializationExpects() {
-		view.setMessageButtonTitle("buttonText");
-		view.addClickOpenMessageInputHandler(presenter.clickOpenMessageInputHandler);
-		view.addClickSendMessageHandler(presenter.clickSendMessageHandler);
+		view.addSendMessageHandler(presenter.clickSendMessageHandler);
 		eventBus.addHandler(presenter.eventCommandSendMessageCallback);
 		eventBus.addHandler(presenter.eventUpdateSendMessageListCallback);
 		eventBus.addHandler(presenter.eventCommandRefreshCallback);
@@ -138,20 +117,11 @@ public class MessagesPresenterTest {
 		replay(view, eventBus);
 	}
 
-	private void setupOpenDialogExpects() {
-		reset(view, eventBus, messagePrefixGenerator);
-		view.setMessageInputTitle("nickname actionText");
-		replay(view, eventBus, messagePrefixGenerator);
-	}
-
-	private void simulateOpenDialogClick() {
-		presenter.clickOpenMessageInputHandler.onClick(null);
-	}
-
+	
 	private void setupSendEmptyMessageExpects() {
-		reset(view, eventBus, messagePrefixGenerator);
+		reset(view, eventBus);
 		expect(view.getMessageInputContent()).andReturn(" ");
-		replay(view, eventBus, messagePrefixGenerator);
+		replay(view, eventBus);
 	}
 
 	private void simulateSendMessage() {
@@ -159,10 +129,10 @@ public class MessagesPresenterTest {
 	}
 
 	private void setupSendOkMessageExpects() {
-		reset(view, eventBus, messagePrefixGenerator);
+		reset(view, eventBus);
 		expect(view.getMessageInputContent()).andReturn("message");
-		eventBus.sendMessage(loginData.player, "nickname actionText message");
-		replay(view, eventBus, messagePrefixGenerator);
+		eventBus.sendMessage(loginData.player, "message");
+		replay(view, eventBus);
 	}
 
 	private void verifyListContentForPreviousMethod() {

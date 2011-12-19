@@ -8,7 +8,9 @@ import com.google.gwt.user.client.ui.*;
 public class MessagePanel implements IsWidget {
 
 	private final VerticalPanel baseWidget = new VerticalPanel();
-	private final MessageButton messageButton = new MessageButton();
+	private final HorizontalPanel textPanel = new HorizontalPanel();
+	private final Button messageButton = new Button();
+	private final TextArea messageBox = new TextArea();
 	private final MessageTable messageTable = new MessageTable();
 
 	public MessagePanel() {
@@ -19,7 +21,12 @@ public class MessagePanel implements IsWidget {
 		// Stops FireFox from expanding the table
 		baseWidget.setHeight("1px");
 		baseWidget.add(messageTable);
-		baseWidget.add(messageButton);
+		baseWidget.add(textPanel);
+		textPanel.add(messageBox);
+		textPanel.add(messageButton);
+		messageButton.setText("Skicka meddelande");
+		messageButton.setStylePrimaryName("button");
+		messageBox.setCharacterWidth(100);
 	}
 
 	@Override
@@ -27,28 +34,21 @@ public class MessagePanel implements IsWidget {
 		return baseWidget;
 	}
 
-	public void setMessageButtonTitle(String buttonTitle) {
-		messageButton.setTitle(buttonTitle);
+	public void addSendMessageHandler(ClickHandler clickHandler) {
+		messageButton.addClickHandler(clickHandler);
 	}
 
-	public void addClickOpenMessageInputHandler(ClickHandler clickHandler) {
-		messageButton.addClickOpenMessageInputHandler(clickHandler);
-	}
-
-	public void setMessageInputTitle(String inputTitle) {
-		messageButton.setMessageInputTitle(inputTitle);
-	}
-
-	public void addClickSendMessageHandler(ClickHandler clickHandler) {
-		messageButton.addClickSendMessageHandler(clickHandler);
-	}
-
+	
 	public String getMessageInputContent() {
-		return messageButton.getMessageInputText();
+		return messageBox.getValue();
 	}
 
 	public void changeMessageList(List<MessageTableRow> content) {
 		messageTable.changeContent(content);
+	}
+	
+	public void resetInputText() {
+		messageBox.setText("");
 	}
 
 }
