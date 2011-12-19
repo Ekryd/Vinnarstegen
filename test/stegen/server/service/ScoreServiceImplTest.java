@@ -69,4 +69,19 @@ public class ScoreServiceImplTest {
 		assertEquals("address1", playerScoreList.get(1).player.email.address);
 	}
 
+	@Test
+	public void playerWonOverPlayerShouldNotRegisterOnSamePlayer() throws InterruptedException {
+		// Also known as Don't play with yourself in public
+		PlayerDto player1 = createPlayerDto("address1");
+
+		playerServiceImpl.registerPlayer(player1.email);
+
+		GameResultDto result = createGameResult30();
+		scoreServiceImpl.playerWonOverPlayer(player1, player1, result, player1);
+
+		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList(player1.email);
+		assertEquals(1, playerScoreList.size());
+		assertEquals("address1", playerScoreList.get(0).player.email.address);
+		assertEquals(0, playerScoreList.get(0).score);
+	}
 }

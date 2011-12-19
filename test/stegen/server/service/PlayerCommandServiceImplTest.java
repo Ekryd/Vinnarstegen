@@ -46,6 +46,21 @@ public class PlayerCommandServiceImplTest {
 	}
 
 	@Test
+	public void aLongListShouldBeTruncatedToDesiredSize() {
+		databaseTestObjectFactory.createPlayer();
+		databaseTestObjectFactory.addChangeNickname();
+		databaseTestObjectFactory.addChangeNickname();
+		databaseTestObjectFactory.addChangeNickname();
+
+		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getMiscPlayerCommandStack(10);
+		assertEquals(3, commandStack.size());
+
+		int desiredDepth = 2;
+		commandStack = playerCommandServiceImpl.getMiscPlayerCommandStack(desiredDepth);
+		assertEquals(desiredDepth, commandStack.size());
+	}
+
+	@Test
 	public void testGetSendMessageCommandStackEmpty() {
 		List<PlayerCommandDto> commandStack = playerCommandServiceImpl.getSendMessageCommandStack(10);
 		assertEquals(0, commandStack.size());
