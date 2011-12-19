@@ -59,11 +59,11 @@ public class EventBusImpl implements EventBus {
 		CommandRegisterPlayerCallback callbackCommand = callbacks.get(CommandRegisterPlayerCallback.class);
 		playerService.registerPlayer(email, createEmptyCallbackIfNull(callbackCommand));
 	}
-	
+
 	@Override
 	public void isNewUserPasswordOk(String newUserPassword) {
 		UpdateIsNewUserPasswordOkCallback callbackCommand = callbacks.get(UpdateIsNewUserPasswordOkCallback.class);
-		playerService.isNewUserPasswordOk(newUserPassword, createEmptyCallbackIfNull(callbackCommand));		
+		playerService.isNewUserPasswordOk(newUserPassword, createEmptyCallbackIfNull(callbackCommand));
 	}
 
 	@Override
@@ -79,9 +79,9 @@ public class EventBusImpl implements EventBus {
 	}
 
 	@Override
-	public void updatePlayerScoreList() {
+	public void updatePlayerScoreList(EmailAddressDto currentPlayerEmail) {
 		UpdatePlayerScoreListCallback callback = callbacks.get(UpdatePlayerScoreListCallback.class);
-		scoreService.getPlayerScoreList(createEmptyCallbackIfNull(callback));
+		scoreService.getPlayerScoreList(currentPlayerEmail, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override

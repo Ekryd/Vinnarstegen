@@ -93,7 +93,7 @@ public class ChallengePresenterTest {
 
 	private void simulateOpenDialogClick() {
 		PlayerDto challengee = new PlayerDto(new EmailAddressDto("challengeeEmail"), "challengeeName");
-		ScoreTableRow row = new ScoreTableRow(challengee, null, null, null, null, false);
+		ScoreTableRow row = new ScoreTableRow(challengee, null, null, null, null, false, true);
 		presenter.openChallengeInputhandler.update(0, row, null);
 	}
 

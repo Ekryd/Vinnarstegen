@@ -10,15 +10,17 @@ public class ScoreTableRow {
 	public final String changedDateTime;
 	public final String changedBy;
 	public final boolean currentUser;
+	public final boolean showChallengeButton;
 
 	public ScoreTableRow(PlayerDto player, String score, String ranking, String changedDateTime, String changedBy,
-			boolean currentUser) {
+			boolean currentUser, boolean showChallengeButton) {
 		this.player = player;
 		this.score = score;
 		this.ranking = ranking;
 		this.changedDateTime = changedDateTime;
 		this.changedBy = changedBy;
 		this.currentUser = currentUser;
+		this.showChallengeButton = showChallengeButton;
 	}
 
 }

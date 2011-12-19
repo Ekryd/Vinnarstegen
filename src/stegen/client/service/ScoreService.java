@@ -9,7 +9,7 @@ import com.google.gwt.user.client.rpc.*;
 @RemoteServiceRelativePath("score")
 public interface ScoreService extends RemoteService {
 
-	List<PlayerScoreDto> getPlayerScoreList();
+	List<PlayerScoreDto> getPlayerScoreList(EmailAddressDto currentPlayerEmail);
 
 	void playerWonOverPlayer(PlayerDto winnerEmail, PlayerDto loserEmail, GameResultDto result, PlayerDto changedBy);
 

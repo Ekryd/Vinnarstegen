@@ -8,6 +8,7 @@ public class PlayerScoreDto implements Serializable {
 	public PlayerDto player;
 	public int score;
 	public int ranking;
+	public boolean showChallenge;
 	public PlayerDto changedBy;
 	public String changedDateTime;
 

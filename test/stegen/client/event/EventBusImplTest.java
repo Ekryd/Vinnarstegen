@@ -95,10 +95,10 @@ public class EventBusImplTest {
 	public void testUpdatePlayerScoreList() {
 		UpdatePlayerScoreListCallback callback = creteAndAddCallbackToEventBus(UpdatePlayerScoreListCallback.class);
 
-		scoreService.getPlayerScoreList(callback);
+		scoreService.getPlayerScoreList(loginDataDto.player.email, callback);
 		replay(playerCommandService, playerService, scoreService);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginDataDto.player.email);
 	}
 
 	@Test
