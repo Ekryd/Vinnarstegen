@@ -15,24 +15,10 @@ public class MessagesView implements Display {
 	}
 
 	@Override
-	public void setMessageButtonTitle(String buttonTitle) {
-		messagePanel.setMessageButtonTitle(buttonTitle);
+	public void addSendMessageHandler(ClickHandler clickHandler) {
+		messagePanel.addSendMessageHandler(clickHandler);
 	}
 
-	@Override
-	public void addClickOpenMessageInputHandler(ClickHandler clickHandler) {
-		messagePanel.addClickOpenMessageInputHandler(clickHandler);
-	}
-
-	@Override
-	public void setMessageInputTitle(String inputTitle) {
-		messagePanel.setMessageInputTitle(inputTitle);
-	}
-
-	@Override
-	public void addClickSendMessageHandler(ClickHandler clickHandler) {
-		messagePanel.addClickSendMessageHandler(clickHandler);
-	}
 
 	@Override
 	public String getMessageInputContent() {
@@ -42,6 +28,12 @@ public class MessagesView implements Display {
 	@Override
 	public void changeMessageList(List<MessageTableRow> content) {
 		messagePanel.changeMessageList(content);
+	}
+
+	@Override
+	public void clearText() {
+		messagePanel.resetInputText();
+		
 	}
 
 }
