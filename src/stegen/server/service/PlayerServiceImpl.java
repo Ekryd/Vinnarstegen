@@ -5,6 +5,7 @@ import stegen.server.command.*;
 import stegen.server.database.*;
 import stegen.shared.*;
 
+import com.google.appengine.api.utils.*;
 import com.google.gwt.user.server.rpc.*;
 
 /**
@@ -13,6 +14,12 @@ import com.google.gwt.user.server.rpc.*;
 public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
 	private static final long serialVersionUID = 1134570288972922306L;
+
+	@Override
+	public String getApplicationVersion() {
+		// Return version without timestamp
+		return SystemProperty.applicationVersion.get().replaceAll("\\..*", "");
+	}
 
 	@Override
 	public LoginDataDto getUserLoginStatus(String requestUri) {

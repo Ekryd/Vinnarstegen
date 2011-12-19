@@ -13,7 +13,7 @@ public class RulesPanel implements IsWidget {
 	}
 
 	private void initLayout() {
-		rules.setHTML("<div class='rulesInsets'>Vi spelar matcher om bäst av fem set (först till tre).<br/>"
+		rules.setHTML("Vi spelar matcher om bäst av fem set (först till tre).<br/>"
 				+ "Varje set ger en poäng, alltså spelar vi om fem poäng i varje match.<br/>"
 				+ "<br/>"
 				+ "1. Om vinnaren i en match är den högre rankade (har högst poäng av de två) får denne 5 poäng minus det antal set som fårloraren vinner.<br/>"
@@ -43,9 +43,9 @@ public class RulesPanel implements IsWidget {
 				+ " <br/>"
 				+ "Det lönar sig alltså att spela många matcher och att vinna stort. <br/>"
 				+ "Till detta gäller att man endast får utmana någon som ligger 3 steg upp. <br/>"
-				+ "Man får endast tacka nej till en utmaning 1 gång. Vid ett andra nekande räknas matchen förlorad med 3-0. <br/>"
-				+ "</div>");
+				+ "Man får endast tacka nej till en utmaning 1 gång. Vid ett andra nekande räknas matchen förlorad med 3-0. <br/>");
 
+		rules.setStylePrimaryName("rulesInsets");
 		baseWidget.add(rules);
 	}
 

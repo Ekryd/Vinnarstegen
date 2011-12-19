@@ -7,6 +7,8 @@ import com.google.gwt.user.client.rpc.*;
 @RemoteServiceRelativePath("login")
 public interface PlayerService extends RemoteService {
 
+	String getApplicationVersion();
+
 	LoginDataDto getUserLoginStatus(String requestUri);
 
 	void registerPlayer(EmailAddressDto email);
@@ -20,5 +22,4 @@ public interface PlayerService extends RemoteService {
 	boolean isNewUserPasswordOk(String registrationCode);
 
 	void removePlayer(EmailAddressDto email);
-
 }

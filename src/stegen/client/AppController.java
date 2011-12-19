@@ -3,6 +3,7 @@ package stegen.client;
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.*;
+import stegen.client.gui.info.*;
 import stegen.client.gui.login.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.refresh.*;
@@ -48,6 +49,7 @@ public class AppController {
 			public void onSuccessImpl(LoginDataDto loginData) {
 				eventBus.clearCallbacks();
 				setupLoginStatusEvent();
+				new ApplicationVersionPresenter(new ApplicationVersionView(), eventBus).go();
 
 				switch (loginData.loginResponse) {
 				case NOT_LOGGED_IN:
