@@ -8,7 +8,7 @@ import com.google.gwt.user.client.rpc.*;
 
 public interface ScoreServiceAsync {
 
-	void getPlayerScoreList(AsyncCallback<List<PlayerScoreDto>> callback);
+	void getPlayerScoreList(EmailAddressDto currentPlayerEmail, AsyncCallback<List<PlayerScoreDto>> callback);
 
 	void playerWonOverPlayer(PlayerDto winner, PlayerDto loser, GameResultDto result, PlayerDto changedBy,
 			AsyncCallback<Void> callback);

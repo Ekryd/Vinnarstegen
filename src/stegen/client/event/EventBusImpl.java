@@ -85,9 +85,9 @@ public class EventBusImpl implements EventBus {
 	}
 
 	@Override
-	public void updatePlayerScoreList() {
+	public void updatePlayerScoreList(EmailAddressDto currentPlayerEmail) {
 		UpdatePlayerScoreListCallback callback = callbacks.get(UpdatePlayerScoreListCallback.class);
-		scoreService.getPlayerScoreList(createEmptyCallbackIfNull(callback));
+		scoreService.getPlayerScoreList(currentPlayerEmail, createEmptyCallbackIfNull(callback));
 	}
 
 	@Override

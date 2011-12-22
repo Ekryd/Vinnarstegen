@@ -43,31 +43,31 @@ public class ScorePresenterTest {
 	public void testUpdateListEvents() {
 		setupPresenter();
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(eventBus, view);
 		presenter.eventCommandClearScoresCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(eventBus, view);
 		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(eventBus, view);
 		presenter.eventCommandPlayerWonCallback.onSuccess(null);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(eventBus, view);
 		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
 		verify(eventBus, view);
 		reset(eventBus, view);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(eventBus, view);
 		presenter.eventCommandUndoCallback.onSuccess(null);
 		verify(eventBus, view);
@@ -107,7 +107,7 @@ public class ScorePresenterTest {
 		eventBus.addHandler(presenter.eventCommandUndoCallback);
 		eventBus.addHandler(presenter.eventCommandPlayerWonCallback);
 		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 		replay(view, eventBus);
 	}
 

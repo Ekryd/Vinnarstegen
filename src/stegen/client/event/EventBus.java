@@ -20,7 +20,7 @@ public interface EventBus {
 
 	void updateSendMessageList();
 
-	void updatePlayerScoreList();
+	void updatePlayerScoreList(EmailAddressDto currentPlayerEmail);
 
 	void clearAllScores(PlayerDto changedBy);
 

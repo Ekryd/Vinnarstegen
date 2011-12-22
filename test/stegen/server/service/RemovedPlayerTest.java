@@ -83,7 +83,7 @@ public class RemovedPlayerTest {
 
 	@Test
 	public void shouldNotBeVisibleInPlayerScoreList() {
-		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
+		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList(anotherPlayer.email);
 		assertThat(playerScoreList, hasSize(1));
 		assertThat(playerScoreList.get(0).player.email.address, is(anotherPlayer.email.address));
 	}
@@ -173,7 +173,7 @@ public class RemovedPlayerTest {
 
 	@Test
 	public void shouldBeVisibleAsChangedByInPlayerScoreList() {
-		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList();
+		List<PlayerScoreDto> playerScoreList = scoreServiceImpl.getPlayerScoreList(anotherPlayer.email);
 		assertThat(playerScoreList, hasSize(1));
 		assertThat(playerScoreList.get(0).changedBy.email.address, is(player.email.address));
 	}

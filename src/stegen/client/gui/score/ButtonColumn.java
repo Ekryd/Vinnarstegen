@@ -19,13 +19,14 @@ public class ButtonColumn extends Column<ScoreTableRow, String> {
 	}
 
 	@Override
-	public void render(Context context, ScoreTableRow cell, SafeHtmlBuilder sb) {
-		dontDisplayButtonsForCurrentUser(context, cell, sb);
-	}
-
-	private void dontDisplayButtonsForCurrentUser(Context context, ScoreTableRow cell, SafeHtmlBuilder sb) {
-		if (!cell.currentUser) {
+	public final void render(Context context, ScoreTableRow cell, SafeHtmlBuilder sb) {
+		if (showButton(cell)) {
 			super.render(context, cell, sb);
 		}
+	}
+
+	protected boolean showButton(ScoreTableRow cell) {
+		boolean dontDisplayForCurrentUser = !cell.currentUser;
+		return dontDisplayForCurrentUser;
 	}
 }

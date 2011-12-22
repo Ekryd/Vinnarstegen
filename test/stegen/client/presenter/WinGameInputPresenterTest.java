@@ -166,7 +166,7 @@ public class WinGameInputPresenterTest {
 	}
 
 	private ScoreTableRow createRow() {
-		return new ScoreTableRow(otherPlayer, null, null, null, null, false);
+		return new ScoreTableRow(otherPlayer, null, null, null, null, false, true);
 	}
 
 	private void setupWonGameExpects() {
