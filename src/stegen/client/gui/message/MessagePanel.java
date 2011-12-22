@@ -10,7 +10,7 @@ public class MessagePanel implements IsWidget {
 	private final VerticalPanel baseWidget = new VerticalPanel();
 	private final HorizontalPanel textPanel = new HorizontalPanel();
 	private final Button messageButton = new Button();
-	private final TextArea messageBox = new TextArea();
+	private final TextBox messageBox = new TextBox();
 	private final MessageTable messageTable = new MessageTable();
 
 	public MessagePanel() {
@@ -22,11 +22,16 @@ public class MessagePanel implements IsWidget {
 		baseWidget.setHeight("1px");
 		baseWidget.add(messageTable);
 		baseWidget.add(textPanel);
+		
 		textPanel.add(messageBox);
 		textPanel.add(messageButton);
-		messageButton.setText("Skicka meddelande");
+		textPanel.setStylePrimaryName("send-message");
+		
+		messageButton.setText("Skicka");
 		messageButton.setStylePrimaryName("button");
-		messageBox.setCharacterWidth(100);
+		
+		messageBox.setMaxLength(100);
+		messageBox.addStyleDependentName("message-textbox");
 	}
 
 	@Override
