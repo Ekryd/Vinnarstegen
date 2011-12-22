@@ -6,6 +6,8 @@ import com.google.gwt.user.client.rpc.*;
 
 public interface PlayerServiceAsync {
 
+	void getApplicationVersion(AsyncCallback<String> callback);
+
 	void getUserLoginStatus(String requestUri, AsyncCallback<LoginDataDto> callback);
 
 	void registerPlayer(EmailAddressDto email, AsyncCallback<Void> callback);
