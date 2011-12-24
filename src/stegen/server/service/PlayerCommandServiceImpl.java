@@ -21,7 +21,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				ChangeNickname.class, RegisterPlayer.class, UndoPlayerCommand.class, Challenge.class,
 				RemovePlayer.class);
-		return convertList(commands, maxDepth);
+		return convertList(commands);
 	}
 
 	@Override
@@ -29,7 +29,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				SendMessage.class);
-		return convertList(commands, maxDepth);
+		return convertList(commands);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				ClearAllScores.class, PlayerWonOverPlayer.class);
-		return convertList(commands, maxDepth);
+		return convertList(commands);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		@SuppressWarnings("unchecked")
 		List<CommandInstance> commands = CommandInstanceRepository.get().getPlayerCommandStack(maxDepth,
 				CheckLoginStatus.class);
-		return convertList(commands, maxDepth);
+		return convertList(commands);
 	}
 
 	@Override
@@ -59,14 +59,9 @@ public class PlayerCommandServiceImpl extends RemoteServiceServlet implements Pl
 		return CommandInstanceRepository.get().getLatestCommand().getId();
 	}
 
-	private List<PlayerCommandDto> convertList(List<CommandInstance> commands, int maxDepth) {
+	private List<PlayerCommandDto> convertList(List<CommandInstance> commands) {
 		List<PlayerCommandDto> returnValue = new ArrayList<PlayerCommandDto>();
-		int index = 0;
 		for (CommandInstance commandInstance : commands) {
-			index++;
-			if (index > maxDepth) {
-				return returnValue;
-			}
 			returnValue.add(commandInstance.createPlayerCommandDto());
 		}
 		return returnValue;

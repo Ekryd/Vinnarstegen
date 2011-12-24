@@ -37,7 +37,7 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 	}
 
 	@Override
-	public List<PlayerScoreDto> getPlayerScoreList() {
+	public List<PlayerScoreDto> getPlayerScoreList(EmailAddressDto currentPlayerEmail) {
 		final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		final List<PlayerScoreDto> playerScoreList = new ArrayList<PlayerScoreDto>();
 		PlayerRepository.get().processAndPersist(new Func() {
@@ -47,21 +47,9 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 				playerScoreList.add(player.createDto(dateFormat));
 			}
 		});
-		List<PlayerScoreDto> playerScoreListWithRanking = calculateRanking(playerScoreList);
+		CalculateRanking calculateRanking = new CalculateRanking(currentPlayerEmail, playerScoreList);
+		List<PlayerScoreDto> playerScoreListWithRanking = calculateRanking.getList();
 		return playerScoreListWithRanking;
-	}
-
-	private List<PlayerScoreDto> calculateRanking(List<PlayerScoreDto> sortedPlayerScores) {
-		int currentScore = 0;
-		int ranking = 0;
-		for (PlayerScoreDto playerScore : sortedPlayerScores) {
-			if (playerScore.score != currentScore) {
-				currentScore = playerScore.score;
-				ranking++;
-			}
-			playerScore.ranking = ranking;
-		}
-		return sortedPlayerScores;
 	}
 
 	@Override

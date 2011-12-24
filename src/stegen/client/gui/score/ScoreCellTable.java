@@ -14,7 +14,7 @@ public class ScoreCellTable implements IsWidget {
 	private final ListDataProvider<ScoreTableRow> dataProvider = new ListDataProvider<ScoreTableRow>();;
 	private final Column<ScoreTableRow, String> winColumn = new ButtonColumn("Jag vann mot");
 	private final Column<ScoreTableRow, String> loseColumn = new ButtonColumn("Jag förlorade mot");
-	private final Column<ScoreTableRow, String> challengeColumn = new ButtonColumn("Utmana!");
+	private final Column<ScoreTableRow, String> challengeColumn = new ChallengeButtonColumn("Utmana!");
 	private final WinGameDialogBox gameResultDialogBox = new WinGameDialogBox();
 	private final ChallengeDialog challengeDialog = new ChallengeDialog();
 

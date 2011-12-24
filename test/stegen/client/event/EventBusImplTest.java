@@ -30,6 +30,16 @@ public class EventBusImplTest {
 	}
 
 	@Test
+	public void testGetApplicationVersion() {
+		UpdateApplicationVersionCallback callback = creteAndAddCallbackToEventBus(UpdateApplicationVersionCallback.class);
+
+		playerService.getApplicationVersion(callback);
+		replay(playerCommandService, playerService, scoreService);
+
+		eventBus.getApplicationVersion();
+	}
+
+	@Test
 	public void testGetUserLoginStatus() {
 		UpdateLoginStatusCallback callback = creteAndAddCallbackToEventBus(UpdateLoginStatusCallback.class);
 
@@ -95,10 +105,10 @@ public class EventBusImplTest {
 	public void testUpdatePlayerScoreList() {
 		UpdatePlayerScoreListCallback callback = creteAndAddCallbackToEventBus(UpdatePlayerScoreListCallback.class);
 
-		scoreService.getPlayerScoreList(callback);
+		scoreService.getPlayerScoreList(loginDataDto.player.email, callback);
 		replay(playerCommandService, playerService, scoreService);
 
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginDataDto.player.email);
 	}
 
 	@Test

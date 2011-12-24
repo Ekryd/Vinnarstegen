@@ -6,12 +6,27 @@ body {
 
 .container {
 	width: 1200px;
-	margin: 0 auto;
 	/* the auto value on the sides, coupled with the width, centers the layout */
+	margin: 0 auto;
+	position: relative;
+}
+
+.versionArea {
+	/* Absolute is relative to the container div */
+	position: absolute;
+	z-index: 999;
+	top: 11px;
+	right: 15px;
+	color: #e2e1d0;
+	font-style: italic;
 }
 
 .headerPanel {
 	width: 100%;
+}
+
+.headerLogo {
+	border: 1px solid #CCC
 }
 
 .contentPanel {
@@ -41,10 +56,6 @@ body {
 	width: 5%;
 	height: 30px;
 	padding: 5px;
-}
-
-.headerLogo {
-	border: 1px solid #CCC
 }
 
 .players_label {
@@ -101,6 +112,11 @@ col.playerColumn {
 
 col.dateColumn {
 	width: 140px;
+}
+
+.rulesInsets {
+	padding-left: 15px;
+	padding-top: 10px;
 }
 
 /** Most GWT widgets already have a style name defined */

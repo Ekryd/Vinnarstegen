@@ -55,7 +55,7 @@ public class ScorePresenter implements Presenter {
 	}
 
 	private void loadScores() {
-		eventBus.updatePlayerScoreList();
+		eventBus.updatePlayerScoreList(loginData.player.email);
 	}
 
 	private ClickHandler createClickCleanScoresHandler() {
@@ -88,7 +88,7 @@ public class ScorePresenter implements Presenter {
 					boolean currentUser = playerScoreDto.player.email.address.equals(loginData.player.email.address);
 					content.add(new ScoreTableRow(playerScoreDto.player, "" + playerScoreDto.score, ""
 							+ playerScoreDto.ranking, playerScoreDto.changedDateTime,
-							playerScoreDto.changedBy.nickname, currentUser));
+							playerScoreDto.changedBy.nickname, currentUser, playerScoreDto.showChallenge));
 				}
 				view.changeScoreList(content);
 			}
