@@ -139,3 +139,12 @@ col.dateColumn {
 #closeButton {
 	margin: 15px 6px 6px;
 }
+
+.send-message{
+	margin-top: 20px; 
+}
+
+.gwt-TextBox-message-textbox{
+	width: 400px;
+	margin-right: 10px;
+}
