@@ -15,6 +15,12 @@
     <servlet-name>loginService</servlet-name>
     <url-pattern>/stegen/login</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+    <url-pattern>/stegen.Stegen.JUnit/login</url-pattern>
+  </servlet-mapping>
+  
 
   <servlet>
     <servlet-name>scoreService</servlet-name>
