@@ -10,8 +10,7 @@
 	<classpathentry kind="lib" path="lib/easymock-3.0.jar" sourcepath="/Users/bjorn/.m2/repository/org/easymock/easymock/3.0/easymock-3.0-sources.jar"/>
 	<classpathentry kind="lib" path="lib/objenesis-1.2.jar"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
-	<classpathentry kind="lib" path="/Users/bjorn/Library/appengine-java-sdk-1.5.4/lib/testing/appengine-testing.jar"/>
-	<classpathentry kind="lib" path="/Users/bjorn/Library/appengine-java-sdk-1.5.4/lib/impl/appengine-api-stubs.jar"/>
 	<classpathentry kind="lib" path="lib/hamcrest-all-1.2.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/appengine-test"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
