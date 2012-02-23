@@ -1,26 +1,29 @@
 package stegen.client.gui;
 
-import com.google.gwt.user.client.ui.*;
+import stegen.client.UILayout;
+
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.IsWidget;
 
 public enum BaseHtmlPage {
-	MAIN_AREA("mainArea"),
-	LOGOUT_AREA("logoutArea"),
-	USER_AREA("userArea"),
-	REFRESH_AREA("refreshArea"),
-	VERSION_AREA("versionArea");
+	MAIN_AREA(UILayout.mainArea),
+	LOGOUT_AREA(UILayout.logoutArea),
+	USER_AREA(UILayout.userArea),
+	REFRESH_AREA(UILayout.refreshArea),
+	VERSION_AREA(UILayout.versionArea);
 
-	private String areaName;
+	private FlowPanel areaName;
 
-	private BaseHtmlPage(String areaName) {
+	private BaseHtmlPage(FlowPanel areaName) {
 		this.areaName = areaName;
 	}
-
+	
 	public void clearPanel() {
-		RootPanel.get(areaName).clear();
+		areaName.clear();
 	}
 
 	public void addToPanel(IsWidget widget) {
-		RootPanel.get(areaName).add(widget);
+		areaName.add(widget);
 	}
 
 }
