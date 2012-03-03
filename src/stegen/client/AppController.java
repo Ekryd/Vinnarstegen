@@ -3,8 +3,8 @@ package stegen.client;
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.*;
+import stegen.client.gui.desktop.login.*;
 import stegen.client.gui.info.*;
-import stegen.client.gui.login.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.refresh.*;
 import stegen.client.gui.register.*;
@@ -13,25 +13,30 @@ import stegen.client.service.*;
 import stegen.client.service.insult.*;
 import stegen.shared.*;
 
-public class AppController {
+import com.google.gwt.core.client.*;
 
+public class AppController {
 	final EventBus eventBus;
 	final UpdateLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
 	private String hostPageBaseURL;
+	final private Shell shell;
 
-	private AppController(EventBus eventBus) {
+	private AppController(EventBus eventBus,Shell shell) {
 		this.eventBus = eventBus;
+		this.shell = shell;
 	}
 
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
-			PlayerServiceAsync playerService) {
-		this(EventBusImpl.create(playerCommandService, scoreService, playerService));
+			PlayerServiceAsync playerService,Shell shell) {		
+		this(EventBusImpl.create(playerCommandService, scoreService, playerService),
+				shell);
 	}
 
 	public static AppController createForTest(EventBus eventBus) {
-		return new AppController(eventBus);
+		return new AppController(eventBus,null);
 	}
 
+	
 	public void start(String hostPageBaseURL) {
 		this.hostPageBaseURL = hostPageBaseURL;
 		setupLoginStatusEvent();
@@ -70,7 +75,9 @@ public class AppController {
 	}
 
 	private void createLoginPresenter(LoginDataDto loginData) {
-		new LoginPresenter(new LoginView(), loginData).go();
+		LoginPresenter.Display loginView = GWT.create(LoginPresenter.Display.class);
+		loginView.setShell(shell);
+		new LoginPresenter(loginView, loginData).go();
 	}
 
 	private void createRegistrationPresenters(LoginDataDto loginData) {

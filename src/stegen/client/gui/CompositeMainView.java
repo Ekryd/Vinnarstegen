@@ -1,5 +1,4 @@
 package stegen.client.gui;
-
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.gui.challenge.*;
 import stegen.client.gui.gameresult.*;

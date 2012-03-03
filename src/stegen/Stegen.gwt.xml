@@ -1,21 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module rename-to='stegen'>
-  <!-- Inherit the core Web Toolkit stuff.                        -->
+
   <inherits name='com.google.gwt.user.User'/>
-
-  <!-- Inherit the default GWT style sheet.  You can change       -->
-  <!-- the theme of your GWT application by uncommenting          -->
-  <!-- any one of the following lines.                            -->
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
-  <!-- <inherits name='com.google.gwt.user.theme.standard.Standard'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
-  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+  <inherits name='stegen.FormFactor'/>
 
-  <!-- Other module inherits                                      -->
 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='stegen.client.Stegen'/>
+  
+  <!-- Use ClientFactoryImpl by default -->
+  <replace-with class="stegen.client.ClientFactoryDesktop">
+    <when-type-is class="stegen.client.ClientFactory"/>
+  </replace-with>
 
+  <replace-with class="stegen.client.ClientFactoryMobile">
+    <when-type-is class="stegen.client.ClientFactory"/>
+    <any>
+	    <when-property-is name="formfactor" value="mobile"/>
+	    <when-property-is name="user.agent" value="ie8" />
+    </any>
+  </replace-with>
+  
+  <replace-with class="stegen.client.gui.desktop.login.LoginView">
+    <when-type-is class="stegen.client.presenter.LoginPresenter.Display"/>
+  </replace-with>
+  
+  <replace-with class="stegen.client.gui.mobile.login.LoginView">
+    <when-type-is class="stegen.client.presenter.LoginPresenter.Display"/>
+    <any>
+	    <when-property-is name="formfactor" value="mobile"/>
+	    <when-property-is name="user.agent" value="ie8" />
+    </any>
+  </replace-with>
+  
+  
+ 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>

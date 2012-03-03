@@ -1,5 +1,4 @@
 package stegen.client.gui.register;
-
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
 

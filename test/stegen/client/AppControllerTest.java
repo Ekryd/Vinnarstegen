@@ -6,7 +6,10 @@ import static org.junit.Assert.*;
 import org.junit.*;
 
 import stegen.client.event.*;
+import stegen.client.gui.*;
 import stegen.client.service.*;
+
+import com.google.gwt.user.client.ui.*;
 
 /**
  * Tyvärr kan vi inte testa eventkoden eftersom den är beroende av konkreta
@@ -16,13 +19,15 @@ public class AppControllerTest {
 
 	private AppController controller;
 	private EventBus eventBus;
+	private Shell shell;
 
 	@Test
 	public void testInitializeEventBus() {
 		PlayerCommandServiceAsync playerCommandService = createStrictMock(PlayerCommandServiceAsync.class);
 		ScoreServiceAsync scoreService = createStrictMock(ScoreServiceAsync.class);
 		PlayerServiceAsync playerService = createStrictMock(PlayerServiceAsync.class);
-		controller = new AppController(playerCommandService, scoreService, playerService);
+		shell = createStrictMock(Shell.class);
+		controller = new AppController(playerCommandService, scoreService, playerService,shell);
 		assertNotNull(controller.eventBus);
 	}
 
@@ -31,7 +36,6 @@ public class AppControllerTest {
 		setupController();
 
 		setupInitializationExpects();
-
 		controller.start("hostPageBaseURL");
 
 		verify(eventBus);

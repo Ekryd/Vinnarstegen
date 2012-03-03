@@ -19,7 +19,7 @@ public class GwtTestAppController extends GWTTestCase {
 		PlayerCommandServiceAsync playerCommandService = createStrictMock(PlayerCommandServiceAsync.class);
 		ScoreServiceAsync scoreService = createStrictMock(ScoreServiceAsync.class);
 		PlayerServiceAsync playerService = createStrictMock(PlayerServiceAsync.class);
-		AppController controller = new AppController(playerCommandService, scoreService, playerService);
+		AppController controller = new AppController(playerCommandService, scoreService, playerService,null);
 		controller.eventCheckLoginStatusHandler.onSuccessImpl(loginData);
 	}
 

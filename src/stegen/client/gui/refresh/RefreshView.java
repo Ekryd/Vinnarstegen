@@ -1,5 +1,4 @@
 package stegen.client.gui.refresh;
-
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.presenter.RefreshPresenter.Display;
 

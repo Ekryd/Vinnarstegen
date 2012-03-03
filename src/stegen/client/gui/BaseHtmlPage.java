@@ -1,18 +1,18 @@
 package stegen.client.gui;
 
-import stegen.client.UILayout;
+import stegen.client.*;
+import stegen.client.gui.desktop.*;
 
-import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.IsWidget;
-
+import com.google.gwt.user.client.ui.*;
+@Deprecated
 public enum BaseHtmlPage {
-	MAIN_AREA(UILayout.mainArea),
-	LOGOUT_AREA(UILayout.logoutArea),
-	USER_AREA(UILayout.userArea),
-	REFRESH_AREA(UILayout.refreshArea),
-	VERSION_AREA(UILayout.versionArea);
+	MAIN_AREA(ShellDesktop.mainArea),
+	LOGOUT_AREA(ShellDesktop.logoutArea),
+	USER_AREA(ShellDesktop.userArea),
+	REFRESH_AREA(ShellDesktop.refreshArea),
+	VERSION_AREA(ShellDesktop.versionArea);
 
-	private FlowPanel areaName;
+	protected FlowPanel areaName;
 
 	private BaseHtmlPage(FlowPanel areaName) {
 		this.areaName = areaName;

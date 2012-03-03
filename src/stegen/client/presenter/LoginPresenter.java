@@ -1,5 +1,6 @@
 package stegen.client.presenter;
 
+import stegen.client.gui.*;
 import stegen.shared.*;
 
 public class LoginPresenter implements Presenter {
@@ -9,6 +10,7 @@ public class LoginPresenter implements Presenter {
 
 	public interface Display {
 		void setSignInUrl(String signInUrl);
+		void setShell(Shell shell);
 	}
 
 	public LoginPresenter(Display loginView, LoginDataDto loginData) {

@@ -1,5 +1,4 @@
 package stegen.client.gui.player;
-
 import static stegen.client.gui.BaseHtmlPage.*;
 import stegen.client.presenter.RegisteredUserPresenter.Display;
 
