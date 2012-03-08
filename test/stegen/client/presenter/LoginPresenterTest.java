@@ -1,8 +1,11 @@
 package stegen.client.presenter;
 
-import org.easymock.*;
-import org.junit.*;
+import static org.mockito.Mockito.*;
 
+import org.junit.*;
+import org.mockito.*;
+
+import stegen.client.gui.*;
 import stegen.client.presenter.LoginPresenter.Display;
 import stegen.shared.*;
 
@@ -10,14 +13,15 @@ public class LoginPresenterTest {
 
 	@Test
 	public void test() {
-		Display loginView = EasyMock.createStrictMock(Display.class);
+		Display view = Mockito.mock(Display.class);
+		Shell shell = Mockito.mock(Shell.class);
 		LoginDataDto loginData = LoginDataDto.userIsNotLoggedIn("signInUrl");
-		LoginPresenter presenter = new LoginPresenter(loginView, loginData);
+		new LoginPresenter(view, loginData,shell).go();
 
-		loginView.setSignInUrl("signInUrl");
-		EasyMock.replay(loginView);
+		
+		verify(view).setSignInUrl("signInUrl");
+		verify(view).setShell(shell);
 
-		presenter.go();
 	}
 
 }

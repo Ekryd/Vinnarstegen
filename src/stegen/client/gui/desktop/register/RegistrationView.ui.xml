@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:style>
+
+	
+	.button {
+		margin-right: 10px !important;
+		background-color: #c3d8d3 !important;
+		border-radius: 5px;
+	}
+	</ui:style>
+	<g:VerticalPanel>
+		<g:Label text="Ange 'Stegen-lösenordet' för att registrera dig." ui:field="registerLabel"/>
+		<g:TextBox ui:field="kodField"/>
+		<g:Button text="Registrera" ui:field="registeraButton" stylePrimaryName="{style.button}"/>
+	</g:VerticalPanel>
+</ui:UiBinder> 

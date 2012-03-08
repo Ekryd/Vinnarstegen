@@ -3,6 +3,8 @@ package stegen.client.gui.mobile;
 import stegen.client.gui.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.resources.client.*;
+import com.google.gwt.resources.client.ClientBundle.*;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -12,7 +14,14 @@ public class ShellMobile extends ResizeComposite implements Shell  {
 
 	interface UILayoutUiBinder extends UiBinder<Widget, ShellMobile> {
 	} 
-	
+	/**
+	   * A ClientBundle that provides images for this widget.
+	   */
+	  interface Resources extends ClientBundle {
+	    @Source("stegen_logga_liten.gif")
+	    ImageResource logo();
+	  }
+	  
 	@UiField 
 	public static FlowPanel mainArea;
 	@UiField 

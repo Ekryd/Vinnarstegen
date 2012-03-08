@@ -4,8 +4,8 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <inherits name='stegen.FormFactor'/>
-
-
+  <!-- <inherits name="com.google.gwt.resources.Resources" />
+ -->
   <!-- Specify the app entry point class.                         -->
   <entry-point class='stegen.client.Stegen'/>
   

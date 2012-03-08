@@ -13,9 +13,9 @@ class ClientFactoryMobile implements ClientFactory {
 	private Shell shell;
 
 	public ClientFactoryMobile() {
-		RootLayoutPanel.get().add(getShell());
+//		RootLayoutPanel.get().add(getShell());
 		appController = new AppController((PlayerCommandServiceAsync) GWT.create(PlayerCommandService.class), (ScoreServiceAsync) GWT.create(ScoreService.class),
-				(PlayerServiceAsync) GWT.create(PlayerService.class), getShell());
+				(PlayerServiceAsync) GWT.create(PlayerService.class), getShell(),RootLayoutPanel.get());
 	}
 
 	@Override

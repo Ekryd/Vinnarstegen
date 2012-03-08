@@ -3,6 +3,7 @@ package stegen.client.presenter;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import java.text.*;
 import java.util.*;
 
 import org.easymock.*;
@@ -13,7 +14,6 @@ import stegen.client.gui.playeraction.*;
 import stegen.client.presenter.PlayerMiscCommandsPresenter.Display;
 import stegen.shared.*;
 
-import com.google.appengine.repackaged.org.joda.time.*;
 
 public class PlayerMiscCommandsPresenterTest {
 
@@ -33,7 +33,7 @@ public class PlayerMiscCommandsPresenterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testEventScoresUpdated() {
+	public void testEventScoresUpdated() throws ParseException {
 		setupPresenter();
 		presenter.go();
 
@@ -43,8 +43,7 @@ public class PlayerMiscCommandsPresenterTest {
 		replay(view, eventBus);
 
 		List<PlayerCommandDto> gameResults = new ArrayList<PlayerCommandDto>();
-		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new LocalDate(2011, 10, 10)
-				.toDateMidnight().toDate(), "Loggade in");
+		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new SimpleDateFormat("yyyy-MM-dd").parse("2011-10-10"), "Loggade in");
 		gameResults.add(playerScoreDto);
 		presenter.eventUpdatePlayerMiscCommandListCallback.onSuccess(gameResults);
 	}

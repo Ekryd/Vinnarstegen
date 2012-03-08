@@ -2,8 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	
-	<g:VerticalPanel>
-		<g:Label text="Logga in med ditt google-konto."/>
-		<g:Anchor text="Logga in" ui:field="signInLink" />
-	</g:VerticalPanel>
+	<g:HorizontalPanel>
+		<g:Anchor text="Logga in" ui:field="signInLink" /> <g:Label text="&nbsp;med ditt google-konto."/>
+	</g:HorizontalPanel>
 </ui:UiBinder> 

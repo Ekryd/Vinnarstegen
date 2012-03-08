@@ -4,6 +4,8 @@ import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.*;
 import stegen.client.gui.desktop.login.*;
+import stegen.client.gui.desktop.player.*;
+import stegen.client.gui.desktop.register.*;
 import stegen.client.gui.info.*;
 import stegen.client.gui.player.*;
 import stegen.client.gui.refresh.*;
@@ -14,26 +16,29 @@ import stegen.client.service.insult.*;
 import stegen.shared.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.ui.*;
 
 public class AppController {
 	final EventBus eventBus;
 	final UpdateLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
 	private String hostPageBaseURL;
-	final private Shell shell;
+	final Shell shell;
+	final HasWidgets.ForIsWidget parentView;
 
-	private AppController(EventBus eventBus,Shell shell) {
+	private AppController(EventBus eventBus,Shell shell,HasWidgets.ForIsWidget parentView) {
 		this.eventBus = eventBus;
 		this.shell = shell;
+		this.parentView = parentView;
 	}
 
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
-			PlayerServiceAsync playerService,Shell shell) {		
+			PlayerServiceAsync playerService,Shell shell,HasWidgets.ForIsWidget parentView) {		
 		this(EventBusImpl.create(playerCommandService, scoreService, playerService),
-				shell);
+				shell,parentView);
 	}
 
-	public static AppController createForTest(EventBus eventBus) {
-		return new AppController(eventBus,null);
+	public static AppController createForTest(EventBus eventBus,Shell shell,HasWidgets.ForIsWidget parentView) {
+		return new AppController(eventBus,shell,parentView);
 	}
 
 	
@@ -41,6 +46,7 @@ public class AppController {
 		this.hostPageBaseURL = hostPageBaseURL;
 		setupLoginStatusEvent();
 		eventBus.getUserLoginStatus(hostPageBaseURL);
+		parentView.add(shell);
 	}
 
 	private void setupLoginStatusEvent() {
@@ -54,7 +60,7 @@ public class AppController {
 			public void onSuccessImpl(LoginDataDto loginData) {
 				eventBus.clearCallbacks();
 				setupLoginStatusEvent();
-				new ApplicationVersionPresenter(new ApplicationVersionView(), eventBus).go();
+				new ApplicationVersionPresenter(new ApplicationVersionView(), eventBus,shell).go();
 
 				switch (loginData.loginResponse) {
 				case NOT_LOGGED_IN:
@@ -75,20 +81,18 @@ public class AppController {
 	}
 
 	private void createLoginPresenter(LoginDataDto loginData) {
-		LoginPresenter.Display loginView = GWT.create(LoginPresenter.Display.class);
-		loginView.setShell(shell);
-		new LoginPresenter(loginView, loginData).go();
+		new LoginPresenter((LoginPresenter.Display) GWT.create(LoginPresenter.Display.class), loginData,shell).go();
 	}
 
 	private void createRegistrationPresenters(LoginDataDto loginData) {
-		new LogoutPresenter(new LogoutView(), loginData).go();
-		new RegistrationPresenter(new RegistrationView(), loginData, eventBus, hostPageBaseURL).go();
-		new NonregisteredUserPresenter(new NonregisteredUserView(), loginData).go();
+		new LogoutPresenter(new LogoutView(), loginData,shell).go();
+		new RegistrationPresenter(new RegistrationView(), loginData, eventBus, hostPageBaseURL,shell).go();
+		new NonregisteredUserPresenter(new UserView(), loginData,shell).go();
 	}
 
 	private void createLoggedInPresenters(LoginDataDto loginData) {
-		new LogoutPresenter(new LogoutView(), loginData).go();
-		new RegisteredUserPresenter(new RegisteredUserView(), loginData, eventBus).go();
+		new LogoutPresenter(new LogoutView(), loginData,shell).go();
+		new RegisteredUserPresenter(new ChangeNicknameView(), loginData, eventBus,shell).go();
 		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl(),
 				new DateTimeFormatsImpl()).go();
 		new RefreshPresenter(new RefreshView(), eventBus).go();

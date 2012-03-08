@@ -2,6 +2,7 @@ package stegen.client.presenter;
 
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
+import stegen.client.gui.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -14,6 +15,7 @@ public class RegistrationPresenter implements Presenter {
 	final Display.NewUserPasswordOkKeyPressAndClickHandler checkNewUserPasswordHandler = new NewUserPasswordOkkeyPressAndClickHandler();
 	final UpdateIsNewUserPasswordOkCallback eventNewUserPassword = createCommandIsNewUserPasswordCallback();
 	private final String hostPageBaseURL;
+	private final Shell shell;
 
 	public interface Display {
 		String getRegistrationCode();
@@ -24,20 +26,23 @@ public class RegistrationPresenter implements Presenter {
 
 		interface NewUserPasswordOkKeyPressAndClickHandler extends KeyPressHandler, ClickHandler {
 		}
+		void setShell(Shell shell);
 	}
 
 	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, EventBus eventBus,
-			String hostPageBaseURL) {
+			String hostPageBaseURL, Shell shell) {
 		this.view = loginButNotRegisteredView;
 		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.hostPageBaseURL = hostPageBaseURL;
+		this.shell = shell;
 	}
 
 	@Override
 	public void go() {
 		view.addRegistrationEventHandler(checkNewUserPasswordHandler);
 		eventBus.addHandler(eventNewUserPassword);
+		view.setShell(shell);
 	}
 
 	private UpdateIsNewUserPasswordOkCallback createCommandIsNewUserPasswordCallback() {

@@ -1,28 +1,37 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
+import stegen.client.gui.*;
 import stegen.client.presenter.RegisteredUserPresenter.Display;
 import stegen.shared.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class RegisteredUserPresenterTest {
 
 	private RegisteredUserPresenter presenter;
+	@Mock
 	private Display view;
-	private LoginDataDto loginData;
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 	private String nickname;
+	@Mock
 	private EventBus eventBus;
+	@Mock
+	private Shell shell;
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();
 	}
 
 	@Test
@@ -31,8 +40,7 @@ public class RegisteredUserPresenterTest {
 		presenter.go();
 
 		nickname = " ";
-		setupEmptyNicknameExpects();
-
+		when(view.getNewNickname()).thenReturn(nickname);
 		simulateChangeNicknameClick();
 	}
 
@@ -42,52 +50,37 @@ public class RegisteredUserPresenterTest {
 		presenter.go();
 
 		nickname = "Nicknick";
-		setupOkNicknameExpects();
-
+		when(view.getNewNickname()).thenReturn(nickname);
 		simulateChangeNicknameClick();
+		setupOkNicknameExpects();
 	}
 
 	@Test
 	public void testChangeNicknameCallback() {
 		setupPresenter();
 
-		view.setUserName("nickname");
-		replay(view);
-
 		presenter.eventCommandChangeNicknameHandler.onSuccess("nickname");
-
-		verify(view);
+		
+		verify(view).setUserName("nickname");
 	}
 
 	private void setupPresenter() {
-		view = createStrictMock(Display.class);
-		loginData = LoginDataDtoFactory.createLoginData();
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new RegisteredUserPresenter(view, loginData, eventBus);
+		presenter = new RegisteredUserPresenter(view, loginData, eventBus,shell);
 	}
 
 	private void setupInitializationExpects() {
-		view.setUserName("nickname");
-		view.addClickChangeUserNameHandler(presenter.clickChangeUserNameHandler);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameHandler);
-		replay(view, eventBus);
-	}
-
-	private void setupEmptyNicknameExpects() {
-		reset(view, eventBus);
-		expect(view.getNewNickname()).andReturn(nickname);
-		replay(view, eventBus);
+		verify(view).setUserName("nickname");
+		verify(view).addClickChangeUserNameHandler(presenter.clickChangeUserNameHandler);
+		verify(eventBus).addHandler(presenter.eventCommandChangeNicknameHandler);
+		verify(view).setShell(shell);
+		
 	}
 
 	private void setupOkNicknameExpects() {
-		reset(view, eventBus);
-		expect(view.getNewNickname()).andReturn(nickname);
 		eventBus.changeNickname(loginData.player, nickname);
-		replay(view, eventBus);
 	}
 
 	private void simulateChangeNicknameClick() {
 		presenter.clickChangeUserNameHandler.onClick(null);
 	}
-
 }

@@ -1,52 +1,62 @@
 package stegen.client.presenter;
-
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
+import stegen.client.gui.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
-
+@RunWith(MockitoJUnitRunner.class)
 public class RegisterationPresenterTest {
 
 	private RegistrationPresenter presenter;
+	@Mock
 	private EventBus eventBus;
+	@Mock
 	private Display view;
+	@Mock
+	private Shell shell;
 	private String passcode;
-	private LoginDataDto loginData;
-
-	@Before
-	public void before() {
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-	}
-
-	@After
-	public void after() {
-		verify(view, eventBus);
-	}
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();
+	}
+	
+	@Test
+	public void shouldRegisterSuccessfull() {
+		setupPresenter();
+		presenter.go();
+
+		passcode = "Waldner";
+		
+		when(view.getRegistrationCode()).thenReturn(passcode);
+		simulateRegistrationClick();
+		setupRegistrationExpectations();
 	}
 
 	@Test
 	public void testRegistrationFail() {
 		setupPresenter();
+		
 		presenter.go();
 
 		passcode = "WrongPasscode";
-		setupRegistrationFailExpectations();
-
+		
+		when(view.getRegistrationCode()).thenReturn(passcode);
 		simulateRegistrationClick();
+		setupRegistrationExpectations();
 	}
 
 	@Test
@@ -55,9 +65,10 @@ public class RegisterationPresenterTest {
 		presenter.go();
 
 		passcode = "WrongPasscode";
-		setupRegistrationFailExpectations();
-
+		
+		when(view.getRegistrationCode()).thenReturn(passcode);
 		simulateEnterPress();
+		setupRegistrationExpectations();
 	}
 	
 	@Test
@@ -65,8 +76,7 @@ public class RegisterationPresenterTest {
 		setupPresenter();
 		presenter.go();
 
-		passcode = "WrongPasscode";
-		setupNoExpectations();
+		passcode = "WrongPasscode";		
 
 		simulateNoEnterPress();
 	}
@@ -75,45 +85,35 @@ public class RegisterationPresenterTest {
 	@Test
 	public void testRegisterPlayerCallback() {
 		setupPresenter();
-		eventBus.registerPlayer(loginData.player.email);
-		eventBus.getUserLoginStatus("hostPageBaseURL");
-		replay(view, eventBus);
 
 		presenter.eventNewUserPassword.onSuccess(true);
+		verify(eventBus).registerPlayer(loginData.player.email);
+		verify(eventBus).getUserLoginStatus("hostPageBaseURL");
 	}
 	
 	@Test
 	public void testNoSuccessPlayerCallback() {
 		setupPresenter();
-		view.showRegistrationFail();
-		replay(view, eventBus);
 
 		presenter.eventNewUserPassword.onSuccess(false);
+		verify(view).showRegistrationFail();
 	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		presenter = new RegistrationPresenter(view, loginData, eventBus, "hostPageBaseURL");
+		presenter = new RegistrationPresenter(view, loginData, eventBus, "hostPageBaseURL",shell);
 	}
 
 	private void setupInitializationExpects() {
-		view.addRegistrationEventHandler(presenter.checkNewUserPasswordHandler);
-		eventBus.addHandler(presenter.eventNewUserPassword);
-		replay(view, eventBus);
+		verify(view).addRegistrationEventHandler(presenter.checkNewUserPasswordHandler);
+		verify(eventBus).addHandler(presenter.eventNewUserPassword);
+		verify(view).setShell(shell);
 	}
 
-	private void setupRegistrationFailExpectations() {
-		reset(view, eventBus);
-		expect(view.getRegistrationCode()).andReturn(passcode);
-		eventBus.isNewUserPasswordOk(passcode);		
-		replay(view, eventBus);
+	private void setupRegistrationExpectations() {
+		verify(eventBus).isNewUserPasswordOk(passcode);		
 	}
 	
-	private void setupNoExpectations() {
-		reset(view, eventBus);
-		replay(view, eventBus);
-	}
-	
+
 	private void simulateRegistrationClick() {
 		presenter.checkNewUserPasswordHandler.onClick(null);
 	}

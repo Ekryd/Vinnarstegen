@@ -3,6 +3,7 @@ package stegen.client.gui.desktop;
 import stegen.client.gui.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.resources.client.*;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.ui.*;
 
@@ -12,6 +13,14 @@ public class ShellDesktop extends Composite implements Shell  {
 
 	interface UILayoutUiBinder extends UiBinder<Widget, ShellDesktop> {
 	}
+	
+	/**
+	   * A ClientBundle that provides images for this widget.
+	   */
+	  interface Resources extends ClientBundle {
+	    @Source("stegen_logga.gif")
+	    ImageResource logo();
+	  }
 	//TODO ta bort public static
 	@UiField 
 	public static FlowPanel mainArea;

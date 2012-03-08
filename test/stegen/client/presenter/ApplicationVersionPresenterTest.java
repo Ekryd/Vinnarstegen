@@ -1,57 +1,60 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
+import stegen.client.gui.*;
 import stegen.client.presenter.ApplicationVersionPresenter.Display;
-
+@RunWith(MockitoJUnitRunner.class)
 public class ApplicationVersionPresenterTest {
 
+	@Mock
 	private Display view;
+	@Mock
 	private EventBus eventBus;
+	@Mock
+	private Shell shell;
+	
 	private ApplicationVersionPresenter presenter;
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
-
-		verify(view, eventBus);
+		
+		setupInitializationExpects();
 	}
 
 	@Test
 	public void testSetVersion() {
 		setupPresenter();
+	
 		presenter.go();
-
-		setupSetVersionExpects();
 
 		presenter.eventUpdateApplicationVersion.onSuccess("42");
 
-		verify(view, eventBus);
+		setupSetVersionExpects();
 	}
 
 	private void setupPresenter() {
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new ApplicationVersionPresenter(view, eventBus);
+		presenter = new ApplicationVersionPresenter(view, eventBus,shell);
 	}
 
 	private void setupInitializationExpects() {
-		eventBus.addHandler(presenter.eventUpdateApplicationVersion);
-		eventBus.getApplicationVersion();
-		replay(view, eventBus);
+		InOrder inOrder = inOrder(eventBus,view,shell);
+		inOrder.verify(eventBus).addHandler(presenter.eventUpdateApplicationVersion);
+		inOrder.verify(eventBus).getApplicationVersion();
+		inOrder.verify(view).setShell(shell);
 	}
 
 	private void setupSetVersionExpects() {
-		reset(view, eventBus);
-		view.setApplicationVersion("v. 42");
-		replay(view, eventBus);
+		verify(view).setApplicationVersion("v. 42");
 	}
 
 }

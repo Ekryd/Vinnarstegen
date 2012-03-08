@@ -3,6 +3,7 @@ package stegen.client.presenter;
 import static org.easymock.EasyMock.*;
 import static org.junit.Assert.*;
 
+import java.text.*;
 import java.util.*;
 
 import org.easymock.*;
@@ -13,7 +14,7 @@ import stegen.client.gui.playeraction.*;
 import stegen.client.presenter.GameResultsPresenter.Display;
 import stegen.shared.*;
 
-import com.google.appengine.repackaged.org.joda.time.*;
+
 
 public class GameResultsPresenterTest {
 
@@ -33,7 +34,7 @@ public class GameResultsPresenterTest {
 
 	@SuppressWarnings("unchecked")
 	@Test
-	public void testEventScoresUpdated() {
+	public void testEventScoresUpdated() throws ParseException {
 		setupPresenter();
 		presenter.go();
 
@@ -41,10 +42,9 @@ public class GameResultsPresenterTest {
 		view.changeGameResultList(anyObject(List.class));
 		verifyListContentForPreviousMethod();
 		replay(view, eventBus);
-
+		
 		List<PlayerCommandDto> gameResults = new ArrayList<PlayerCommandDto>();
-		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new LocalDate(2011, 10, 10)
-				.toDateMidnight().toDate(), "1 - 3");
+		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new SimpleDateFormat("yyyy-MM-dd").parse("2011-10-10"), "1 - 3");
 		gameResults.add(playerScoreDto);
 		presenter.eventUpdateGameResultListCallback.onSuccess(gameResults);
 	}
@@ -111,7 +111,7 @@ public class GameResultsPresenterTest {
 				List<GameResultsRow> content = (List<GameResultsRow>) getCurrentArguments()[0];
 				assertEquals(1, content.size());
 				assertEquals(loginData.player.nickname, content.get(0).playerName);
-				assertEquals(new LocalDate(2011, 10, 10).toDateMidnight().toDate(), content.get(0).gameDateTime);
+				assertEquals(new SimpleDateFormat("yyyy-MM-dd").parse("2011-10-10"), content.get(0).gameDateTime);
 				assertEquals("1 - 3", content.get(0).result);
 				return null;
 			}

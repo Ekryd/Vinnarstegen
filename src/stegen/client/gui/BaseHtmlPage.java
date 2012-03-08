@@ -1,6 +1,5 @@
 package stegen.client.gui;
 
-import stegen.client.*;
 import stegen.client.gui.desktop.*;
 
 import com.google.gwt.user.client.ui.*;

@@ -35,7 +35,7 @@
 	height: 24px;
 	margin-left: 10px;
 }
-
+<!-- TODO, TA BORT BUTTON när de finns i ui.xml-->
 button {
 	margin-right: 10px !important;
 	background-color: #c3d8d3 !important;
