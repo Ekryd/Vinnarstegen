@@ -1,12 +1,10 @@
 package stegen.client.gui.desktop.register;
+import stegen.client.gui.*;
+import stegen.client.presenter.RegistrationPresenter.Display;
+
 import com.google.gwt.core.client.*;
 import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.ui.*;
-
-import stegen.client.gui.*;
-import stegen.client.gui.desktop.login.*;
-import stegen.client.gui.desktop.login.LoginView.*;
-import stegen.client.presenter.RegistrationPresenter.Display;
 
 public class RegistrationView  extends Composite implements Display {
 

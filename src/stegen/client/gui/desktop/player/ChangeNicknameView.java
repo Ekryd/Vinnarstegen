@@ -2,12 +2,12 @@ package stegen.client.gui.desktop.player;
 
 import stegen.client.gui.desktop.register.*;
 import stegen.client.gui.dialog.*;
+import stegen.client.presenter.RegisteredUserPresenter.Display;
 
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.user.client.ui.*;
 
-public class ChangeNicknameView extends UserView implements stegen.client.presenter.RegisteredUserPresenter.Display {
-	
+public class ChangeNicknameView extends UserView implements Display {
 	
 	Button changeNicknameButton = new Button("Ändra alias");
 	

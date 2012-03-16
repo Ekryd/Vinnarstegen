@@ -1,2 +1,0 @@
-serviceClass: stegen.client.service.ScoreService
-path: 6F618C206E694A0842DE86ED78D13BC6.gwt.rpc

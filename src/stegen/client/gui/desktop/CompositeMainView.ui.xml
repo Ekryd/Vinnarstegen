@@ -1,0 +1,41 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:score="urn:import:stegen.client.gui.score"
+	xmlns:message="urn:import:stegen.client.gui.message"
+	xmlns:gameresult="urn:import:stegen.client.gui.playeraction"
+	xmlns:rules="urn:import:stegen.client.gui.rules">
+	
+	  <g:TabLayoutPanel barUnit='EM' barHeight='2.5' ui:field="mainContentTable" height="1000px" animationDuration="1000">
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Poängställning"/> </g:customHeader>
+		    <score:ListScorePanel ui:field="scorePanel"/>
+		  </g:tab>
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Meddelanden"/> </g:customHeader>
+		    <message:MessagePanel ui:field="messagePanel"/>
+		  </g:tab>
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Matcher"/> </g:customHeader>
+		    <gameresult:GameResultPanel ui:field="gameResultPanel"/>
+		  </g:tab>
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Inloggning"/> </g:customHeader>
+		    <g:VerticalPanel>
+		    	<gameresult:LoginStatusTable ui:field="loginStatusTable"/>
+		    </g:VerticalPanel>
+		  </g:tab>
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Övrigt"/> </g:customHeader>
+		    <g:VerticalPanel>
+		    	<gameresult:PlayerMiscCommandTable ui:field="playerMiscCommandTable"/>
+		    </g:VerticalPanel>
+		  </g:tab>
+		  <g:tab>
+		    <g:customHeader> <g:Label text="Regler"/> </g:customHeader>
+		    <rules:RulesPanel ui:field="rulesPanel"/>
+		  </g:tab>
+	 </g:TabLayoutPanel>
+	 
+	  
+</ui:UiBinder> 

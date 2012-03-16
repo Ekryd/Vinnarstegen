@@ -1,7 +1,6 @@
 package stegen.client;
 
 import static org.junit.Assert.*;
-import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
@@ -10,7 +9,6 @@ import org.mockito.*;
 import org.mockito.runners.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.*;
 import stegen.client.service.*;
 
@@ -49,9 +47,8 @@ public class AppControllerTest {
 		controller.start("hostPageBaseURL");
 		
 		InOrder inOrder = inOrder(eventBus,parentView);
-		inOrder.verify(eventBus).addHandler(any(UpdateLoginStatusCallback.class));
+		inOrder.verify(eventBus).addHandler(controller.eventCheckLoginStatusHandler);
 		inOrder.verify(eventBus).getUserLoginStatus("hostPageBaseURL");
-		inOrder.verify(parentView).add(shell);
 	}
 
 	private void setupController() {

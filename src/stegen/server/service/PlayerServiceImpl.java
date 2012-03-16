@@ -78,6 +78,6 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
 	@Override
 	public boolean isNewUserPasswordOk(String registrationCode) {
 		final String NEW_USER_PASSWORD = "Waldner";
-		return NEW_USER_PASSWORD.equals(registrationCode);
+		return NEW_USER_PASSWORD.equalsIgnoreCase(registrationCode);
 	}
 }

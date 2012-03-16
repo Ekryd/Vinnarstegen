@@ -40,39 +40,46 @@
 		}
 		.logoutArea_right {
 			float: right;
-			width: 5%;
+			width: 8%;
 			height: 30px;
 			padding: 5px;
 		}
 		.refreshPanel {
 			position: relative;
-			float: right;
+			height: 30px;
+			padding: 5px;
 			z-index: 999;
-			top: 50px;
-			left: 60px;
 		}								
 		.contentPanel {
 			float: left;
 			width: 100%;
 			padding: 5px;
+			position: absolute;
 		}
 	</ui:style>
 	
 	
-     <g:DockLayoutPanel unit='EM' styleName="{style.container}">
-       <g:north size='10'>
-       <g:FlowPanel >
-         <g:FlowPanel styleName="{style.versionArea}" ui:field="versionArea"/>
-         <g:FlowPanel styleName="{style.headerPanel}" >
-           <g:Image resource='{res.logo}' styleName="{style.headerLogo}"/>
-           <g:FlowPanel styleName="{style.userArea_left}" ui:field="userArea" />	           
-	       <g:FlowPanel styleName="{style.logoutArea_right}" ui:field="logoutArea" />  
-	       <g:FlowPanel styleName="{style.refreshPanel}" ui:field="refreshArea" />
-         </g:FlowPanel>
-       </g:FlowPanel>
-       </g:north>
+     <g:DockLayoutPanel unit='PX' styleName="{style.container}">
+     	<g:north size="170">
+     	<g:FlowPanel styleName="{style.headerPanel">
+         	
+			<g:Image resource='{res.logo}' styleName="{style.headerLogo}"/>         
+
+       		<g:FlowPanel styleName="{style.versionArea}" ui:field="versionArea"/>
+         		
+            <g:FlowPanel styleName="{style.userArea_left}" ui:field="userArea" />	           
+
+	        <g:FlowPanel styleName="{style.logoutArea_right}" ui:field="logoutArea" />  
+
+	        <g:FlowPanel styleName="{style.refreshPanel}" ui:field="refreshArea" />
+	      
+         	
+     
+     	</g:FlowPanel>
+     	
+     	</g:north>
        <g:center>
-         <g:FlowPanel styleName="{style.contentPanel}" ui:field="mainArea"/>
+         <g:LayoutPanel  styleName="{style.contentPanel}" ui:field="mainArea"/>
        </g:center>
      </g:DockLayoutPanel>
      

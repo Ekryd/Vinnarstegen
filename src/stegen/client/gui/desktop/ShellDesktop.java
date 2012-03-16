@@ -21,17 +21,16 @@ public class ShellDesktop extends Composite implements Shell  {
 	    @Source("stegen_logga.gif")
 	    ImageResource logo();
 	  }
-	//TODO ta bort public static
 	@UiField 
-	public static FlowPanel mainArea;
+	FlowPanel mainArea;
 	@UiField 
-	public static FlowPanel versionArea;
+	FlowPanel versionArea;
 	@UiField 
-	public static FlowPanel logoutArea;
+	FlowPanel logoutArea;
 	@UiField 
-	public static FlowPanel userArea;
+	FlowPanel userArea;
 	@UiField 
-	public static FlowPanel refreshArea;
+	FlowPanel refreshArea;
 
 	public ShellDesktop() {
 		initWidget(uiBinder.createAndBindUi(this));

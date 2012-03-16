@@ -1,15 +1,12 @@
 package stegen.client;
-
 import stegen.client.event.*;
 import stegen.client.event.callback.*;
 import stegen.client.gui.*;
 import stegen.client.gui.desktop.login.*;
 import stegen.client.gui.desktop.player.*;
+import stegen.client.gui.desktop.refresh.*;
 import stegen.client.gui.desktop.register.*;
 import stegen.client.gui.info.*;
-import stegen.client.gui.player.*;
-import stegen.client.gui.refresh.*;
-import stegen.client.gui.register.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
 import stegen.client.service.insult.*;
@@ -29,12 +26,12 @@ public class AppController {
 		this.eventBus = eventBus;
 		this.shell = shell;
 		this.parentView = parentView;
+		this.parentView.add(shell);
 	}
 
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
 			PlayerServiceAsync playerService,Shell shell,HasWidgets.ForIsWidget parentView) {		
-		this(EventBusImpl.create(playerCommandService, scoreService, playerService),
-				shell,parentView);
+		this(EventBusImpl.create(playerCommandService, scoreService, playerService),shell,parentView);
 	}
 
 	public static AppController createForTest(EventBus eventBus,Shell shell,HasWidgets.ForIsWidget parentView) {
@@ -46,7 +43,6 @@ public class AppController {
 		this.hostPageBaseURL = hostPageBaseURL;
 		setupLoginStatusEvent();
 		eventBus.getUserLoginStatus(hostPageBaseURL);
-		parentView.add(shell);
 	}
 
 	private void setupLoginStatusEvent() {
@@ -76,7 +72,6 @@ public class AppController {
 					createLoginPresenter(loginData);
 				}
 			}
-
 		};
 	}
 
@@ -93,8 +88,7 @@ public class AppController {
 	private void createLoggedInPresenters(LoginDataDto loginData) {
 		new LogoutPresenter(new LogoutView(), loginData,shell).go();
 		new RegisteredUserPresenter(new ChangeNicknameView(), loginData, eventBus,shell).go();
-		new CompositeMainPresenter(new CompositeMainView(), loginData, eventBus, new InsultFactoryImpl(),
-				new DateTimeFormatsImpl()).go();
-		new RefreshPresenter(new RefreshView(), eventBus).go();
+		new CompositeMainPresenter((CompositeMainPresenter.Display)GWT.create(CompositeMainPresenter.Display.class), loginData, eventBus, new InsultFactoryImpl(),new DateTimeFormatsImpl(),shell).go();
+		new RefreshPresenter(new RefreshView(), eventBus,shell).go();
 	}
 }

@@ -4,8 +4,8 @@
   <inherits name='com.google.gwt.user.User'/>
   <inherits name='com.google.gwt.user.theme.clean.Clean'/>
   <inherits name='stegen.FormFactor'/>
-  <!-- <inherits name="com.google.gwt.resources.Resources" />
- -->
+   <inherits name="com.googlecode.mgwt.MGWT"/>
+ 
   <!-- Specify the app entry point class.                         -->
   <entry-point class='stegen.client.Stegen'/>
   
@@ -33,6 +33,19 @@
 	    <when-property-is name="user.agent" value="ie8" />
     </any>
   </replace-with>
+  
+  <replace-with class="stegen.client.gui.desktop.CompositeMainView">
+    <when-type-is class="stegen.client.presenter.CompositeMainPresenter.Display"/>
+  </replace-with>
+  
+  <replace-with class="stegen.client.gui.mobile.CompositeMainView">
+    <when-type-is class="stegen.client.presenter.CompositeMainPresenter.Display"/>
+    <any>
+	    <when-property-is name="formfactor" value="mobile"/>
+	    <when-property-is name="user.agent" value="ie8" />
+    </any>
+  </replace-with>
+  
   
   
  

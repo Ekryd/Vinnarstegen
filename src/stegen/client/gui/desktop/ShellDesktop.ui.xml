@@ -1,6 +1,7 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui"
+	xmlns:test="urn:import:stegen.client.gui">
 	
 	<ui:with field='res' type='stegen.client.gui.desktop.ShellDesktop.Resources'/>
 	
@@ -59,22 +60,23 @@
 	</ui:style>
 	
 	
-     <g:DockLayoutPanel unit='EM' styleName="{style.container}">
-       <g:north size='15'>
-       <g:FlowPanel >
-         <g:FlowPanel styleName="{style.versionArea}" ui:field="versionArea"/>
-         <g:FlowPanel styleName="{style.headerPanel}" >
-          <g:Image resource='{res.logo}' styleName="{style.headerLogo}"/>
-           <g:FlowPanel styleName="{style.userArea_left}" ui:field="userArea" />	           
-	       <g:FlowPanel styleName="{style.logoutArea_right}" ui:field="logoutArea" />  
-	       <g:FlowPanel styleName="{style.refreshPanel}" ui:field="refreshArea" />
-         </g:FlowPanel>
-       </g:FlowPanel>
-       </g:north>
-       <g:center>
-         <g:FlowPanel styleName="{style.contentPanel}" ui:field="mainArea"/>
-       </g:center>
-     </g:DockLayoutPanel>
+     <g:FlowPanel styleName="{style.container}">
+         	
+			<g:Image resource='{res.logo}' styleName="{style.headerLogo}"/>         
+
+       		<g:FlowPanel styleName="{style.versionArea}" ui:field="versionArea"/>
+         		
+            <g:FlowPanel styleName="{style.userArea_left}" ui:field="userArea" />	           
+
+	        <g:FlowPanel styleName="{style.logoutArea_right}" ui:field="logoutArea" />  
+
+	        <g:FlowPanel styleName="{style.refreshPanel}" ui:field="refreshArea" />
+	      
+         	<g:FlowPanel styleName="{style.contentPanel}" ui:field="mainArea"/>
+         	
+         	
+     
+     </g:FlowPanel>
      
    
 </ui:UiBinder> 

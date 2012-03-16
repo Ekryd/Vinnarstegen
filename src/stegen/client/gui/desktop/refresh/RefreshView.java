@@ -1,16 +1,28 @@
-package stegen.client.gui.refresh;
+package stegen.client.gui.desktop.refresh;
+
 import stegen.client.gui.*;
 import stegen.client.presenter.RefreshPresenter.Display;
 
+import com.google.gwt.core.client.*;
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.uibinder.client.*;
 import com.google.gwt.user.client.*;
+import com.google.gwt.user.client.ui.*;
 
-public class RefreshView implements Display {
+public class RefreshView extends Composite implements Display{
+	
+	private static RefreshUiBinder uiBinder = GWT.create(RefreshUiBinder.class);
+	interface RefreshUiBinder extends UiBinder<Widget, RefreshView> {}
+	
 	private static final int ONE_MINUTE = 60 * 1000;
-	private final RefreshButton refreshButton = new RefreshButton();
+	
+	@UiField
+	Button refreshButton = new Button("Refresh!");
+	
 	private Timer timer;
 
 	public RefreshView() {
+		initWidget(uiBinder.createAndBindUi(this));
 	}
 
 	@Override
@@ -32,7 +44,6 @@ public class RefreshView implements Display {
 	
 	@Override
 	public void setShell(Shell shell) {
-		shell.showInRefreshArea(refreshButton);
+		shell.showInRefreshArea(this);
 	}
-
 }

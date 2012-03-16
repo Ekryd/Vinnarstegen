@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
+import stegen.client.gui.*;
 import stegen.client.service.*;
 import stegen.shared.*;
 
@@ -11,39 +12,34 @@ public class CompositeMainPresenter implements Presenter {
 	private final EventBus eventBus;
 	private final InsultFactory insultFactory;
 	private final DateTimeFormats dateTimeFormats;
+	private final Shell shell;
 
 	public interface Display {
-
 		stegen.client.presenter.ScorePresenter.Display getScoreView();
-
 		stegen.client.presenter.ChallengePresenter.Display getChallengeInputView();
-
 		stegen.client.presenter.WinGameInputPresenter.Display getWinGameInputView();
-
 		stegen.client.presenter.GameResultsPresenter.Display getGameResultsView();
-
 		stegen.client.presenter.UndoPresenter.Display getUndoView();
-
 		stegen.client.presenter.LoginStatusesPresenter.Display getLoginStatusesView();
-
 		stegen.client.presenter.PlayerMiscCommandsPresenter.Display getPlayerMiscCommandView();
-
 		stegen.client.presenter.MessagesPresenter.Display getMessageView();
-
+		void setShell(Shell shell);
 	}
 
 	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData, EventBus eventBus,
-			InsultFactory insultFactory, DateTimeFormats dateTimeFormats) {
+			InsultFactory insultFactory, DateTimeFormats dateTimeFormats,Shell shell) {
 		this.view = compositeMainView;
 		this.loginData = loginData;
 		this.eventBus = eventBus;
 		this.insultFactory = insultFactory;
 		this.dateTimeFormats = dateTimeFormats;
+		this.shell = shell;
 	}
 
 	@Override
 	public void go() {
 		initPresenterParts();
+		view.setShell(shell);
 	}
 
 	private void initPresenterParts() {

@@ -1,14 +1,31 @@
-package stegen.client.gui;
-import static stegen.client.gui.BaseHtmlPage.*;
+package stegen.client.gui.desktop;
+import stegen.client.gui.*;
 import stegen.client.gui.challenge.*;
 import stegen.client.gui.gameresult.*;
 import stegen.client.gui.message.*;
 import stegen.client.gui.playeraction.*;
+import stegen.client.gui.rules.*;
 import stegen.client.gui.score.*;
 import stegen.client.presenter.CompositeMainPresenter.Display;
 
-public class CompositeMainView implements Display {
-	private final MainContentTable mainContentTable = new MainContentTable();
+import com.google.gwt.core.client.*;
+import com.google.gwt.uibinder.client.*;
+import com.google.gwt.user.client.ui.*;
+
+public class CompositeMainView extends Composite implements Display {
+	
+	private static CompositeMainUiBinder uiBinder = GWT.create(CompositeMainUiBinder.class);
+
+	interface CompositeMainUiBinder extends UiBinder<Widget, CompositeMainView> {}
+
+	@UiField TabLayoutPanel mainContentTable;
+	@UiField ListScorePanel scorePanel;
+	@UiField GameResultPanel gameResultPanel;
+	@UiField LoginStatusTable loginStatusTable;
+	@UiField PlayerMiscCommandTable playerMiscCommandTable;
+	@UiField MessagePanel messagePanel;
+	@UiField RulesPanel rulesPanel;
+	
 	private final ScoreView scoreView;
 	private final MessagesView messagesView;
 	private final ChallengeInputView challengeView;
@@ -19,19 +36,15 @@ public class CompositeMainView implements Display {
 	private final PlayerMiscCommandsView playerMiscCommandView;
 
 	public CompositeMainView() {
-		MAIN_AREA.clearPanel();
-		MAIN_AREA.addToPanel(mainContentTable);
-		ListScorePanel scorePanel = mainContentTable.getScorePanel();
-		GameResultPanel gameResultPanel = mainContentTable.getGameResultPanel();
+		initWidget(uiBinder.createAndBindUi(this));
 		scoreView = new ScoreView(scorePanel);
-		messagesView = new MessagesView(mainContentTable.getMessagePanel());
+		messagesView = new MessagesView(messagePanel);
 		challengeView = new ChallengeInputView(scorePanel.getChallengeButtonColumn(), scorePanel.getChallengeDialog());
-		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),
-				scorePanel.getWinGameDialog());
+		gameInputView = new WinGameInputView(scorePanel.getWinnerButtonColumn(), scorePanel.getLoserButtonColumn(),scorePanel.getWinGameDialog());
 		gameResultsView = new GameResultsView(gameResultPanel);
 		undoView = new UndoView(gameResultPanel.getUndoButton());
-		loginStatusesView = new LoginStatusesView(mainContentTable.getLoginStatusesPanel());
-		playerMiscCommandView = new PlayerMiscCommandsView(mainContentTable.getPlayerMiscCommandsPanel());
+		loginStatusesView = new LoginStatusesView(loginStatusTable);
+		playerMiscCommandView = new PlayerMiscCommandsView(playerMiscCommandTable);
 	}
 
 	@Override
@@ -74,4 +87,8 @@ public class CompositeMainView implements Display {
 		return messagesView;
 	}
 
+	@Override
+	public void setShell(Shell shell) {
+		shell.showInMainArea(this);
+	}
 }
