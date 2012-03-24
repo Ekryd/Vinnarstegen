@@ -1,10 +1,10 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.gameresult.*;
 import stegen.client.gui.gameresult.WinGameFieldUpdater.ButtonType;
 import stegen.client.gui.score.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -12,14 +12,16 @@ import com.google.gwt.event.dom.client.*;
 public class WinGameInputPresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
 	private ButtonType clickedWonOrLostButton;
 	private PlayerDto otherPlayer;
 	private String nickname;
 
 	final WinGameFieldUpdater openWinGameInputhandler = createOpenWinGameInputhandler();
 	final ClickHandler clickWinGameHandler = createClickWinGameHandler();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final ChangeNicknameEventHandler changeNicknameEventHandler =  createChangeNicknameEventHandler();
+	final AbstractAsyncCallback<Void> playerWonOverPlayerCallback = createPlayerWonOverPlayerCallback();
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
+	private final ScoreServiceAsync scoreService;
 
 	public interface Display {
 		void addClickOpenWinGameInputHandler(WinGameFieldUpdater fieldUpdater);
@@ -31,13 +33,13 @@ public class WinGameInputPresenter implements Presenter {
 		void openWinGameInputDialog();
 
 		SetResult getGameResult();
-
 	}
 
-	public WinGameInputPresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus) {
+	public WinGameInputPresenter(Display scoreView, LoginDataDto loginData, com.google.gwt.event.shared.EventBus gwtEventBus,ScoreServiceAsync scoreService) {
 		this.view = scoreView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
+		this.gwtEventBus = gwtEventBus;
+		this.scoreService = scoreService;
 		this.nickname = loginData.player.nickname;
 	}
 
@@ -53,12 +55,11 @@ public class WinGameInputPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
 	}
 
 	private WinGameFieldUpdater createOpenWinGameInputhandler() {
 		return new WinGameFieldUpdater() {
-
 			@Override
 			public void onButtonClick(ScoreTableRow row, ButtonType buttonType) {
 				clickedWonOrLostButton = buttonType;
@@ -75,15 +76,12 @@ public class WinGameInputPresenter implements Presenter {
 
 	private ClickHandler createClickWinGameHandler() {
 		return new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				if (clickedWonOrLostButton == ButtonType.WIN) {
-					eventBus.playerWonOverPlayer(loginData.player, otherPlayer, convert(view.getGameResult()),
-							loginData.player);
+					scoreService.playerWonOverPlayer(loginData.player, otherPlayer, convert(view.getGameResult()),loginData.player,playerWonOverPlayerCallback);
 				} else {
-					eventBus.playerWonOverPlayer(otherPlayer, loginData.player, convert(view.getGameResult()),
-							loginData.player);
+					scoreService.playerWonOverPlayer(otherPlayer, loginData.player, convert(view.getGameResult()),loginData.player,playerWonOverPlayerCallback);
 				}
 			}
 		};
@@ -113,15 +111,22 @@ public class WinGameInputPresenter implements Presenter {
 		}
 		return returnValue;
 	}
-
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
+	
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(String newNickname) {
-				nickname = newNickname;
+			public void handleEvent(ChangeNicknameEvent event) {
+				nickname = event.getNewNickname();
 			}
-
+		};
+	}
+	
+	private AbstractAsyncCallback<Void> createPlayerWonOverPlayerCallback(){
+		return new AbstractAsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void result) {
+				gwtEventBus.fireEvent(new GamePlayedEvent());
+			}
 		};
 	}
 }

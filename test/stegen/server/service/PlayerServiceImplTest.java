@@ -54,7 +54,7 @@ public class PlayerServiceImplTest {
 
 	@Test
 	public void testIncorrectNewUserPassword() {
-		final String newUserPassword = "waldner";
+		final String newUserPassword = "baldner";
 		assertFalse("password incorrect: " + newUserPassword, playerServiceImpl.isNewUserPasswordOk(newUserPassword));
 	}
 

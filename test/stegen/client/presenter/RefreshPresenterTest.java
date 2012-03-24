@@ -1,6 +1,7 @@
 package stegen.client.presenter;
 
 import static org.mockito.Mockito.*;
+
 import org.junit.*;
 import org.junit.runner.*;
 import org.mockito.*;
@@ -9,12 +10,14 @@ import org.mockito.runners.*;
 import stegen.client.event.*;
 import stegen.client.gui.*;
 import stegen.client.presenter.RefreshPresenter.Display;
+import stegen.client.service.*;
+import stegen.shared.*;
 @RunWith(MockitoJUnitRunner.class)
 public class RefreshPresenterTest {
 
 	private RefreshPresenter presenter;
 	@Mock
-	private EventBus eventBus;
+	com.google.gwt.event.shared.EventBus gwtEventBus;
 	@Mock
 	private Display view;
 	@Mock
@@ -37,7 +40,16 @@ public class RefreshPresenterTest {
 
 		presenter.clickRefreshHandler.onClick(null);
 		
-		verify(eventBus).refresh();
+		verify(presenter.refreshService).refresh(presenter.refreshCallback);
+	}
+	
+	@Test
+	public void shouldFireRefreshEvent(){
+		setupPresenter();
+		
+		presenter.refreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
+		
+		verify(gwtEventBus).fireEvent(any(RefreshEvent.class));
 	}
 
 	@Test
@@ -46,11 +58,12 @@ public class RefreshPresenterTest {
 		
 		presenter.timerCommand.run();
 		
-		verify(eventBus).refresh();
+		verify(presenter.refreshService).refresh(presenter.refreshCallback);
 	}
 
 	private void setupPresenter() {
-		presenter = new RefreshPresenter(view, eventBus,shell);
+		presenter = new RefreshPresenter(view, mock(PlayerCommandServiceAsync.class),gwtEventBus,shell);
+		presenter.refreshService = mock(RefreshService.class);
 	}
 
 	private void setupInitializationExpects() {

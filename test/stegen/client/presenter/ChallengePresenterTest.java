@@ -1,8 +1,12 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
 import stegen.client.gui.score.*;
@@ -10,24 +14,26 @@ import stegen.client.presenter.ChallengePresenter.Display;
 import stegen.client.service.*;
 import stegen.shared.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ChallengePresenterTest {
 
+	@Mock
 	private Display view;
-	private LoginDataDto loginData;
-	private EventBus eventBus;
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 	private ChallengePresenter presenter;
-	private InsultFactory insultFactory;
+	@Mock
 	private DateTimeFormats dateTimeFormats;
-
+	@Mock
+	private com.google.gwt.event.shared.EventBus gwtEventBus;
+	@Mock
+	private ScoreServiceAsync scoreService;
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
-
-		verify(view, eventBus, insultFactory);
+		
+		setupInitializationExpects();
 	}
 
 	@Test
@@ -35,60 +41,53 @@ public class ChallengePresenterTest {
 		setupPresenter();
 		presenter.go();
 
-		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+		presenter.changeNicknameEventHandler.handleEvent(new ChangeNicknameEvent("nick2"));
 
-		setupOpenDialogExpects();
-
+		when(dateTimeFormats.getChallengeDateDefaultOneDayFromNow()).thenReturn("nextDay");
+		
 		simulateOpenDialogClick();
-
-		verify(view, eventBus, insultFactory);
+		
+		setupOpenDialogExpects();
 	}
 
 	@Test
 	public void testSendOkMessage() {
 		setupPresenter();
 		presenter.go();
-		setupOpenDialogExpects();
+		
 
-		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+		presenter.changeNicknameEventHandler.handleEvent(new ChangeNicknameEvent("nick2"));
 
+		when(dateTimeFormats.getChallengeDateDefaultOneDayFromNow()).thenReturn("nextDay");
+		
 		simulateOpenDialogClick();
-
-		setupSendOkMessageExpects();
+		
+		setupOpenDialogExpects();
 
 		simulateSendMessage();
 
-		verify(view, eventBus, insultFactory);
+		setupSendOkMessageExpects();
 	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		insultFactory = createStrictMock(InsultFactory.class);
-		dateTimeFormats = createStrictMock(DateTimeFormats.class);
-		presenter = new ChallengePresenter(view, loginData, eventBus, insultFactory, dateTimeFormats);
+		presenter = new ChallengePresenter(view, loginData,  dateTimeFormats,scoreService,gwtEventBus);
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickOpenChallengeInputHandler(presenter.openChallengeInputhandler);
-		view.addClickSendChallengeHandler(presenter.clickSendChallengeHandler);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		replay(view, eventBus, insultFactory);
+		verify(view).addClickOpenChallengeInputHandler(presenter.openChallengeInputhandler);
+		verify(view).addClickSendChallengeHandler(presenter.clickSendChallengeHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE, presenter.changeNicknameEventHandler);
 	}
 
 	private void setupOpenDialogExpects() {
-		reset(view, eventBus, insultFactory);
-		expect(insultFactory.createCompleteInsult()).andReturn("insult1");
-		expect(insultFactory.createCompleteInsult()).andReturn("insult2");
-		expect(dateTimeFormats.getChallengeDateDefaultOneDayFromNow()).andReturn("nextDay");
-		String message = "Jag, nick2 (address),  tycker att du, challengeeName, är insult1!\n"
-				+ "Försvara din ära! Möt mig i pingis nextDay.\n"
-				+ "Annars kommer hela världen att veta att du är insult2\n" + "\n" + "Med vänliga hälsningar\n"
+		
+		String message = "Jag, nick2 (address),  vill utmana dig, challengeeName!\n"
+				+ "Försvara din ära! Möt mig i pingis nextDay.\n\n"
+				+ "Med vänliga hälsningar\n"
 				+ "nick2";
-		view.setupChallengeInputDialog("challengeeName", "insult1", "Utmaning från Vinnarstegen", message);
-		view.openChallengeInputDialog();
-		replay(view, eventBus, insultFactory, dateTimeFormats);
+		verify(view).setupChallengeInputDialog("challengeeName", "Utmaning från Vinnarstegen", message);
+		verify(view).openChallengeInputDialog();
+		
 	}
 
 	private void simulateOpenDialogClick() {
@@ -98,10 +97,8 @@ public class ChallengePresenterTest {
 	}
 
 	private void setupSendOkMessageExpects() {
-		reset(view, eventBus, insultFactory);
-		expect(view.getUserModifiedMessage()).andReturn("Modified message");
-		eventBus.challengePlayer(anyObject(ChallengeMessageDto.class));
-		replay(view, eventBus, insultFactory);
+		when(view.getUserModifiedMessage()).thenReturn("Modified message");
+		verify(scoreService).challengePlayer(any(ChallengeMessageDto.class), eq(presenter.challangePlayerCallback));
 	}
 
 	private void simulateSendMessage() {

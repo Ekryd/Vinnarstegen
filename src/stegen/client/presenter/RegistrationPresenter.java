@@ -1,19 +1,23 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.client.rpc.*;
 
 public class RegistrationPresenter implements Presenter {
 
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
-	final Display.NewUserPasswordOkKeyPressAndClickHandler checkNewUserPasswordHandler = new NewUserPasswordOkkeyPressAndClickHandler();
-	final UpdateIsNewUserPasswordOkCallback eventNewUserPassword = createCommandIsNewUserPasswordCallback();
+	private final PlayerServiceAsync playerService;
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
+	final Display.KeyPressAndClickHandler checkNewUserPasswordHandler = new NewUserPasswordOkkeyPressAndClickHandler();
+	final AsyncCallback<LoginDataDto> userLoginStatusCallback = new UpdateLoginStatusCallback();
+	final AsyncCallback<Void> registerPlayerCallback = new RegisterPlayerCallback();
+	final AsyncCallback<Boolean> isNewUserPasswordOk = new IsNewUserPasswordOkCallback();
 	private final String hostPageBaseURL;
 	private final Shell shell;
 
@@ -22,61 +26,69 @@ public class RegistrationPresenter implements Presenter {
 
 		void showRegistrationFail();
 
-		void addRegistrationEventHandler(NewUserPasswordOkKeyPressAndClickHandler handler);
+		void addRegistrationEventHandler(KeyPressAndClickHandler handler);
 
-		interface NewUserPasswordOkKeyPressAndClickHandler extends KeyPressHandler, ClickHandler {
+		interface KeyPressAndClickHandler extends KeyPressHandler, ClickHandler {
 		}
 		void setShell(Shell shell);
 	}
 
-	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, EventBus eventBus,
+	public RegistrationPresenter(Display loginButNotRegisteredView, LoginDataDto loginData, PlayerServiceAsync playerService,com.google.gwt.event.shared.EventBus gwtEventBus,
 			String hostPageBaseURL, Shell shell) {
 		this.view = loginButNotRegisteredView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
+		this.playerService = playerService;
 		this.hostPageBaseURL = hostPageBaseURL;
 		this.shell = shell;
+		this.gwtEventBus = gwtEventBus;
 	}
 
 	@Override
 	public void go() {
 		view.addRegistrationEventHandler(checkNewUserPasswordHandler);
-		eventBus.addHandler(eventNewUserPassword);
 		view.setShell(shell);
 	}
 
-	private UpdateIsNewUserPasswordOkCallback createCommandIsNewUserPasswordCallback() {
-		return new UpdateIsNewUserPasswordOkCallback() {
-
-			@Override
-			public void onSuccessImpl(Boolean result) {
-				if (result) {
-					eventBus.registerPlayer(loginData.player.email);
-					eventBus.getUserLoginStatus(hostPageBaseURL);
-				} else {
-					view.showRegistrationFail();
-				}
-			}
-		};
+	
+	private class UpdateLoginStatusCallback extends AbstractAsyncCallback<LoginDataDto>  {
+		@Override
+		public void onSuccess(LoginDataDto result) {
+			gwtEventBus.fireEvent(new LoginEvent(result));							
+		}
 	}
-
-	private class NewUserPasswordOkkeyPressAndClickHandler implements Display.NewUserPasswordOkKeyPressAndClickHandler {
-
+	private class RegisterPlayerCallback extends AbstractAsyncCallback<Void>  {
+		@Override
+		public void onSuccess(Void result) {
+		}
+	}
+	
+	private class IsNewUserPasswordOkCallback extends AbstractAsyncCallback<Boolean>{
+		@Override
+		public void onSuccess(Boolean result) {
+			if (result) {
+				playerService.registerPlayer(loginData.player.email, registerPlayerCallback);
+				playerService.getUserLoginStatus(hostPageBaseURL, userLoginStatusCallback);
+			} else {
+				view.showRegistrationFail();
+			}	
+		}
+	}
+	
+	private class NewUserPasswordOkkeyPressAndClickHandler implements Display.KeyPressAndClickHandler {
 		@Override
 		public void onClick(ClickEvent event) {
 			checkRegistrationCode();
 		}
-
 		@Override
 		public void onKeyPress(KeyPressEvent event) {
 			if (event.getCharCode() == KeyCodes.KEY_ENTER) {
 				checkRegistrationCode();
 			}
 		}
-
+		
 		private void checkRegistrationCode() {
 			String registrationCode = view.getRegistrationCode();
-			eventBus.isNewUserPasswordOk(registrationCode);
+			playerService.isNewUserPasswordOk(registrationCode,isNewUserPasswordOk);
 		}
 	}
 }

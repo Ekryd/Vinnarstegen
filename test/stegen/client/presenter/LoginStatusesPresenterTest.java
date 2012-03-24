@@ -1,43 +1,66 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import java.text.*;
-import java.util.*;
-
-import org.easymock.*;
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
-import stegen.client.gui.playeraction.*;
 import stegen.client.presenter.LoginStatusesPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class LoginStatusesPresenterTest {
 
+	@Mock
 	private Display view;
-	private EventBus eventBus;
+	@Mock
+	private com.google.gwt.event.shared.EventBus gwtEventBus;
+	@Mock
+	private PlayerCommandServiceAsync playerCommandService;
 	private LoginStatusesPresenter presenter;
-	private LoginDataDto loginData;
+	//private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();
 	}
 
+
+	@Test
+	public void testUpdateListEvents() {
+		setupPresenter();
+		presenter.changeNicknameEventHandler.handleEvent(null);
+		verify(playerCommandService).getLoginStatusCommandStack(10, presenter.loginStatusStackCallback);
+		reset(playerCommandService);
+
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent( RefreshType.CHANGES_ON_SERVER_SIDE));
+		verify(playerCommandService).getLoginStatusCommandStack(10, presenter.loginStatusStackCallback);
+	}
+
+	private void setupPresenter() {
+		presenter = new LoginStatusesPresenter(view,playerCommandService,gwtEventBus);
+	}
+
+	private void setupInitializationExpects() {
+		verify(gwtEventBus).addHandler(RefreshEvent.TYPE,presenter.refreshEventHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE, presenter.changeNicknameEventHandler);
+		verify(playerCommandService).getLoginStatusCommandStack(10, presenter.loginStatusStackCallback);
+	}
+	/*
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testEventScoresUpdated() throws ParseException {
 		setupPresenter();
 		presenter.go();
 
-		reset(view, eventBus);
 		view.changeLoginStatusList(anyObject(List.class));
 		verifyListContentForPreviousMethod();
 		replay(view, eventBus);
@@ -47,39 +70,6 @@ public class LoginStatusesPresenterTest {
 		gameResults.add(playerScoreDto);
 		presenter.eventUpdateLoginStatusListCallback.onSuccess(gameResults);
 	}
-
-	@Test
-	public void testUpdateListEvents() {
-		setupPresenter();
-
-		eventBus.updateLoginStatusList();
-		replay(eventBus, view);
-		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateLoginStatusList();
-		replay(eventBus, view);
-		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
-		verify(eventBus, view);
-		reset(eventBus, view);
-	}
-
-	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new LoginStatusesPresenter(view, eventBus);
-	}
-
-	private void setupInitializationExpects() {
-		eventBus.addHandler(presenter.eventUpdateLoginStatusListCallback);
-		eventBus.addHandler(presenter.eventCommandRefreshCallback);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		eventBus.updateLoginStatusList();
-		replay(view, eventBus);
-	}
-
 	private void verifyListContentForPreviousMethod() {
 		IAnswer<? extends Object> answer = new IAnswer<Object>() {
 
@@ -94,6 +84,5 @@ public class LoginStatusesPresenterTest {
 			}
 		};
 		expectLastCall().andAnswer(answer);
-	}
-
+	}*/
 }

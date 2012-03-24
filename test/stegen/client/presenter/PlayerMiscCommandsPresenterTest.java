@@ -1,36 +1,39 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-import java.text.*;
-import java.util.*;
-
-import org.easymock.*;
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
-import stegen.client.gui.playeraction.*;
 import stegen.client.presenter.PlayerMiscCommandsPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
-
+@RunWith(MockitoJUnitRunner.class)
 public class PlayerMiscCommandsPresenterTest {
 
+	@Mock
 	private Display view;
-	private EventBus eventBus;
+	@Mock
+	com.google.gwt.event.shared.EventBus gwtEventBus;
 	private PlayerMiscCommandsPresenter presenter;
-	private LoginDataDto loginData;
+	//private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
+	@Mock
+	private PlayerCommandServiceAsync playerCommandService;
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();
 	}
 
+	/*
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testEventScoresUpdated() throws ParseException {
@@ -47,53 +50,7 @@ public class PlayerMiscCommandsPresenterTest {
 		gameResults.add(playerScoreDto);
 		presenter.eventUpdatePlayerMiscCommandListCallback.onSuccess(gameResults);
 	}
-
-	@Test
-	public void testUpdateListEvents() {
-		setupPresenter();
-
-		eventBus.updatePlayerMiscCommandList();
-		replay(eventBus, view);
-		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updatePlayerMiscCommandList();
-		replay(eventBus, view);
-		presenter.eventCommandChallengeCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updatePlayerMiscCommandList();
-		replay(eventBus, view);
-		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updatePlayerMiscCommandList();
-		replay(eventBus, view);
-		presenter.eventCommandUndoCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-	}
-
-	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new PlayerMiscCommandsPresenter(view, eventBus);
-	}
-
-	private void setupInitializationExpects() {
-		eventBus.addHandler(presenter.eventUpdatePlayerMiscCommandListCallback);
-		eventBus.addHandler(presenter.eventCommandRefreshCallback);
-		eventBus.addHandler(presenter.eventCommandUndoCallback);
-		eventBus.addHandler(presenter.eventCommandChallengeCallback);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		eventBus.updatePlayerMiscCommandList();
-		replay(view, eventBus);
-	}
-
+	
 	private void verifyListContentForPreviousMethod() {
 		IAnswer<? extends Object> answer = new IAnswer<Object>() {
 
@@ -109,5 +66,41 @@ public class PlayerMiscCommandsPresenterTest {
 		};
 		expectLastCall().andAnswer(answer);
 	}
+*/
+	@Test
+	public void testUpdateListEvents() {
+		setupPresenter();
+
+
+		presenter.challangeEventHandler.handleEvent(new ChallengeEvent());
+		verify(playerCommandService).getMiscPlayerCommandStack(10, presenter.miscPlayerCallback);
+		reset(playerCommandService);
+
+		presenter.changeNicknameEventHandler.handleEvent(new ChangeNicknameEvent(null));
+		verify(playerCommandService).getMiscPlayerCommandStack(10, presenter.miscPlayerCallback);
+		reset(playerCommandService);
+		
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent(RefreshType.CHANGES_ON_SERVER_SIDE));
+		verify(playerCommandService).getMiscPlayerCommandStack(10, presenter.miscPlayerCallback);
+		reset(playerCommandService);
+
+		presenter.undoEventHandler.handleEvent(new UndoEvent(null));
+		verify(playerCommandService).getMiscPlayerCommandStack(10, presenter.miscPlayerCallback);
+		reset(playerCommandService);
+	}
+
+	private void setupPresenter() {
+		presenter = new PlayerMiscCommandsPresenter(view,gwtEventBus,playerCommandService);
+	}
+
+	private void setupInitializationExpects() {
+		verify(gwtEventBus).addHandler(RefreshEvent.TYPE,presenter.refreshEventHandler);
+		verify(gwtEventBus).addHandler(UndoEvent.TYPE, presenter.undoEventHandler);
+		verify(gwtEventBus).addHandler(ChallengeEvent.TYPE, presenter.challangeEventHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE, presenter.changeNicknameEventHandler);
+		verify(playerCommandService).getMiscPlayerCommandStack(10, presenter.miscPlayerCallback);
+	}
+
+	
 
 }

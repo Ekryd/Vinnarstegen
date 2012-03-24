@@ -10,6 +10,7 @@ import org.mockito.runners.*;
 import stegen.client.event.*;
 import stegen.client.gui.*;
 import stegen.client.presenter.RegisteredUserPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -21,9 +22,11 @@ public class RegisteredUserPresenterTest {
 	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 	private String nickname;
 	@Mock
-	private EventBus eventBus;
-	@Mock
 	private Shell shell;
+	@Mock
+	private PlayerServiceAsync playerService;
+	@Mock
+	com.google.gwt.event.shared.EventBus gwtEventBus;
 
 	@Test
 	public void testShowView() {
@@ -59,28 +62,28 @@ public class RegisteredUserPresenterTest {
 	public void testChangeNicknameCallback() {
 		setupPresenter();
 
-		presenter.eventCommandChangeNicknameHandler.onSuccess("nickname");
+		presenter.changeNicknameCallback.onSuccess("nickname");
 		
-		verify(view).setUserName("nickname");
+		verify(gwtEventBus).fireEvent(any(ChangeNicknameEvent.class));
+		
 	}
 
 	private void setupPresenter() {
-		presenter = new RegisteredUserPresenter(view, loginData, eventBus,shell);
+		presenter = new RegisteredUserPresenter(view, loginData, playerService,gwtEventBus, shell);
 	}
 
 	private void setupInitializationExpects() {
 		verify(view).setUserName("nickname");
-		verify(view).addClickChangeUserNameHandler(presenter.clickChangeUserNameHandler);
-		verify(eventBus).addHandler(presenter.eventCommandChangeNicknameHandler);
+		verify(view).addClickChangeUserNameHandler(presenter.changeUserNameClickHandler);
 		verify(view).setShell(shell);
 		
 	}
 
 	private void setupOkNicknameExpects() {
-		eventBus.changeNickname(loginData.player, nickname);
+		playerService.changeNickname(loginData.player, nickname,presenter.changeNicknameCallback);
 	}
 
 	private void simulateChangeNicknameClick() {
-		presenter.clickChangeUserNameHandler.onClick(null);
+		presenter.changeUserNameClickHandler.onClick(null);
 	}
 }

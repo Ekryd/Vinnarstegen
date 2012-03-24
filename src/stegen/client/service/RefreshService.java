@@ -5,24 +5,19 @@ import stegen.shared.*;
 
 import com.google.gwt.user.client.rpc.*;
 
+//TODO skriv test
 public class RefreshService {
 	private final PlayerCommandServiceAsync playerCommandService;
-	private long latestCommandId;
 
+	private long latestCommandId;
 	public RefreshService(PlayerCommandServiceAsync playerCommandService) {
 		this.playerCommandService = playerCommandService;
 	}
 
 	public void refresh(final AsyncCallback<RefreshType> callback) {
-		playerCommandService.getLatestCommandId(new EventCallback<Long>() {
-
+		playerCommandService.getLatestCommandId(new AbstractAsyncCallback<Long>() {
 			@Override
-			public Class<? extends EventCallback<Long>> getCallbackClass() {
-				return null;
-			}
-
-			@Override
-			public void onSuccessImpl(final Long latestCommandIdFromServer) {
+			public void onSuccess(final Long latestCommandIdFromServer) {
 				executeCallbacks(callback, latestCommandIdFromServer);
 			}
 		});

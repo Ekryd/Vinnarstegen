@@ -3,27 +3,29 @@ package stegen.client.presenter;
 import java.util.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.playeraction.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 public class GameResultsPresenter implements Presenter {
 	private final Display view;
-	private final EventBus eventBus;
-	final UpdateGameResultListCallback eventUpdateGameResultListCallback = createUpdateGameResultListCallback();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
-	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
-	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
-	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	private final PlayerCommandServiceAsync playerCommandService;
+	final com.google.gwt.event.shared.EventBus gwtEventBus;
+	final AbstractAsyncCallback<List<PlayerCommandDto>> eventUpdateGameResultListCallback = createUpdateGameResultListCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final UndoEventHandler undoEventHandler = createUndoEventHandler();
+	final GamePlayedEventHandler gamePlayedEventHandler = createGamePlayedEventHandler();
+	final ClearScoresEventHandler clearScoresEventHandler = createClearScoresEventHandler();
+	final ChangeNicknameEventHandler changeNicknameEventHandler =  createChangeNicknameEventHandler();
 
 	public interface Display {
 		void changeGameResultList(List<GameResultsRow> content);
 	}
 
-	public GameResultsPresenter(Display scoreView, EventBus eventBus) {
+	public GameResultsPresenter(Display scoreView,com.google.gwt.event.shared.EventBus gwtEventBus,PlayerCommandServiceAsync playerCommandService) {
 		this.view = scoreView;
-		this.eventBus = eventBus;
+		this.gwtEventBus = gwtEventBus;
+		this.playerCommandService =playerCommandService;
 	}
 
 	@Override
@@ -33,84 +35,77 @@ public class GameResultsPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventUpdateGameResultListCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
-		eventBus.addHandler(eventCommandUndoCallback);
-		eventBus.addHandler(eventCommandPlayerWonCallback);
-		eventBus.addHandler(eventCommandClearScoresCallback);
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
+		gwtEventBus.addHandler(GamePlayedEvent.TYPE, gamePlayedEventHandler);
+		gwtEventBus.addHandler(UndoEvent.TYPE, undoEventHandler);
+		gwtEventBus.addHandler(ClearScoresEvent.TYPE,clearScoresEventHandler);
 	}
-
-	private void loadGameResults() {
-		eventBus.updateGameResultList();
-	}
-
-	private UpdateGameResultListCallback createUpdateGameResultListCallback() {
-		return new UpdateGameResultListCallback() {
-
+	
+	
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
 			@Override
-			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
-				List<GameResultsRow> content = new ArrayList<GameResultsRow>();
-				for (PlayerCommandDto playerCommandDto : gameResults) {
-					content.add(new GameResultsRow(playerCommandDto.player.nickname,
-							playerCommandDto.performedDateTime, playerCommandDto.description));
-				}
-				view.changeGameResultList(content);
-			}
-		};
-	}
-
-	private UpdateRefreshCallback createCommandRefreshCallback() {
-		return new UpdateRefreshCallback() {
-
-			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+			public void handleEvent(RefreshEvent event) {
+				if (event.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadGameResults();
 				}
 			}
 		};
 	}
 
-	private CommandUndoCallback createCommandUndoCallback() {
-		return new CommandUndoCallback() {
+	private void loadGameResults() {
+		playerCommandService.getGameResultCommandStack(10,eventUpdateGameResultListCallback);
+	}
+
+	private AbstractAsyncCallback<List<PlayerCommandDto>> createUpdateGameResultListCallback() {
+		return new AbstractAsyncCallback<List<PlayerCommandDto>>() {
 
 			@Override
-			public void onSuccessImpl(UndoPlayerCommandResult result) {
+			public void onSuccess(List<PlayerCommandDto> gameResults) {
+				List<GameResultsRow> content = new ArrayList<GameResultsRow>();
+				for (PlayerCommandDto playerCommandDto : gameResults) {
+					content.add(new GameResultsRow(playerCommandDto.player.nickname,playerCommandDto.performedDateTime, playerCommandDto.description));
+				}
+				view.changeGameResultList(content);
+			}
+		};
+	}
+
+	private UndoEventHandler createUndoEventHandler(){
+		return new UndoEventHandler() {
+			@Override
+			public void handleEvent(UndoEvent event) {
+				loadGameResults();
+			}
+		};
+	}
+	
+	private GamePlayedEventHandler createGamePlayedEventHandler(){
+		return new GamePlayedEventHandler() {
+			@Override
+			public void handleEvent(GamePlayedEvent event) {
 				loadGameResults();
 			}
 		};
 	}
 
-	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
-		return new CommandPlayerWonCallback() {
-
+	private ClearScoresEventHandler createClearScoresEventHandler() {
+		return new ClearScoresEventHandler() {
+			
 			@Override
-			public void onSuccessImpl(Void result) {
+			public void handleEvent(ClearScoresEvent event) {
 				loadGameResults();
 			}
 		};
 	}
 
-	private CommandClearScoresCallback createCommandClearScoresCallback() {
-		return new CommandClearScoresCallback() {
-
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(Void result) {
+			public void handleEvent(ChangeNicknameEvent event) {
 				loadGameResults();
 			}
 		};
 	}
-
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
-			@Override
-			public void onSuccessImpl(String newNickname) {
-				loadGameResults();
-			}
-
-		};
-	}
-
 }

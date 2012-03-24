@@ -57,7 +57,7 @@ public class RemovedPlayerTest {
 	}
 
 	private ChallengeMessageDto getChallengeMessage() {
-		return new ChallengeMessageDto(player.email, anotherPlayer.email, "insult", "body", "subject");
+		return new ChallengeMessageDto(player.email, anotherPlayer.email, "body", "subject");
 	}
 
 	@After
@@ -99,7 +99,7 @@ public class RemovedPlayerTest {
 		List<PlayerCommandDto> commands = playerCommandServiceImpl.getMiscPlayerCommandStack(2);
 		assertThat(commands, hasSize(2));
 		collector.checkThat(commands.get(1).description,
-				is("address kallade address2 för insult och utmanade därmed honom till duell"));
+				is("address utmanade address2."));
 		collector.checkThat(commands.get(1).performedDateTime, notNullValue());
 		collector.checkThat(commands.get(1).player.email.address, is(player.email.address));
 	}

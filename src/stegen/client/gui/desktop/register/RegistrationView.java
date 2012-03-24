@@ -34,7 +34,7 @@ public class RegistrationView  extends Composite implements Display {
 	}
 
 	@Override
-	public void addRegistrationEventHandler(NewUserPasswordOkKeyPressAndClickHandler handler) {
+	public void addRegistrationEventHandler(KeyPressAndClickHandler handler) {
 		registeraButton.addClickHandler(handler);
 		kodField.addKeyPressHandler(handler);		
 	}

@@ -1,4 +1,5 @@
 package stegen.client.presenter;
+import static org.mockito.Matchers.*;
 import static org.mockito.Mockito.*;
 
 import org.junit.*;
@@ -9,19 +10,24 @@ import org.mockito.runners.*;
 import stegen.client.event.*;
 import stegen.client.gui.*;
 import stegen.client.presenter.RegistrationPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
+import com.google.gwt.user.client.rpc.*;
+@SuppressWarnings("unchecked")
 @RunWith(MockitoJUnitRunner.class)
 public class RegisterationPresenterTest {
 
 	private RegistrationPresenter presenter;
 	@Mock
-	private EventBus eventBus;
-	@Mock
 	private Display view;
 	@Mock
 	private Shell shell;
+	@Mock
+	private PlayerServiceAsync playerService;
+	@Mock
+	com.google.gwt.event.shared.EventBus gwtEventBus;
 	private String passcode;
 	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 
@@ -82,35 +88,44 @@ public class RegisterationPresenterTest {
 	}
 
 
+	
 	@Test
 	public void testRegisterPlayerCallback() {
 		setupPresenter();
 
-		presenter.eventNewUserPassword.onSuccess(true);
-		verify(eventBus).registerPlayer(loginData.player.email);
-		verify(eventBus).getUserLoginStatus("hostPageBaseURL");
+		presenter.isNewUserPasswordOk.onSuccess(true);
+		verify(playerService).registerPlayer(eq(loginData.player.email),any(AsyncCallback.class));
+		verify(playerService).getUserLoginStatus(eq("hostPageBaseURL"),any(AsyncCallback.class));
 	}
 	
+
+	@Test
+	public void testUserLoginStatusCallback() {
+		setupPresenter();
+
+		presenter.userLoginStatusCallback.onSuccess(loginData);
+		verify(gwtEventBus).fireEvent(any(LoginEvent.class));
+	}
+
 	@Test
 	public void testNoSuccessPlayerCallback() {
 		setupPresenter();
 
-		presenter.eventNewUserPassword.onSuccess(false);
+		presenter.isNewUserPasswordOk.onSuccess(false);
 		verify(view).showRegistrationFail();
 	}
 
-	private void setupPresenter() {
-		presenter = new RegistrationPresenter(view, loginData, eventBus, "hostPageBaseURL",shell);
-	}
 
 	private void setupInitializationExpects() {
 		verify(view).addRegistrationEventHandler(presenter.checkNewUserPasswordHandler);
-		verify(eventBus).addHandler(presenter.eventNewUserPassword);
 		verify(view).setShell(shell);
 	}
 
+	private void setupPresenter() {
+		presenter = new RegistrationPresenter(view, loginData, playerService,gwtEventBus, "hostPageBaseURL",shell);
+	}
 	private void setupRegistrationExpectations() {
-		verify(eventBus).isNewUserPasswordOk(passcode);		
+		verify(playerService).isNewUserPasswordOk(eq(passcode), any(AsyncCallback.class));
 	}
 	
 

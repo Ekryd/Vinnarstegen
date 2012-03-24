@@ -5,21 +5,22 @@ import stegen.client.gui.desktop.*;
 import stegen.client.service.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.event.shared.*;
 import com.google.gwt.user.client.ui.*;
 
 class ClientFactoryDesktop implements ClientFactory {
 
 	private Shell shell;
-	
+
+	private final EventBus eventBus = new SimpleEventBus();
 
 	public ClientFactoryDesktop() {
 	}
 
 	@Override
 	public AppController getApp() {
-		//RootLayoutPanel.get().add(getShell());
 		return new AppController((PlayerCommandServiceAsync) GWT.create(PlayerCommandService.class), (ScoreServiceAsync) GWT.create(ScoreService.class),
-				(PlayerServiceAsync) GWT.create(PlayerService.class), getShell(),RootLayoutPanel.get());
+				(PlayerServiceAsync) GWT.create(PlayerService.class), getShell(),RootLayoutPanel.get(),getEventBus());
 	}
 	
 	
@@ -36,5 +37,8 @@ class ClientFactoryDesktop implements ClientFactory {
 		return new ShellDesktop();
 	 }
 
-
+	@Override
+	public EventBus getEventBus() {
+		return eventBus;
+	}
 }

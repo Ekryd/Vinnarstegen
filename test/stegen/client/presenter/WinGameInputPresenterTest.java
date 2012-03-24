@@ -1,22 +1,33 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
+
 import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
 import stegen.client.gui.gameresult.*;
 import stegen.client.gui.gameresult.WinGameFieldUpdater.ButtonType;
 import stegen.client.gui.score.*;
 import stegen.client.presenter.WinGameInputPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class WinGameInputPresenterTest {
 
+	@Mock
 	private Display view;
-	private LoginDataDto loginData;
-	private EventBus eventBus;
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
+	@Mock
+	private com.google.gwt.event.shared.EventBus gwtEventBus;
+	@Mock
+	ScoreServiceAsync scoreService;
 	private WinGameInputPresenter presenter;
 	private PlayerDto otherPlayer = new PlayerDto(new EmailAddressDto("otherEmail"), "otherName");
 
@@ -72,10 +83,9 @@ public class WinGameInputPresenterTest {
 	@Test
 	public void testShowView() {
 		setupPresenter();
+		presenter.go();
 
 		setupInitializationExpects();
-
-		presenter.go();
 	}
 
 	@Test
@@ -83,9 +93,11 @@ public class WinGameInputPresenterTest {
 		setupPresenter();
 		presenter.go();
 
+		simulateOpenDialogClickWonGame();
+		
 		setupOpenDialogExpectsWonGame();
 
-		simulateOpenDialogClickWonGame();
+		
 	}
 
 	@Test
@@ -93,24 +105,30 @@ public class WinGameInputPresenterTest {
 		setupPresenter();
 		presenter.go();
 
-		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
-
-		setupOpenDialogExpectsLostGame();
+		presenter.changeNicknameEventHandler.handleEvent(new ChangeNicknameEvent("nick2"));
 
 		simulateOpenDialogClickLostGame();
+		
+		setupOpenDialogExpectsLostGame();
+
+		
 	}
 
 	@Test
 	public void testWonGame() {
 		setupPresenter();
 		presenter.go();
-		setupOpenDialogExpectsWonGame();
-
+		
+		SetResult setResult = SetResult.TRE_TVA;
+		when(view.getGameResult()).thenReturn(setResult);
+		
 		simulateOpenDialogClickWonGame();
-
-		setupWonGameExpects();
-
+		
+		setupOpenDialogExpectsWonGame();
+		
 		simulateClickWonOrLostButton();
+		
+		setupWonGameExpects();
 	}
 
 	@Test
@@ -118,43 +136,40 @@ public class WinGameInputPresenterTest {
 		setupPresenter();
 		presenter.go();
 
-		presenter.eventCommandChangeNicknameCallback.onSuccess("nick2");
+		presenter.changeNicknameEventHandler.handleEvent(new ChangeNicknameEvent("nick2"));
 
+		SetResult setResult = SetResult.TRE_TVA;
+		when(view.getGameResult()).thenReturn(setResult);
+		
+		simulateOpenDialogClickLostGame();
+		
 		setupOpenDialogExpectsLostGame();
 
-		simulateOpenDialogClickLostGame();
+		simulateClickWonOrLostButton();
 
 		setupLostGameExpects();
 
-		simulateClickWonOrLostButton();
+		
 	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new WinGameInputPresenter(view, loginData, eventBus);
+		presenter = new WinGameInputPresenter(view, loginData, gwtEventBus,scoreService);
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickOpenWinGameInputHandler(presenter.openWinGameInputhandler);
-		view.addClickWinGameHandler(presenter.clickWinGameHandler);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		replay(view, eventBus);
+		verify(view).addClickOpenWinGameInputHandler(presenter.openWinGameInputhandler);
+		verify(view).addClickWinGameHandler(presenter.clickWinGameHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE, presenter.changeNicknameEventHandler);
 	}
 
 	private void setupOpenDialogExpectsWonGame() {
-		reset(view, eventBus);
-		view.setupWinGameInputDialog(loginData.player.nickname, otherPlayer.nickname);
-		view.openWinGameInputDialog();
-		replay(view, eventBus);
+		verify(view).setupWinGameInputDialog(loginData.player.nickname, otherPlayer.nickname);
+		verify(view).openWinGameInputDialog();		
 	}
 
 	private void setupOpenDialogExpectsLostGame() {
-		reset(view, eventBus);
-		view.setupWinGameInputDialog(otherPlayer.nickname, "nick2");
-		view.openWinGameInputDialog();
-		replay(view, eventBus);
+		verify(view).setupWinGameInputDialog(otherPlayer.nickname, "nick2");
+		verify(view).openWinGameInputDialog();
 	}
 
 	private void simulateOpenDialogClickWonGame() {
@@ -170,21 +185,13 @@ public class WinGameInputPresenterTest {
 	}
 
 	private void setupWonGameExpects() {
-		reset(view, eventBus);
-		SetResult setResult = SetResult.TRE_TVA;
-		expect(view.getGameResult()).andReturn(setResult);
-		eventBus.playerWonOverPlayer(eq(loginData.player), eq(otherPlayer), anyObject(GameResultDto.class),
-				eq(loginData.player));
-		replay(view, eventBus);
+		verify(scoreService).playerWonOverPlayer(eq(loginData.player), eq(otherPlayer), any(GameResultDto.class),eq(loginData.player), eq(presenter.playerWonOverPlayerCallback));
 	}
 
 	private void setupLostGameExpects() {
-		reset(view, eventBus);
-		SetResult setResult = SetResult.TRE_TVA;
-		expect(view.getGameResult()).andReturn(setResult);
-		eventBus.playerWonOverPlayer(eq(otherPlayer), eq(loginData.player), anyObject(GameResultDto.class),
-				eq(loginData.player));
-		replay(view, eventBus);
+	
+		scoreService.playerWonOverPlayer(eq(otherPlayer), eq(loginData.player), any(GameResultDto.class),
+				eq(loginData.player), eq(presenter.playerWonOverPlayerCallback));
 	}
 
 	private void simulateClickWonOrLostButton() {

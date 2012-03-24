@@ -1,31 +1,39 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
 
-import java.util.*;
+import static org.mockito.Mockito.*;
 
-import org.easymock.*;
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
-import stegen.client.gui.message.*;
 import stegen.client.presenter.MessagesPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class MessagesPresenterTest {
 
+	@Mock
 	private Display view;
-	private LoginDataDto loginData;
-	private EventBus eventBus;
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
+	@Mock
+	private  PlayerCommandServiceAsync playerCommandService;
+	@Mock
+	private  PlayerServiceAsync playerService;
+	@Mock
+	private  com.google.gwt.event.shared.EventBus gwtEventBus;
 	private MessagesPresenter presenter;
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();	
 	}
 
 	
@@ -35,7 +43,7 @@ public class MessagesPresenterTest {
 		presenter.go();
 		
 		setupSendEmptyMessageExpects();
-
+		
 		simulateSendMessage();
 	}
 
@@ -47,81 +55,61 @@ public class MessagesPresenterTest {
 		setupSendOkMessageExpects();
 
 		simulateSendMessage();
+		
+		verify(playerService).sendMessage(loginData.player, "message", presenter.eventCommandSendMessageCallback);
 	}
 
 	@Test
 	public void testSendMessageCallback() {
 		setupPresenter();
 
-		eventBus.updateSendMessageList();
-		view.clearText();
-		replay(eventBus,view);
-
 		presenter.eventCommandSendMessageCallback.onSuccess(null);
-
-		verify(eventBus,view);
+		verify(playerCommandService).getSendMessageCommandStack(10, presenter.eventUpdateSendMessageListCallback);
+		verify(view).clearText();
 	}
-
+/*
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testUpdateSendMessageListCallback() {
 		setupPresenter();
 
-		view.changeMessageList(anyObject(List.class));
-		verifyListContentForPreviousMethod();
-		replay(view);
-
 		List<PlayerCommandDto> list = new ArrayList<PlayerCommandDto>();
 		list.add(new PlayerCommandDto(loginData.player, new Date(10000L), "description"));
+		
 		presenter.eventUpdateSendMessageListCallback.onSuccess(list);
-
-		verify(view);
+		
+		view.changeMessageList(any(List.class));
+		
+		verifyListContentForPreviousMethod();
 	}
-
+*/
 	@Test
 	public void testChangeNicknameCallback() {
 		setupPresenter();
-
-		eventBus.updateSendMessageList();
-		replay(eventBus, view);
-		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
+		presenter.changeNicknameEventHandler.handleEvent(null);
+		verify(playerCommandService).getSendMessageCommandStack(10, presenter.eventUpdateSendMessageListCallback);
 	}
 
 	@Test
 	public void testRefreshCallback() {
 		setupPresenter();
-
-		eventBus.updateSendMessageList();
-		replay(eventBus, view);
-		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
-		verify(eventBus, view);
-		reset(eventBus, view);
-	}
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent(RefreshType.CHANGES_ON_SERVER_SIDE));
+		verify(playerCommandService).getSendMessageCommandStack(10, presenter.eventUpdateSendMessageListCallback);	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new MessagesPresenter(view, loginData, eventBus);
+		presenter = new MessagesPresenter(view, loginData,playerCommandService,playerService, gwtEventBus);
 	}
 
 	private void setupInitializationExpects() {
-		view.addSendMessageHandler(presenter.clickSendMessageHandler);
-		eventBus.addHandler(presenter.eventCommandSendMessageCallback);
-		eventBus.addHandler(presenter.eventUpdateSendMessageListCallback);
-		eventBus.addHandler(presenter.eventCommandRefreshCallback);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		eventBus.updateSendMessageList();
-		replay(view, eventBus);
+		verify(view).addSendMessageHandler(presenter.clickSendMessageHandler);
+		verify(gwtEventBus).addHandler(RefreshEvent.TYPE,presenter.refreshEventHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE, presenter.changeNicknameEventHandler);
+		verify(playerCommandService).getSendMessageCommandStack(10, presenter.eventUpdateSendMessageListCallback);
 	}
 
 	
 	private void setupSendEmptyMessageExpects() {
-		reset(view, eventBus);
-		expect(view.getMessageInputContent()).andReturn(" ");
-		replay(view, eventBus);
+		when(view.getMessageInputContent()).thenReturn(" ");
 	}
 
 	private void simulateSendMessage() {
@@ -129,13 +117,10 @@ public class MessagesPresenterTest {
 	}
 
 	private void setupSendOkMessageExpects() {
-		reset(view, eventBus);
-		expect(view.getMessageInputContent()).andReturn("message");
-		eventBus.sendMessage(loginData.player, "message");
-		replay(view, eventBus);
+		when(view.getMessageInputContent()).thenReturn("message");
 	}
 
-	private void verifyListContentForPreviousMethod() {
+	/*private void verifyListContentForPreviousMethod() {
 		IAnswer<Object> answer = new IAnswer<Object>() {
 
 			@Override
@@ -150,6 +135,6 @@ public class MessagesPresenterTest {
 			}
 		};
 		expectLastCall().andAnswer(answer);
-	}
+	}*/
 
 }

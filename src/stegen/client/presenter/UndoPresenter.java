@@ -1,7 +1,7 @@
 package stegen.client.presenter;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -10,14 +10,15 @@ public class UndoPresenter implements Presenter {
 
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
 	final ClickHandler clickUndoInputHandler = createClickUndoHandler();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
-	final CommandUndoCallback eventCommandUndoCommandCallback = createCommandUndoCallback();
-	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
-	final CommandClearScoresCallback eventCommandClearAllScoresCallback = createCommandClearScoresCallback();
-	final UpdateUndoCommandCallback eventUpdateUndoCommandCallback = createUpdateUndoCommandCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final UndoEventHandler undoEventHandler = createUndoEventHandler();
+	final GamePlayedEventHandler gamePlayedEventHandler = createGamePlayedEventHandler();
+	final ClearScoresEventHandler clearScoresEventHandler = createClearScoresEventHandler();
+	final AbstractAsyncCallback<PlayerCommandDto> getUndoCallback = createGetUndoCallback();
+	final AbstractAsyncCallback<UndoPlayerCommandResult> undoCallback = createUndoCallback();
+	private final PlayerCommandServiceAsync playerCommandService;
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
 
 	public interface Display {
 
@@ -33,10 +34,11 @@ public class UndoPresenter implements Presenter {
 
 	}
 
-	public UndoPresenter(Display messagesView, LoginDataDto loginData, EventBus eventBus) {
+	public UndoPresenter(Display messagesView, LoginDataDto loginData,PlayerCommandServiceAsync playerCommandService,com.google.gwt.event.shared.EventBus gwtEventBus) {
 		this.view = messagesView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
+		this.playerCommandService = playerCommandService;
+		this.gwtEventBus = gwtEventBus;
 	}
 
 	@Override
@@ -51,87 +53,20 @@ public class UndoPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventUpdateUndoCommandCallback);
-		eventBus.addHandler(eventCommandUndoCommandCallback);
-		eventBus.addHandler(eventCommandPlayerWonCallback);
-		eventBus.addHandler(eventCommandClearAllScoresCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
+		gwtEventBus.addHandler(GamePlayedEvent.TYPE, gamePlayedEventHandler);
+		gwtEventBus.addHandler(ClearScoresEvent.TYPE,clearScoresEventHandler);
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(UndoEvent.TYPE, undoEventHandler);
 	}
 
 	private void loadUndoButton() {
-		eventBus.updateUndoCommand();
+		playerCommandService.getUndoCommand(getUndoCallback);
 	}
-
-	private ClickHandler createClickUndoHandler() {
-		return new ClickHandler() {
-
+	
+	private AbstractAsyncCallback<PlayerCommandDto> createGetUndoCallback(){
+		return new AbstractAsyncCallback<PlayerCommandDto>() {
 			@Override
-			public void onClick(ClickEvent event) {
-				eventBus.undoPlayerCommand(loginData.player);
-			}
-		};
-	}
-
-	private UpdateRefreshCallback createCommandRefreshCallback() {
-		return new UpdateRefreshCallback() {
-
-			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
-					loadUndoButton();
-				}
-			}
-		};
-	}
-
-	private CommandClearScoresCallback createCommandClearScoresCallback() {
-		return new CommandClearScoresCallback() {
-
-			@Override
-			public void onSuccessImpl(Void result) {
-				loadUndoButton();
-			}
-		};
-	}
-
-	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
-		return new CommandPlayerWonCallback() {
-
-			@Override
-			public void onSuccessImpl(Void result) {
-				loadUndoButton();
-			}
-		};
-	}
-
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
-			@Override
-			public void onSuccessImpl(String newNickname) {
-				loadUndoButton();
-			}
-		};
-	}
-
-	private CommandUndoCallback createCommandUndoCallback() {
-		return new CommandUndoCallback() {
-
-			@Override
-			public void onSuccessImpl(UndoPlayerCommandResult result) {
-				if (result == UndoPlayerCommandResult.FAILURE) {
-					view.showUndoFailAlert();
-				}
-				loadUndoButton();
-			}
-		};
-	}
-
-	private UpdateUndoCommandCallback createUpdateUndoCommandCallback() {
-		return new UpdateUndoCommandCallback() {
-
-			@Override
-			public void onSuccessImpl(PlayerCommandDto result) {
+			public void onSuccess(PlayerCommandDto result) {
 				if (ownsLastUndoCommand(result)) {
 					view.setUndoButtonText("Ångra " + result.description);
 					view.showUndoButton();
@@ -139,11 +74,68 @@ public class UndoPresenter implements Presenter {
 					view.hideUndoButton();
 				}
 			}
-
 			private boolean ownsLastUndoCommand(PlayerCommandDto result) {
 				return result != null && result.player.email.address.equals(loginData.player.email.address);
 			}
 		};
 	}
+	
+	private AbstractAsyncCallback<UndoPlayerCommandResult> createUndoCallback(){
+		return new AbstractAsyncCallback<UndoPlayerCommandResult>() {
+			@Override
+			public void onSuccess(UndoPlayerCommandResult result) {
+				gwtEventBus.fireEvent(new UndoEvent(result));
+			}
+		};
+	}
+	
+	private UndoEventHandler createUndoEventHandler(){
+		return new UndoEventHandler() {
+			@Override
+			public void handleEvent(UndoEvent event) {
+				if (event.getResult() == UndoPlayerCommandResult.FAILURE) {
+					view.showUndoFailAlert();
+				}
+				loadUndoButton();
+			}
+		};
+	}
 
+	private ClickHandler createClickUndoHandler() {
+		return new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				playerCommandService.undoPlayerCommand(loginData.player,undoCallback );
+			}
+		};
+	}
+
+	private ClearScoresEventHandler createClearScoresEventHandler() {
+		return new ClearScoresEventHandler() {
+			@Override
+			public void handleEvent(ClearScoresEvent event) {
+				loadUndoButton();
+			}
+		};
+	}
+
+	private GamePlayedEventHandler createGamePlayedEventHandler(){
+		return new GamePlayedEventHandler() {
+			@Override
+			public void handleEvent(GamePlayedEvent event) {
+				loadUndoButton();
+			}
+		};
+	}
+
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
+			@Override
+			public void handleEvent(RefreshEvent event) {
+				if (event.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
+					loadUndoButton();
+				}
+			}
+		};
+	}
 }

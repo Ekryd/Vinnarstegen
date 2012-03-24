@@ -3,8 +3,8 @@ package stegen.client.presenter;
 import java.util.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.score.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -12,14 +12,16 @@ import com.google.gwt.event.dom.client.*;
 public class ScorePresenter implements Presenter {
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
-	final CommandClearScoresCallback eventCommandClearScoresCallback = createCommandClearScoresCallback();
-	final UpdatePlayerScoreListCallback eventChangedScoresCallback = createUpdatePlayerScoreListCallback();
+	final ClearScoresEventHandler clearScoresEventHandler = createClearScoresEventHandler();
+	final AbstractAsyncCallback<Void> clearScoresCallback = createClearScoresCallback(); 
+	final AbstractAsyncCallback<List<PlayerScoreDto>> eventChangedScoresCallback = createUpdatePlayerScoreListCallback();
 	final ClickHandler clickCleanScoresHandler = createClickCleanScoresHandler();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
-	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
-	final CommandPlayerWonCallback eventCommandPlayerWonCallback = createCommandPlayerWonCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final UndoEventHandler undoEventHandler = createUndoEventHandler();
+	final GamePlayedEventHandler gamePlayedEventHandler = createGamePlayedEventHandler();
+	final ChangeNicknameEventHandler changeNicknameEventHandler = createChangeNicknameEventHandler();
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
+	private final ScoreServiceAsync scoreService;
 
 	public interface Display {
 		void addCleanScoresHandler(ClickHandler clickHandler);
@@ -27,12 +29,14 @@ public class ScorePresenter implements Presenter {
 		void changeScoreList(List<ScoreTableRow> content);
 	}
 
-	public ScorePresenter(Display scoreView, LoginDataDto loginData, EventBus eventBus) {
+	public ScorePresenter(Display scoreView, LoginDataDto loginData, com.google.gwt.event.shared.EventBus gwtEventBus, ScoreServiceAsync scoreService) {
 		this.view = scoreView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
+		this.gwtEventBus = gwtEventBus;
+		this.scoreService = scoreService;
 	}
 
+	
 	@Override
 	public void go() {
 		initView();
@@ -40,49 +44,55 @@ public class ScorePresenter implements Presenter {
 		loadScores();
 	}
 
+	private void initEvents() {
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(ClearScoresEvent.TYPE, clearScoresEventHandler);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
+		gwtEventBus.addHandler(UndoEvent.TYPE, undoEventHandler);
+		gwtEventBus.addHandler(GamePlayedEvent.TYPE, gamePlayedEventHandler);
+	}
+
 	private void initView() {
 		view.addCleanScoresHandler(clickCleanScoresHandler);
 
 	}
 
-	private void initEvents() {
-		eventBus.addHandler(eventCommandClearScoresCallback);
-		eventBus.addHandler(eventChangedScoresCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
-		eventBus.addHandler(eventCommandUndoCallback);
-		eventBus.addHandler(eventCommandPlayerWonCallback);
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
-	}
-
 	private void loadScores() {
-		eventBus.updatePlayerScoreList(loginData.player.email);
+		scoreService.getPlayerScoreList(loginData.player.email,eventChangedScoresCallback);
 	}
 
-	private ClickHandler createClickCleanScoresHandler() {
-		return new ClickHandler() {
-
+	private ClearScoresEventHandler createClearScoresEventHandler() {
+		return new ClearScoresEventHandler() {
+			
 			@Override
-			public void onClick(ClickEvent event) {
-				eventBus.clearAllScores(loginData.player);
-			}
-		};
-	}
-
-	private CommandClearScoresCallback createCommandClearScoresCallback() {
-		return new CommandClearScoresCallback() {
-
-			@Override
-			public void onSuccessImpl(Void result) {
+			public void handleEvent(ClearScoresEvent event) {
 				loadScores();
 			}
 		};
 	}
-
-	private UpdatePlayerScoreListCallback createUpdatePlayerScoreListCallback() {
-		return new UpdatePlayerScoreListCallback() {
-
+	
+	private ClickHandler createClickCleanScoresHandler() {
+		return new ClickHandler() {
 			@Override
-			public void onSuccessImpl(List<PlayerScoreDto> scores) {
+			public void onClick(ClickEvent event) {
+				scoreService.clearAllScores(loginData.player,clearScoresCallback);
+			}
+		};
+	}
+	
+	private AbstractAsyncCallback<Void> createClearScoresCallback() {
+		return new AbstractAsyncCallback<Void>() {
+			@Override
+			public void onSuccess(Void newNickname) {
+				gwtEventBus.fireEvent(new ClearScoresEvent());
+			}
+		};
+	}
+
+	private AbstractAsyncCallback<List<PlayerScoreDto>> createUpdatePlayerScoreListCallback() {
+		return new AbstractAsyncCallback<List<PlayerScoreDto>>() {
+			@Override
+			public void onSuccess(List<PlayerScoreDto> scores) {
 				List<ScoreTableRow> content = new ArrayList<ScoreTableRow>();
 				for (PlayerScoreDto playerScoreDto : scores) {
 					boolean currentUser = playerScoreDto.player.email.address.equals(loginData.player.email.address);
@@ -94,47 +104,41 @@ public class ScorePresenter implements Presenter {
 			}
 		};
 	}
-
-	private UpdateRefreshCallback createCommandRefreshCallback() {
-		return new UpdateRefreshCallback() {
-
+	
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
 			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+			public void handleEvent(RefreshEvent event) {
+				if (event.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadScores();
 				}
 			}
 		};
 	}
 
-	private CommandUndoCallback createCommandUndoCallback() {
-		return new CommandUndoCallback() {
-
+	private UndoEventHandler createUndoEventHandler(){
+		return new UndoEventHandler() {
 			@Override
-			public void onSuccessImpl(UndoPlayerCommandResult result) {
+			public void handleEvent(UndoEvent event) {
 				loadScores();
 			}
 		};
 	}
 
-	private CommandPlayerWonCallback createCommandPlayerWonCallback() {
-		return new CommandPlayerWonCallback() {
-
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(Void result) {
+			public void handleEvent(ChangeNicknameEvent event) {
 				loadScores();
 			}
 		};
 	}
-
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
+	private GamePlayedEventHandler createGamePlayedEventHandler(){
+		return new GamePlayedEventHandler() {
 			@Override
-			public void onSuccessImpl(String newNickname) {
+			public void handleEvent(GamePlayedEvent event) {
 				loadScores();
 			}
-
 		};
 	}
 }

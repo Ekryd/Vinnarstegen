@@ -7,18 +7,16 @@ public class ChallengeMessageDto implements Serializable {
 
 	public EmailAddressDto challengerEmail;
 	public EmailAddressDto challengeeEmail;
-	public String insult;
 	public String body;
 	public String subject;
 
 	/** For Serialization */
 	protected ChallengeMessageDto() {}
 
-	public ChallengeMessageDto(EmailAddressDto challengerEmail, EmailAddressDto challengeeEmail, String insult,
+	public ChallengeMessageDto(EmailAddressDto challengerEmail, EmailAddressDto challengeeEmail,
 			String body, String subject) {
 		this.challengerEmail = challengerEmail;
 		this.challengeeEmail = challengeeEmail;
-		this.insult = insult;
 		this.body = body;
 		this.subject = subject;
 	}

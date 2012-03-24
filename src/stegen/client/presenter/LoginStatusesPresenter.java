@@ -3,24 +3,26 @@ package stegen.client.presenter;
 import java.util.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.playeraction.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 public class LoginStatusesPresenter implements Presenter {
 	private final Display view;
-	private final EventBus eventBus;
-	final UpdateLoginStatusListCallback eventUpdateLoginStatusListCallback = creatUpdateLoginStatusListCallback();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final AbstractAsyncCallback<List<PlayerCommandDto>> loginStatusStackCallback = createLoginStatusStackCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final ChangeNicknameEventHandler changeNicknameEventHandler =  createChangeNicknameEventHandler();
+	private final PlayerCommandServiceAsync playerCommandService;
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
 
 	public interface Display {
 		void changeLoginStatusList(List<LoginStatusRow> content);
 	}
 
-	public LoginStatusesPresenter(Display scoreView, EventBus eventBus) {
+	public LoginStatusesPresenter(Display scoreView,PlayerCommandServiceAsync playerCommandService,com.google.gwt.event.shared.EventBus gwtEventBus) {
 		this.view = scoreView;
-		this.eventBus = eventBus;
+		this.playerCommandService = playerCommandService;
+		this.gwtEventBus = gwtEventBus;
 	}
 
 	@Override
@@ -30,51 +32,44 @@ public class LoginStatusesPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventUpdateLoginStatusListCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
 	}
 
 	private void loadLoginStatuses() {
-		eventBus.updateLoginStatusList();
+		playerCommandService.getLoginStatusCommandStack(10, loginStatusStackCallback);
 	}
-
-	private UpdateLoginStatusListCallback creatUpdateLoginStatusListCallback() {
-		return new UpdateLoginStatusListCallback() {
-
+	
+	private AbstractAsyncCallback<List<PlayerCommandDto>> createLoginStatusStackCallback(){
+		return new AbstractAsyncCallback<List<PlayerCommandDto>>() {
 			@Override
-			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
+			public void onSuccess(List<PlayerCommandDto> gameResults) {
 				List<LoginStatusRow> content = new ArrayList<LoginStatusRow>();
 				for (PlayerCommandDto playerCommandDto : gameResults) {
-					content.add(new LoginStatusRow(playerCommandDto.player.nickname,
-							playerCommandDto.performedDateTime, playerCommandDto.description));
+					content.add(new LoginStatusRow(playerCommandDto.player.nickname,playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
-				view.changeLoginStatusList(content);
+				view.changeLoginStatusList(content);			
 			}
-		};
+		};	
 	}
-
-	private UpdateRefreshCallback createCommandRefreshCallback() {
-		return new UpdateRefreshCallback() {
-
+	
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
 			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+			public void handleEvent(RefreshEvent result) {
+				if (result.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadLoginStatuses();
 				}
 			}
 		};
 	}
 
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(String newNickname) {
+			public void handleEvent(ChangeNicknameEvent event) {
 				loadLoginStatuses();
 			}
-
 		};
 	}
-
 }

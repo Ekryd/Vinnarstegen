@@ -7,16 +7,16 @@ import org.junit.runner.*;
 import org.mockito.*;
 import org.mockito.runners.*;
 
-import stegen.client.event.*;
 import stegen.client.gui.*;
 import stegen.client.presenter.ApplicationVersionPresenter.Display;
+import stegen.client.service.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ApplicationVersionPresenterTest {
 
 	@Mock
 	private Display view;
 	@Mock
-	private EventBus eventBus;
+	private PlayerServiceAsync playerService;
 	@Mock
 	private Shell shell;
 	
@@ -43,13 +43,12 @@ public class ApplicationVersionPresenterTest {
 	}
 
 	private void setupPresenter() {
-		presenter = new ApplicationVersionPresenter(view, eventBus,shell);
+		presenter = new ApplicationVersionPresenter(view, playerService,shell);
 	}
 
 	private void setupInitializationExpects() {
-		InOrder inOrder = inOrder(eventBus,view,shell);
-		inOrder.verify(eventBus).addHandler(presenter.eventUpdateApplicationVersion);
-		inOrder.verify(eventBus).getApplicationVersion();
+		InOrder inOrder = inOrder(playerService,view,shell);
+		inOrder.verify(playerService).getApplicationVersion(presenter.eventUpdateApplicationVersion);
 		inOrder.verify(view).setShell(shell);
 	}
 

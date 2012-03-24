@@ -1,41 +1,44 @@
 package stegen.client.presenter;
 
-import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.*;
+import stegen.client.service.*;
+
+import com.google.gwt.user.client.rpc.*;
 
 public class ApplicationVersionPresenter implements Presenter {
 
 	private final Display view;
-	private final EventBus eventBus;
+	private final PlayerServiceAsync playerService;
 	private final Shell shell;
-	final UpdateApplicationVersionCallback eventUpdateApplicationVersion = createApplicationVersionCallback();
+	final AsyncCallback<String> eventUpdateApplicationVersion = createApplicationVersionCallback();
 
 	public interface Display {
 		void setApplicationVersion(String pplicationVersion);
 		void setShell(Shell shell);
 	}
 
-	public ApplicationVersionPresenter(Display view, EventBus eventBus,Shell shell) {
+	public ApplicationVersionPresenter(Display view, PlayerServiceAsync playerService,Shell shell) {
 		this.view = view;
-		this.eventBus = eventBus;
 		this.shell = shell;
+		this.playerService = playerService;
 	}
 
-	private UpdateApplicationVersionCallback createApplicationVersionCallback() {
-		return new UpdateApplicationVersionCallback() {
-
+	private AsyncCallback<String> createApplicationVersionCallback() {
+		return new AsyncCallback<String>() {
 			@Override
-			public void onSuccessImpl(String result) {
+			public void onSuccess(String result) {
 				view.setApplicationVersion("v. " + result);
+			}
+			@Override
+			public void onFailure(Throwable caught) {
+				caught.printStackTrace();
 			}
 		};
 	}
 
 	@Override
 	public void go() {
-		eventBus.addHandler(eventUpdateApplicationVersion);
-		eventBus.getApplicationVersion();
+		playerService.getApplicationVersion(eventUpdateApplicationVersion);
 		view.setShell(shell);
 	}
 }

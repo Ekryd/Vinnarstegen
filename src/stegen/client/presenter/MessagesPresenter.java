@@ -3,8 +3,8 @@ package stegen.client.presenter;
 import java.util.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.message.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 import com.google.gwt.event.dom.client.*;
@@ -13,12 +13,14 @@ public class MessagesPresenter implements Presenter {
 
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
 	final ClickHandler clickSendMessageHandler = createClickSendMessageHandler();
-	final UpdateSendMessageListCallback eventUpdateSendMessageListCallback = createUpdateSendMessageListCallback();
-	final CommandSendMessageCallback eventCommandSendMessageCallback = createCommandSendMessageCallback();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createCommandRefreshMessagesCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final AbstractAsyncCallback<List<PlayerCommandDto>> eventUpdateSendMessageListCallback = createUpdateSendMessageListCallback();
+	final AbstractAsyncCallback<Void> eventCommandSendMessageCallback = createCommandSendMessageCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final ChangeNicknameEventHandler changeNicknameEventHandler = createChangeNicknameEventHandler();
+	private final PlayerCommandServiceAsync playerCommandService;
+	private final PlayerServiceAsync playerService;
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
 
 	public interface Display {
 
@@ -32,10 +34,12 @@ public class MessagesPresenter implements Presenter {
 
 	}
 
-	public MessagesPresenter(Display messagesView, LoginDataDto loginData,EventBus eventBus) {
+	public MessagesPresenter(Display messagesView, LoginDataDto loginData,PlayerCommandServiceAsync playerCommandService,PlayerServiceAsync playerService,com.google.gwt.event.shared.EventBus gwtEventBus) {
 		this.view = messagesView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
+		this.playerCommandService = playerCommandService;
+		this.playerService = playerService;
+		this.gwtEventBus = gwtEventBus;
 	}
 
 	@Override
@@ -50,76 +54,71 @@ public class MessagesPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventCommandSendMessageCallback);
-		eventBus.addHandler(eventUpdateSendMessageListCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
 	}
 
 	private void loadMessages() {
-		eventBus.updateSendMessageList();
+		playerCommandService.getSendMessageCommandStack(10, eventUpdateSendMessageListCallback);
+		
 	}
 
 	private ClickHandler createClickSendMessageHandler() {
 		return new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				String messageContent = view.getMessageInputContent();
 				boolean emptyMessageContent = messageContent.trim().isEmpty();
 				if (!emptyMessageContent) {
-					eventBus.sendMessage(loginData.player, messageContent);
+					playerService.sendMessage(loginData.player, messageContent, eventCommandSendMessageCallback);
 				}
 			}
 		};
 	}
 
-	private CommandSendMessageCallback createCommandSendMessageCallback() {
-		return new CommandSendMessageCallback() {
+	private AbstractAsyncCallback<Void> createCommandSendMessageCallback() {
+		return new AbstractAsyncCallback<Void>() {
 
 			@Override
-			public void onSuccessImpl(Void result) {
-				eventBus.updateSendMessageList();
+			public void onSuccess(Void result) {
+				loadMessages();
 				view.clearText();
 			}
 		};
 	}
 
-	private UpdateSendMessageListCallback createUpdateSendMessageListCallback() {
-		return new UpdateSendMessageListCallback() {
+	private AbstractAsyncCallback<List<PlayerCommandDto>> createUpdateSendMessageListCallback() {
+		return new AbstractAsyncCallback<List<PlayerCommandDto>>() {
 
 			@Override
-			public void onSuccessImpl(List<PlayerCommandDto> result) {
+			public void onSuccess(List<PlayerCommandDto> result) {
 				List<MessageTableRow> content = new ArrayList<MessageTableRow>();
 				for (PlayerCommandDto playerCommandDto : result) {
-					content.add(new MessageTableRow(playerCommandDto.player.nickname,
-							playerCommandDto.performedDateTime, playerCommandDto.description));
+					content.add(new MessageTableRow(playerCommandDto.player.nickname,playerCommandDto.performedDateTime, playerCommandDto.description));
 				}
 				view.changeMessageList(content);
 			}
 		};
 	}
 
-	private UpdateRefreshCallback createCommandRefreshMessagesCallback() {
-		return new UpdateRefreshCallback() {
-
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
 			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+			public void handleEvent(RefreshEvent event) {
+				if (event.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadMessages();
 				}
 			}
 		};
 	}
+	
 
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(String newNickname) {
+			public void handleEvent(ChangeNicknameEvent event) {
 				loadMessages();
 			}
-
 		};
 	}
 }

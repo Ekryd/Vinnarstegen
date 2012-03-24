@@ -177,12 +177,12 @@ public class SerializeDatabaseEntitiesTest {
 	@Test
 	public void serializeChallengeCommand() {
 		ChallengeMessageDto message = new ChallengeMessageDto(new EmailAddressDto("jimjoh71@gmail.com"),
-				new EmailAddressDto("martin@gotblad.com"), "en svag skrotnisse", "body", "subject");
+				new EmailAddressDto("martin@gotblad.com"), "body", "subject");
 		PlayerCommand command = new Challenge(message);
 		command.execute();
 		String actual = serializer.deepSerialize(command);
 		Assert.assertEquals(
-				"{\"insult\":\"en svag skrotnisse\",\"challenger\":{\"address\":\"jimjoh71@gmail.com\"},\"challengee\":{\"address\":\"martin@gotblad.com\"}}",
+				"{\"challenger\":{\"address\":\"jimjoh71@gmail.com\"},\"challengee\":{\"address\":\"martin@gotblad.com\"}}",
 				actual);
 	}
 
@@ -190,10 +190,10 @@ public class SerializeDatabaseEntitiesTest {
 	public void deserializeChallengeCommand() {
 		PlayerCommand deserialize = serializer
 				.deserialize(
-						"{\"insult\":\"en svag skrotnisse\",\"challenger\":{\"address\":\"jimjoh71@gmail.com\"},\"challengee\":{\"address\":\"martin@gotblad.com\"}}",
+						"{\"challenger\":{\"address\":\"jimjoh71@gmail.com\"},\"challengee\":{\"address\":\"martin@gotblad.com\"}}",
 						Challenge.class);
 		Assert.assertEquals(
-				"jimjoh71@gmail.com kallade martin@gotblad.com för en svag skrotnisse och utmanade därmed honom till duell",
+				"jimjoh71@gmail.com utmanade martin@gotblad.com.",
 				deserialize.getDescription());
 	}
 

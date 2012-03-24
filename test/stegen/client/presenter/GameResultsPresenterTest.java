@@ -1,47 +1,53 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
-import static org.junit.Assert.*;
+import static org.mockito.Matchers.*;
+
+import static org.mockito.Mockito.*;
 
 import java.text.*;
 import java.util.*;
 
-import org.easymock.*;
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
+
+import com.google.gwt.user.client.rpc.*;
 
 import stegen.client.event.*;
-import stegen.client.gui.playeraction.*;
 import stegen.client.presenter.GameResultsPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
-
-
-
+@SuppressWarnings("unchecked")
+@RunWith(MockitoJUnitRunner.class)
 public class GameResultsPresenterTest {
-
+	@Mock
 	private Display view;
-	private EventBus eventBus;
-	private GameResultsPresenter presenter;
-	private LoginDataDto loginData;
+	@Mock
+	private com.google.gwt.event.shared.EventBus gwtEventBus;
+	@Mock
+	private  PlayerCommandServiceAsync playerCommandService;
 
+	private GameResultsPresenter presenter;
+	
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
+	
 	@Test
 	public void testShowView() {
 		setupPresenter();
 
-		setupInitializationExpects();
-
 		presenter.go();
+		
+		setupInitializationExpects();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Test
 	public void testEventScoresUpdated() throws ParseException {
 		setupPresenter();
 		presenter.go();
 
-		reset(view, eventBus);
-		view.changeGameResultList(anyObject(List.class));
-		verifyListContentForPreviousMethod();
-		replay(view, eventBus);
+		view.changeGameResultList(any(List.class));
+		//verifyListContentForPreviousMethod();
 		
 		List<PlayerCommandDto> gameResults = new ArrayList<PlayerCommandDto>();
 		PlayerCommandDto playerScoreDto = new PlayerCommandDto(loginData.player, new SimpleDateFormat("yyyy-MM-dd").parse("2011-10-10"), "1 - 3");
@@ -52,56 +58,49 @@ public class GameResultsPresenterTest {
 	@Test
 	public void testUpdateListEvents() {
 		setupPresenter();
-
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventCommandClearScoresCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventCommandChangeNicknameCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventCommandPlayerWonCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventCommandRefreshCallback.onSuccess(RefreshType.CHANGES_ON_SERVER_SIDE);
-		verify(eventBus, view);
-		reset(eventBus, view);
-
-		eventBus.updateGameResultList();
-		replay(eventBus, view);
-		presenter.eventCommandUndoCallback.onSuccess(null);
-		verify(eventBus, view);
-		reset(eventBus, view);
+		
+		presenter.clearScoresEventHandler.handleEvent(null);
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
+		reset(playerCommandService);
+		
+		presenter.changeNicknameEventHandler.handleEvent(null);
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
+		reset(playerCommandService);
+		
+		presenter.gamePlayedEventHandler.handleEvent(null);
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
+		reset(playerCommandService);
+		
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent(RefreshType.CHANGES_ON_SERVER_SIDE));
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
+		reset(playerCommandService);
+		
+		presenter.undoEventHandler.handleEvent(null);
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
 	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new GameResultsPresenter(view, eventBus);
+		presenter = new GameResultsPresenter(view,gwtEventBus, playerCommandService);
+	}
+	
+	@Test
+	public void shouldUpdateGareResultList(){
+		setupPresenter();
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent(RefreshType.CHANGES_ON_SERVER_SIDE));
+
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
 	}
 
 	private void setupInitializationExpects() {
-		eventBus.addHandler(presenter.eventUpdateGameResultListCallback);
-		eventBus.addHandler(presenter.eventCommandRefreshCallback);
-		eventBus.addHandler(presenter.eventCommandUndoCallback);
-		eventBus.addHandler(presenter.eventCommandPlayerWonCallback);
-		eventBus.addHandler(presenter.eventCommandClearScoresCallback);
-		eventBus.addHandler(presenter.eventCommandChangeNicknameCallback);
-		eventBus.updateGameResultList();
-		replay(view, eventBus);
+		verify(gwtEventBus).addHandler(RefreshEvent.TYPE,presenter.refreshEventHandler);
+		verify(gwtEventBus).addHandler(UndoEvent.TYPE, presenter.undoEventHandler);
+		verify(gwtEventBus).addHandler(GamePlayedEvent.TYPE,presenter.gamePlayedEventHandler);
+		verify(gwtEventBus).addHandler(ClearScoresEvent.TYPE, presenter.clearScoresEventHandler);
+		verify(gwtEventBus).addHandler(ChangeNicknameEvent.TYPE,presenter.changeNicknameEventHandler);
+		verify(playerCommandService).getGameResultCommandStack(eq(10),any(AsyncCallback.class));
+		
 	}
-
+/*
 	private void verifyListContentForPreviousMethod() {
 		IAnswer<? extends Object> answer = new IAnswer<Object>() {
 
@@ -118,5 +117,5 @@ public class GameResultsPresenterTest {
 		};
 		expectLastCall().andAnswer(answer);
 	}
-
+*/
 }

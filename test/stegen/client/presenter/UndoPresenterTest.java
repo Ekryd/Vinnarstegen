@@ -1,122 +1,109 @@
 package stegen.client.presenter;
 
-import static org.easymock.EasyMock.*;
+import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 import org.junit.*;
+import org.junit.runner.*;
+import org.mockito.*;
+import org.mockito.runners.*;
 
 import stegen.client.event.*;
 import stegen.client.presenter.UndoPresenter.Display;
+import stegen.client.service.*;
 import stegen.shared.*;
 
+@RunWith(MockitoJUnitRunner.class)
 public class UndoPresenterTest {
-
+	@Mock
+	com.google.gwt.event.shared.EventBus gwtEventBus;
+	@Mock
+	private PlayerCommandServiceAsync playerService;
+	@Mock
 	private Display view;
-	private LoginDataDto loginData;
-	private EventBus eventBus;
+	private LoginDataDto loginData = LoginDataDtoFactory.createLoginData();
 	private UndoPresenter presenter;
 
 	@Test
 	public void testShowView() {
 		setupPresenter();
-
+		
+		presenter.go();
+		
 		setupInitializationExpects();
 
-		presenter.go();
 	}
 
 	@Test
 	public void testUndoCommand() {
 		setupPresenter();
 		presenter.go();
+		
+		simulateUndoCommand();
 		setupUndoCommandOkExpects();
 
-		simulateUndoCommand();
+		
 	}
 
 	@Test
 	public void testSimpleCallbacks() {
 		setupPresenter();
 
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
-		presenter.eventCommandClearAllScoresCallback.onSuccessImpl(null);
-		verify(view, eventBus);
-		reset(view, eventBus);
-
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
-		presenter.eventCommandPlayerWonCallback.onSuccessImpl(null);
-		verify(view, eventBus);
-		reset(view, eventBus);
-
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
-		presenter.eventCommandRefreshCallback.onSuccessImpl(RefreshType.CHANGES_ON_SERVER_SIDE);
-		verify(view, eventBus);
-		reset(view, eventBus);
-
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
-		presenter.eventCommandChangeNicknameCallback.onSuccessImpl(null);
-		verify(view, eventBus);
-		reset(view, eventBus);
+		
+		presenter.clearScoresEventHandler.handleEvent(null);
+		verify(playerService).getUndoCommand(presenter.getUndoCallback);
+		
+		reset(playerService);
+		
+		presenter.gamePlayedEventHandler.handleEvent(null);
+		verify(playerService).getUndoCommand(presenter.getUndoCallback);
+		reset(playerService);
+		
+		presenter.refreshEventHandler.handleEvent(new RefreshEvent(RefreshType.CHANGES_ON_SERVER_SIDE));
+		verify(playerService).getUndoCommand(presenter.getUndoCallback);
+		reset(playerService);
 	}
 
 	@Test
 	public void testOnUndoFailCallback() {
 		setupPresenter();
-
-		view.showUndoFailAlert();
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
-		presenter.eventCommandUndoCommandCallback.onSuccessImpl(UndoPlayerCommandResult.FAILURE);
-		verify(view, eventBus);
-		reset(view, eventBus);
+		
+		presenter.undoCallback.onSuccess(UndoPlayerCommandResult.FAILURE);
+		verify(gwtEventBus).fireEvent(any(UndoEvent.class));
 	}
 
 	@Test
 	public void testOnUpdateUndoCommandCallbackNotOwned() {
 		setupPresenter();
+		
+		presenter.getUndoCallback.onSuccess(new PlayerCommandDto(LoginDataDtoFactory.createOtherLoginData().player, new Date(), "desc"));
+		
+		verify(view).hideUndoButton();
 
-		view.hideUndoButton();
-		replay(view, eventBus);
-		presenter.eventUpdateUndoCommandCallback.onSuccessImpl(new PlayerCommandDto(LoginDataDtoFactory
-				.createOtherLoginData().player, new Date(), "desc"));
-		verify(view, eventBus);
-		reset(view, eventBus);
 	}
 
 	@Test
 	public void testOnUpdateUndoCommandCallbackIsOwned() {
 		setupPresenter();
 
-		view.setUndoButtonText("Ångra desc");
-		view.showUndoButton();
-		replay(view, eventBus);
-		presenter.eventUpdateUndoCommandCallback.onSuccessImpl(new PlayerCommandDto(loginData.player, new Date(),
-				"desc"));
-		verify(view, eventBus);
-		reset(view, eventBus);
+		presenter.getUndoCallback.onSuccess(new PlayerCommandDto(loginData.player, new Date(),"desc"));
+		
+		verify(view).setUndoButtonText("Ångra desc");
+		verify(view).showUndoButton();
 	}
 
 	private void setupPresenter() {
-		loginData = LoginDataDtoFactory.createLoginData();
-		view = createStrictMock(Display.class);
-		eventBus = createStrictMock(EventBus.class);
-		presenter = new UndoPresenter(view, loginData, eventBus);
+		presenter = new UndoPresenter(view, loginData,playerService,gwtEventBus);
 	}
 
 	private void setupInitializationExpects() {
-		view.addClickUndoHandler(presenter.clickUndoInputHandler);
-		eventBus.addHandler(presenter.eventUpdateUndoCommandCallback);
-		eventBus.addHandler(presenter.eventCommandUndoCommandCallback);
-		eventBus.addHandler(presenter.eventCommandPlayerWonCallback);
-		eventBus.addHandler(presenter.eventCommandClearAllScoresCallback);
-		eventBus.addHandler(presenter.eventCommandRefreshCallback);
-		eventBus.updateUndoCommand();
-		replay(view, eventBus);
+		verify(view).addClickUndoHandler(presenter.clickUndoInputHandler);
+		verify(gwtEventBus).addHandler(GamePlayedEvent.TYPE, presenter.gamePlayedEventHandler);
+		verify(gwtEventBus).addHandler(ClearScoresEvent.TYPE,presenter.clearScoresEventHandler);
+		verify(gwtEventBus).addHandler(RefreshEvent.TYPE,presenter.refreshEventHandler);
+		verify(gwtEventBus).addHandler(UndoEvent.TYPE, presenter.undoEventHandler);
+		verify(playerService).getUndoCommand(presenter.getUndoCallback);
 	}
 
 	private void simulateUndoCommand() {
@@ -124,9 +111,8 @@ public class UndoPresenterTest {
 	}
 
 	private void setupUndoCommandOkExpects() {
-		reset(view, eventBus);
-		eventBus.undoPlayerCommand(loginData.player);
-		replay(view, eventBus);
+		playerService.undoPlayerCommand(loginData.player,presenter.undoCallback);
+
 	}
 
 }

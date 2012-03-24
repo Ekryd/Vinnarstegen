@@ -1,6 +1,5 @@
 package stegen.client.presenter;
 
-import stegen.client.event.*;
 import stegen.client.gui.*;
 import stegen.client.service.*;
 import stegen.shared.*;
@@ -9,10 +8,12 @@ public class CompositeMainPresenter implements Presenter {
 
 	private final Display view;
 	private final LoginDataDto loginData;
-	private final EventBus eventBus;
-	private final InsultFactory insultFactory;
+	final com.google.gwt.event.shared.EventBus gwtEventBus;
 	private final DateTimeFormats dateTimeFormats;
 	private final Shell shell;
+	private final PlayerCommandServiceAsync playerCommandService;
+	private final ScoreServiceAsync scoreService;
+	private final PlayerServiceAsync playerService;
 
 	public interface Display {
 		stegen.client.presenter.ScorePresenter.Display getScoreView();
@@ -26,14 +27,17 @@ public class CompositeMainPresenter implements Presenter {
 		void setShell(Shell shell);
 	}
 
-	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData, EventBus eventBus,
-			InsultFactory insultFactory, DateTimeFormats dateTimeFormats,Shell shell) {
+	public CompositeMainPresenter(Display compositeMainView, LoginDataDto loginData,com.google.gwt.event.shared.EventBus gwtEventBus,PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,PlayerServiceAsync playerService,
+		 DateTimeFormats dateTimeFormats,Shell shell) {
 		this.view = compositeMainView;
 		this.loginData = loginData;
-		this.eventBus = eventBus;
-		this.insultFactory = insultFactory;
+		this.scoreService = scoreService;
+		this.playerService = playerService;
 		this.dateTimeFormats = dateTimeFormats;
 		this.shell = shell;
+		this.gwtEventBus = gwtEventBus;
+		this.playerCommandService = playerCommandService;
+		
 	}
 
 	@Override
@@ -43,14 +47,14 @@ public class CompositeMainPresenter implements Presenter {
 	}
 
 	private void initPresenterParts() {
-		new ScorePresenter(view.getScoreView(), loginData, eventBus).go();
-		new MessagesPresenter(view.getMessageView(), loginData, eventBus).go();
-		new ChallengePresenter(view.getChallengeInputView(), loginData, eventBus, insultFactory, dateTimeFormats).go();
-		new WinGameInputPresenter(view.getWinGameInputView(), loginData, eventBus).go();
-		new GameResultsPresenter(view.getGameResultsView(), eventBus).go();
-		new UndoPresenter(view.getUndoView(), loginData, eventBus).go();
-		new LoginStatusesPresenter(view.getLoginStatusesView(), eventBus).go();
-		new PlayerMiscCommandsPresenter(view.getPlayerMiscCommandView(), eventBus).go();
+		new ScorePresenter(view.getScoreView(), loginData, gwtEventBus,scoreService).go();
+		new MessagesPresenter(view.getMessageView(), loginData,  playerCommandService,playerService,gwtEventBus).go();
+		new ChallengePresenter(view.getChallengeInputView(), loginData, dateTimeFormats,scoreService,gwtEventBus).go();
+		new WinGameInputPresenter(view.getWinGameInputView(), loginData, gwtEventBus,scoreService).go();
+		new GameResultsPresenter(view.getGameResultsView(),gwtEventBus, playerCommandService).go();
+		new UndoPresenter(view.getUndoView(), loginData, playerCommandService,gwtEventBus).go();
+		new LoginStatusesPresenter(view.getLoginStatusesView(),playerCommandService,gwtEventBus).go();
+		new PlayerMiscCommandsPresenter(view.getPlayerMiscCommandView(),gwtEventBus,playerCommandService).go();
 	}
 
 }

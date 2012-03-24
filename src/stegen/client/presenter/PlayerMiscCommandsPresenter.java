@@ -3,26 +3,28 @@ package stegen.client.presenter;
 import java.util.*;
 
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.playeraction.*;
+import stegen.client.service.*;
 import stegen.shared.*;
 
 public class PlayerMiscCommandsPresenter implements Presenter {
 	private final Display view;
-	private final EventBus eventBus;
-	final UpdatePlayerMiscCommandListCallback eventUpdatePlayerMiscCommandListCallback = creatUpdatePlayerMiscCommandListCallback();
-	final UpdateRefreshCallback eventCommandRefreshCallback = createRefreshCallback();
-	final CommandUndoCallback eventCommandUndoCallback = createCommandUndoCallback();
-	final CommandChallengeCallback eventCommandChallengeCallback = createCommandChallengeCallback();
-	final CommandChangeNicknameCallback eventCommandChangeNicknameCallback = createCommandChangeNicknameCallback();
+	final AbstractAsyncCallback<List<PlayerCommandDto>> miscPlayerCallback = createMiscPlayerCallback();
+	final RefreshEventHandler refreshEventHandler = refreshEventHandler();
+	final UndoEventHandler undoEventHandler = createUndoEventHandler();
+	final ChallengeEventHandler challangeEventHandler = createChallengeEventHandler();
+	final ChangeNicknameEventHandler changeNicknameEventHandler =  createChangeNicknameEventHandler();
+	private final com.google.gwt.event.shared.EventBus gwtEventBus;
+	private final PlayerCommandServiceAsync playerCommandService;
 
 	public interface Display {
 		void changePlayerMiscCommandList(List<PlayerMiscCommandRow> content);
 	}
 
-	public PlayerMiscCommandsPresenter(Display scoreView, EventBus eventBus) {
+	public PlayerMiscCommandsPresenter(Display scoreView,com.google.gwt.event.shared.EventBus gwtEventBus,PlayerCommandServiceAsync playerCommandService) {
 		this.view = scoreView;
-		this.eventBus = eventBus;
+		this.gwtEventBus = gwtEventBus;
+		this.playerCommandService = playerCommandService;
 	}
 
 	@Override
@@ -32,22 +34,21 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 	}
 
 	private void initEvents() {
-		eventBus.addHandler(eventUpdatePlayerMiscCommandListCallback);
-		eventBus.addHandler(eventCommandRefreshCallback);
-		eventBus.addHandler(eventCommandUndoCallback);
-		eventBus.addHandler(eventCommandChallengeCallback);
-		eventBus.addHandler(eventCommandChangeNicknameCallback);
+		gwtEventBus.addHandler(RefreshEvent.TYPE,refreshEventHandler);
+		gwtEventBus.addHandler(UndoEvent.TYPE, undoEventHandler);
+		gwtEventBus.addHandler(ChallengeEvent.TYPE, challangeEventHandler);
+		gwtEventBus.addHandler(ChangeNicknameEvent.TYPE, changeNicknameEventHandler);
 	}
 
 	private void loadPlayerMiscCommands() {
-		eventBus.updatePlayerMiscCommandList();
+		playerCommandService.getMiscPlayerCommandStack(10, miscPlayerCallback);
 	}
 
-	private UpdatePlayerMiscCommandListCallback creatUpdatePlayerMiscCommandListCallback() {
-		return new UpdatePlayerMiscCommandListCallback() {
-
+	private AbstractAsyncCallback<List<PlayerCommandDto>> createMiscPlayerCallback(){
+		return new AbstractAsyncCallback<List<PlayerCommandDto>>() {
+			
 			@Override
-			public void onSuccessImpl(List<PlayerCommandDto> gameResults) {
+			public void onSuccess(List<PlayerCommandDto> gameResults) {
 				List<PlayerMiscCommandRow> content = new ArrayList<PlayerMiscCommandRow>();
 				for (PlayerCommandDto playerCommandDto : gameResults) {
 					content.add(new PlayerMiscCommandRow(playerCommandDto.player.nickname,
@@ -58,47 +59,42 @@ public class PlayerMiscCommandsPresenter implements Presenter {
 		};
 	}
 
-	private UpdateRefreshCallback createRefreshCallback() {
-		return new UpdateRefreshCallback() {
-
+	private RefreshEventHandler refreshEventHandler(){
+		return new RefreshEventHandler() {
 			@Override
-			public void onSuccessImpl(RefreshType result) {
-				if (result == RefreshType.CHANGES_ON_SERVER_SIDE) {
+			public void handleEvent(RefreshEvent result) {
+				if (result.getRefreshType() == RefreshType.CHANGES_ON_SERVER_SIDE) {
 					loadPlayerMiscCommands();
 				}
 			}
 		};
 	}
-
-	private CommandUndoCallback createCommandUndoCallback() {
-		return new CommandUndoCallback() {
-
+	private UndoEventHandler createUndoEventHandler(){
+		return new UndoEventHandler() {
 			@Override
-			public void onSuccessImpl(UndoPlayerCommandResult result) {
+			public void handleEvent(UndoEvent event) {
+				loadPlayerMiscCommands();
+			}
+		};
+	}
+	
+
+
+	private ChallengeEventHandler createChallengeEventHandler() {
+		return new ChallengeEventHandler() {
+			@Override
+			public void handleEvent(ChallengeEvent event) {
 				loadPlayerMiscCommands();
 			}
 		};
 	}
 
-	private CommandChallengeCallback createCommandChallengeCallback() {
-		return new CommandChallengeCallback() {
-
+	private ChangeNicknameEventHandler createChangeNicknameEventHandler() {
+		return new ChangeNicknameEventHandler() {
 			@Override
-			public void onSuccessImpl(Void result) {
+			public void handleEvent(ChangeNicknameEvent event) {
 				loadPlayerMiscCommands();
 			}
 		};
 	}
-
-	private CommandChangeNicknameCallback createCommandChangeNicknameCallback() {
-		return new CommandChangeNicknameCallback() {
-
-			@Override
-			public void onSuccessImpl(String newNickname) {
-				loadPlayerMiscCommands();
-			}
-
-		};
-	}
-
 }

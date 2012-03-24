@@ -28,9 +28,8 @@ public class ChallengeInputView implements Display {
 	}
 
 	@Override
-	public void setupChallengeInputDialog(String challengeeName, String shortInsultText,
-			String challengeMessageSubject, String challengeMessage) {
-		challengeDialog.setupChallengeInputDialog(challengeeName, shortInsultText, challengeMessageSubject,
+	public void setupChallengeInputDialog(String challengeeName, String challengeMessageSubject, String challengeMessage) {
+		challengeDialog.setupChallengeInputDialog(challengeeName,  challengeMessageSubject,
 				challengeMessage);
 
 	}

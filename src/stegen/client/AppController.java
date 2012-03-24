@@ -1,6 +1,5 @@
 package stegen.client;
 import stegen.client.event.*;
-import stegen.client.event.callback.*;
 import stegen.client.gui.*;
 import stegen.client.gui.desktop.login.*;
 import stegen.client.gui.desktop.player.*;
@@ -9,55 +8,59 @@ import stegen.client.gui.desktop.register.*;
 import stegen.client.gui.info.*;
 import stegen.client.presenter.*;
 import stegen.client.service.*;
-import stegen.client.service.insult.*;
 import stegen.shared.*;
 
 import com.google.gwt.core.client.*;
+import com.google.gwt.user.client.rpc.*;
 import com.google.gwt.user.client.ui.*;
 
 public class AppController {
-	final EventBus eventBus;
-	final UpdateLoginStatusCallback eventCheckLoginStatusHandler = createEventCheckLoginStatusHandler();
+	private final PlayerCommandServiceAsync playerCommandService;
+	private final ScoreServiceAsync scoreService;
+	private final PlayerServiceAsync playerService;
+	final com.google.gwt.event.shared.EventBus gwtEventBus;
+	final AsyncCallback<LoginDataDto> userLoginStatusCallback = createLoginStatusCallback();
+	private final LoginEventHandler loginStatusHandler = createLoginStatusHandler();
 	private String hostPageBaseURL;
 	final Shell shell;
 	final HasWidgets.ForIsWidget parentView;
 
-	private AppController(EventBus eventBus,Shell shell,HasWidgets.ForIsWidget parentView) {
-		this.eventBus = eventBus;
+	private AppController(Shell shell,HasWidgets.ForIsWidget parentView, com.google.gwt.event.shared.EventBus gwtEventBus,PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
+			PlayerServiceAsync playerService) {
 		this.shell = shell;
 		this.parentView = parentView;
 		this.parentView.add(shell);
+		this.gwtEventBus = gwtEventBus;
+		this.playerCommandService = playerCommandService;
+		this.scoreService = scoreService;
+		this.playerService = playerService;
 	}
-
+	
 	public AppController(PlayerCommandServiceAsync playerCommandService, ScoreServiceAsync scoreService,
-			PlayerServiceAsync playerService,Shell shell,HasWidgets.ForIsWidget parentView) {		
-		this(EventBusImpl.create(playerCommandService, scoreService, playerService),shell,parentView);
+			PlayerServiceAsync playerService,Shell shell,HasWidgets.ForIsWidget parentView,com.google.gwt.event.shared.EventBus gwtEventBus) {		
+		this(shell,parentView,gwtEventBus,playerCommandService,scoreService,playerService);
 	}
-
-	public static AppController createForTest(EventBus eventBus,Shell shell,HasWidgets.ForIsWidget parentView) {
-		return new AppController(eventBus,shell,parentView);
-	}
-
 	
 	public void start(String hostPageBaseURL) {
 		this.hostPageBaseURL = hostPageBaseURL;
-		setupLoginStatusEvent();
-		eventBus.getUserLoginStatus(hostPageBaseURL);
+		gwtEventBus.addHandler(LoginEvent.TYPE,loginStatusHandler);
+		playerService.getUserLoginStatus(hostPageBaseURL,userLoginStatusCallback);
 	}
 
-	private void setupLoginStatusEvent() {
-		eventBus.addHandler(eventCheckLoginStatusHandler);
-	}
-
-	private UpdateLoginStatusCallback createEventCheckLoginStatusHandler() {
-		return new UpdateLoginStatusCallback() {
-
+	private AbstractAsyncCallback<LoginDataDto> createLoginStatusCallback(){
+		return new AbstractAsyncCallback<LoginDataDto>(){
 			@Override
-			public void onSuccessImpl(LoginDataDto loginData) {
-				eventBus.clearCallbacks();
-				setupLoginStatusEvent();
-				new ApplicationVersionPresenter(new ApplicationVersionView(), eventBus,shell).go();
-
+			public void onSuccess(LoginDataDto result) {
+				gwtEventBus.fireEvent(new LoginEvent(result));							
+			}
+		};
+	}
+	private LoginEventHandler createLoginStatusHandler(){
+		return new LoginEventHandler() {
+			@Override
+			public void handleEvent(LoginEvent event) {
+				new ApplicationVersionPresenter(new ApplicationVersionView(),playerService, shell).go();
+				LoginDataDto loginData = event.getLoginData();
 				switch (loginData.loginResponse) {
 				case NOT_LOGGED_IN:
 					createLoginPresenter(loginData);
@@ -81,14 +84,14 @@ public class AppController {
 
 	private void createRegistrationPresenters(LoginDataDto loginData) {
 		new LogoutPresenter(new LogoutView(), loginData,shell).go();
-		new RegistrationPresenter(new RegistrationView(), loginData, eventBus, hostPageBaseURL,shell).go();
+		new RegistrationPresenter(new RegistrationView(), loginData, playerService, gwtEventBus,hostPageBaseURL,shell).go();
 		new NonregisteredUserPresenter(new UserView(), loginData,shell).go();
 	}
 
 	private void createLoggedInPresenters(LoginDataDto loginData) {
 		new LogoutPresenter(new LogoutView(), loginData,shell).go();
-		new RegisteredUserPresenter(new ChangeNicknameView(), loginData, eventBus,shell).go();
-		new CompositeMainPresenter((CompositeMainPresenter.Display)GWT.create(CompositeMainPresenter.Display.class), loginData, eventBus, new InsultFactoryImpl(),new DateTimeFormatsImpl(),shell).go();
-		new RefreshPresenter(new RefreshView(), eventBus,shell).go();
+		new RegisteredUserPresenter(new ChangeNicknameView(), loginData, playerService,gwtEventBus,shell).go();
+		new CompositeMainPresenter((CompositeMainPresenter.Display)GWT.create(CompositeMainPresenter.Display.class), loginData,gwtEventBus, playerCommandService, scoreService,playerService,new DateTimeFormatsImpl(),shell).go();
+		new RefreshPresenter(new RefreshView(), playerCommandService,gwtEventBus,shell).go();
 	}
 }

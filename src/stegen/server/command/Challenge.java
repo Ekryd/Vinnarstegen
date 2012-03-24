@@ -6,7 +6,6 @@ import stegen.shared.*;
 
 public class Challenge implements PlayerCommand {
 	private static final long serialVersionUID = 1381534401064229916L;
-	private final String insult;
 	private final EmailAddressDto challenger;
 	private final EmailAddressDto challengee;
 	private final transient String messageBody;
@@ -14,7 +13,6 @@ public class Challenge implements PlayerCommand {
 
 	/** Only for serialization */
 	protected Challenge() {
-		this.insult = null;
 		this.challenger = null;
 		this.challengee = null;
 		this.messageBody = null;
@@ -22,7 +20,6 @@ public class Challenge implements PlayerCommand {
 	}
 
 	public Challenge(ChallengeMessageDto message) {
-		this.insult = message.insult;
 		this.challenger = message.challengerEmail;
 		this.challengee = message.challengeeEmail;
 		this.messageBody = message.body;
@@ -63,8 +60,8 @@ public class Challenge implements PlayerCommand {
 		NicknameService nicknameService = NicknameService.get();
 		String challengerNickname = nicknameService.getNickname(challenger);
 		String challengeeNickname = nicknameService.getNickname(challengee);
-		return String.format("%s kallade %s för %s och utmanade därmed honom till duell", challengerNickname,
-				challengeeNickname, insult);
+		return String.format("%s utmanade %s.", challengerNickname,
+				challengeeNickname);
 	}
 
 	@Override

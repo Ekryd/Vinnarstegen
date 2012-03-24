@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.*;
 public class ChallengeDialog implements IsWidget {
 
 	private final DialogBox baseWidget = new DialogBox();
-	private final Label insultLabel = new Label();
+	private final Label textLabel = new Label();
 	private final Label subjectLabel = new Label();
 	private final TextArea messageBody = new TextArea();
 	private final CancelOrOkButtonPanel buttonPanel = new CancelOrOkButtonPanel();
@@ -25,7 +25,7 @@ public class ChallengeDialog implements IsWidget {
 		messageBody.setHeight("200px");
 
 		VerticalPanel verticalPanel = new VerticalPanel();
-		verticalPanel.add(insultLabel);
+		verticalPanel.add(textLabel);
 		verticalPanel.add(subjectLabel);
 		verticalPanel.add(messageBody);
 		verticalPanel.add(buttonPanel);
@@ -40,11 +40,10 @@ public class ChallengeDialog implements IsWidget {
 		buttonPanel.addClickOkHandler(clickHandler);
 	}
 
-	public void setupChallengeInputDialog(String challengeeName, String shortInsultText,
+	public void setupChallengeInputDialog(String challengeeName,
 			String challengeMessageSubject, String challengeMessage) {
-		insultLabel.setText("Du vill kalla " + challengeeName + " för " + shortInsultText
-				+ " och skicka en utmaning via mail!");
-		subjectLabel.setText("Ämne för mailet är " + challengeMessageSubject);
+		textLabel.setText("Du vill utmana " + challengeeName + " och skicka en utmaning via mail!");
+		subjectLabel.setText("Ämne för mailet är '" + challengeMessageSubject+"'");
 		messageBody.setText(challengeMessage);
 	}
 

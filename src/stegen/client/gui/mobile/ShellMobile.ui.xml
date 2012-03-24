@@ -58,7 +58,8 @@
 		}
 	</ui:style>
 	
-	
+	<g:LayoutPanel >
+	<g:layer>
      <g:DockLayoutPanel unit='PX' styleName="{style.container}">
      	<g:north size="170">
      	<g:FlowPanel styleName="{style.headerPanel">
@@ -79,9 +80,10 @@
      	
      	</g:north>
        <g:center>
-         <g:LayoutPanel  styleName="{style.contentPanel}" ui:field="mainArea"/>
+         <g:LayoutPanel  styleName="{style.contentPanel}" ui:field="mainArea" />
        </g:center>
      </g:DockLayoutPanel>
-     
+     </g:layer>
+     </g:LayoutPanel>
    
 </ui:UiBinder> 
