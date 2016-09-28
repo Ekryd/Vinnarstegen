@@ -15,6 +15,10 @@
     <servlet-name>loginService</servlet-name>
     <url-pattern>/stegen/login</url-pattern>
   </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>loginService</servlet-name>
+    <url-pattern>/viewer.Viewer/login</url-pattern>
+  </servlet-mapping>
 
   <servlet>
     <servlet-name>scoreService</servlet-name>
@@ -24,6 +28,10 @@
   <servlet-mapping>
     <servlet-name>scoreService</servlet-name>
     <url-pattern>/stegen/score</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>scoreService</servlet-name>
+    <url-pattern>/viewer.Viewer/score</url-pattern>
   </servlet-mapping>
  
   <servlet>
@@ -35,6 +43,10 @@
     <servlet-name>undoService</servlet-name>
     <url-pattern>/stegen/undo</url-pattern>
   </servlet-mapping> 
+  <servlet-mapping>
+    <servlet-name>undoService</servlet-name>
+    <url-pattern>/viewer.Viewer/undo</url-pattern>
+  </servlet-mapping>
 
   <!-- Default page to serve -->
   <welcome-file-list>

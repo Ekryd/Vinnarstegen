@@ -47,8 +47,16 @@ public class ScoreServiceImpl extends RemoteServiceServlet implements ScoreServi
 				playerScoreList.add(player.createDto(dateFormat));
 			}
 		});
-		CalculateRanking calculateRanking = new CalculateRanking(currentPlayerEmail, playerScoreList);
-		List<PlayerScoreDto> playerScoreListWithRanking = calculateRanking.getList();
+		
+		// TODO null => viewer... inte snyggt, test, vad är bäst design?
+		CalculateRankingIF calculateRanking = null;
+		if( currentPlayerEmail == null){
+			calculateRanking = new CalculateRankingViewer(playerScoreList);
+		}else{
+			calculateRanking = new CalculateRanking(currentPlayerEmail, playerScoreList);	
+		}
+		
+		List<PlayerScoreDto>  playerScoreListWithRanking = calculateRanking.getList();
 		return playerScoreListWithRanking;
 	}
 

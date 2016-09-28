@@ -4,7 +4,7 @@ import java.util.*;
 
 import stegen.shared.*;
 
-public class CalculateRanking {
+public class CalculateRanking implements CalculateRankingIF{
 
 	private static final int CHALLENGE_DIFFERENCE_RANKING = 3;
 	private final String currentPlayerAddress;
@@ -16,6 +16,7 @@ public class CalculateRanking {
 		this.sortedPlayerScores = Collections.unmodifiableList(sortedPlayerScores);
 	}
 
+	@Override
 	public List<PlayerScoreDto> getList() {
 		calculateRanking();
 		calculateShowChallenge();
